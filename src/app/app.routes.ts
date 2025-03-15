@@ -11,6 +11,9 @@ import { InscripcionFormComponent } from './components/inscripciones/inscripcion
 import { InscripcionDetalleComponent } from './components/inscripciones/inscripcion-detalle/inscripcion-detalle.component';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
+import { TurnoListComponent } from './components/turnos/turno-list/turno-list.component';
+import { TurnoFormComponent } from './components/turnos/turno-form/turno-form.component';
+import { TurnoDetalleComponent } from './components/turnos/turno-detalle/turno-detalle.component';
 
 export const routes: Routes = [
   { 
@@ -90,6 +93,30 @@ export const routes: Routes = [
   {
     path: 'inscripciones/:id',
     component: InscripcionDetalleComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'turnos',
+    component: TurnoListComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'turnos/nuevo',
+    component: TurnoFormComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN'] }
+  },
+  {
+    path: 'turnos/:id/editar',
+    component: TurnoFormComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN'] }
+  },
+  {
+    path: 'turnos/:id',
+    component: TurnoDetalleComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
   },

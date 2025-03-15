@@ -68,7 +68,7 @@ export interface LoginDto {
   
   // Plan
   export interface PlanDto {
-    id?: number;
+    id: number;
     nombre: string;
     precio: number;
     descripcion?: string;
@@ -76,7 +76,7 @@ export interface LoginDto {
   
   // Turno
   export interface TurnoDto {
-    id?: number;
+    id: number;
     diaSemana: DayOfWeek;
     hora: string;
     descripcion?: string;

@@ -190,7 +190,7 @@
               <div *ngIf="seleccionesTurnos.length > 0" class="space-y-4">
                 <h3 class="text-lg font-medium text-secondary-900">Selecciona el horario para cada día</h3>
                 
-                <div *ngFor="let seleccion of seleccionesTurnos.controls; let i = index" class="p-4 border border-secondary-200 rounded-lg"> <!--  [formGroup]="seleccion" -->
+                <div *ngFor="let seleccion of seleccionesTurnos.controls; let i = index" class="p-4 border border-secondary-200 rounded-lg">
                   <h4 class="font-medium text-secondary-800">{{ nombresDias[seleccion.get('diaSemana')?.value] }}</h4>
                   
                   <div class="mt-2">
