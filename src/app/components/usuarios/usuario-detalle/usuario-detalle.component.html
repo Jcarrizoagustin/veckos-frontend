@@ -1,0 +1,289 @@
+<div class="container mx-auto px-4">
+    <div class="flex items-center mb-6">
+      <button routerLink="/usuarios" class="mr-4 text-secondary-600 hover:text-secondary-900">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+      <h1 class="text-2xl font-bold text-primary-800">
+        Perfil de Usuario
+      </h1>
+    </div>
+  
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  
+    <!-- User Profile -->
+    <div *ngIf="!loading && usuario">
+      <!-- Header Card with Actions -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+          <div>
+            <h2 class="text-xl font-bold text-secondary-900">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+            <p class="text-secondary-600">
+              <span class="inline-block mr-4">DNI: {{ usuario.dni }}</span>
+              <span *ngIf="usuario.edad" class="inline-block mr-4">{{ usuario.edad }} años</span>
+              <span *ngIf="usuario.correo" class="inline-block mr-4">{{ usuario.correo }}</span>
+            </p>
+            <div class="mt-2">
+              <span [ngClass]="estadoClasses[usuario.estado]" class="px-3 py-1 rounded-full text-xs font-semibold">
+                {{ usuario.estado }}
+              </span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-4 md:mt-0">
+            <button (click)="editarUsuario()" class="btn-secondary flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Editar
+            </button>
+            <button *ngIf="!usuario.tieneInscripcionActiva" (click)="nuevaInscripcion()" class="btn-primary flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Nueva Inscripción
+            </button>
+            <button *ngIf="usuario.tieneInscripcionActiva" (click)="registrarPago()" class="btn-primary flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              Registrar Pago
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Info Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Basic Information -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-primary-800 mb-4">Información Personal</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-secondary-500">Fecha de Nacimiento</p>
+              <p>{{ getFechaFormateada(usuario.fechaNacimiento) }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">CUIL</p>
+              <p>{{ usuario.cuil || 'No registrado' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Teléfono</p>
+              <p>{{ usuario.telefono || 'No registrado' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Correo</p>
+              <p>{{ usuario.correo || 'No registrado' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Fecha de Alta</p>
+              <p>{{ getFechaFormateada(usuario.fechaAlta) }}</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Current Subscription -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-primary-800 mb-4">Inscripción Actual</h3>
+          
+          <!-- No active subscription -->
+          <div *ngIf="!usuario.inscripcionActiva" class="flex flex-col items-center justify-center h-32 bg-secondary-50 rounded-lg border border-secondary-200">
+            <p class="text-secondary-500 text-center mb-4">El usuario no tiene ninguna inscripción activa</p>
+            <button (click)="nuevaInscripcion()" class="btn-primary text-sm">
+              Nueva Inscripción
+            </button>
+          </div>
+          
+          <!-- Active subscription -->
+          <div *ngIf="usuario.inscripcionActiva" class="flex flex-col">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-secondary-500">Plan</p>
+                <p class="font-medium">{{ usuario.inscripcionActiva.nombrePlan }}</p>
+              </div>
+              <div>
+                <p class="text-sm text-secondary-500">Estado</p>
+                <span [ngClass]="estadoPagoClasses[usuario.inscripcionActiva.estadoPago]" class="px-2 py-1 rounded-full text-xs font-semibold">
+                  {{ usuario.inscripcionActiva.estadoPago }}
+                </span>
+              </div>
+              <div>
+                <p class="text-sm text-secondary-500">Frecuencia</p>
+                <p>{{ usuario.inscripcionActiva.frecuencia }} días por semana</p>
+              </div>
+              <div>
+                <p class="text-sm text-secondary-500">Días Restantes</p>
+                <p [ngClass]="getDiasRestantes(usuario.inscripcionActiva.fechaFin) <= 7 ? 'text-yellow-600 font-medium' : ''">
+                  {{ getDiasRestantes(usuario.inscripcionActiva.fechaFin) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-secondary-500">Fecha Inicio</p>
+                <p>{{ getFechaFormateada(usuario.inscripcionActiva.fechaInicio) }}</p>
+              </div>
+              <div>
+                <p class="text-sm text-secondary-500">Fecha Fin</p>
+                <p>{{ getFechaFormateada(usuario.inscripcionActiva.fechaFin) }}</p>
+              </div>
+              <div>
+                <p class="text-sm text-secondary-500">Último Pago</p>
+                <p>{{ usuario.inscripcionActiva.ultimoPago ? getFechaFormateada(usuario.inscripcionActiva.ultimoPago) : 'No registrado' }}</p>
+              </div>
+            </div>
+            
+            <div class="flex justify-end mt-4">
+              <button 
+                (click)="renovarInscripcion(usuario.inscripcionActiva.id)" 
+                class="btn-secondary text-sm">
+                Renovar Inscripción
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Tabs for Details -->
+      <mat-tab-group class="bg-white rounded-lg shadow-md mb-6">
+        <!-- Attendance Tab -->
+        <mat-tab label="Asistencias">
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-primary-800">Asistencias Recientes</h3>
+              <div>
+                <span class="text-secondary-700">Porcentaje de asistencia: </span>
+                <span [ngClass]="{
+                  'text-green-600': calcularPorcentajeAsistencia() >= 70,
+                  'text-yellow-600': calcularPorcentajeAsistencia() >= 50 && calcularPorcentajeAsistencia() < 70,
+                  'text-red-600': calcularPorcentajeAsistencia() < 50
+                }" class="font-semibold">
+                  {{ calcularPorcentajeAsistencia() | number:'1.0-0' }}%
+                </span>
+              </div>
+            </div>
+            
+            <div *ngIf="asistenciasRecientes.length === 0" class="text-center py-6 text-secondary-500">
+              No hay registros de asistencia en el último mes
+            </div>
+            
+            <div *ngIf="asistenciasRecientes.length > 0" class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-secondary-200">
+                <thead class="bg-secondary-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                      Fecha
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                      Hora
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                      Estado
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-secondary-200">
+                  <tr *ngFor="let asistencia of asistenciasRecientes">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      {{ getFechaFormateada(asistencia.fechaClase) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      {{ asistencia.horaClase }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span [ngClass]="asistencia.presente ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" 
+                            class="px-2 py-1 rounded-full text-xs font-semibold">
+                        {{ asistencia.presente ? 'Presente' : 'Ausente' }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+        
+        <!-- Payments Tab -->
+        <mat-tab label="Pagos">
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-primary-800">Pagos Recientes</h3>
+              <div>
+                <span class="text-secondary-700">Total pagado: </span>
+                <span class="font-semibold">${{ getTotalPagado() | number:'1.2-2' }}</span>
+              </div>
+            </div>
+            
+            <div *ngIf="pagosRecientes.length === 0" class="text-center py-6 text-secondary-500">
+              No hay registros de pagos para este usuario
+            </div>
+            
+            <div *ngIf="pagosRecientes.length > 0" class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-secondary-200">
+                <thead class="bg-secondary-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                      Fecha
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                      Monto
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                      Método
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                      Plan
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-secondary-200">
+                  <tr *ngFor="let pago of pagosRecientes">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      {{ getFechaFormateada(pago.fechaPago) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap font-semibold">
+                      ${{ pago.monto | number:'1.2-2' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      {{ pago.metodoPago }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      {{ pago.nombrePlan }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+        
+        <!-- Schedule Tab -->
+        <mat-tab label="Horarios">
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-primary-800">Horarios de Asistencia</h3>
+            </div>
+            
+            <div *ngIf="!usuario.inscripcionActiva" class="text-center py-6 text-secondary-500">
+              No hay horarios asignados (usuario sin inscripción activa)
+            </div>
+            
+            <div *ngIf="usuario.inscripcionActiva && usuario.inscripcionActiva.detalles?.length === 0" class="text-center py-6 text-secondary-500">
+              No hay horarios asignados para esta inscripción
+            </div>
+            
+            <div *ngIf="usuario.inscripcionActiva && usuario.inscripcionActiva.detalles.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div *ngFor="let detalle of usuario.inscripcionActiva.detalles" class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
+                <div class="font-semibold text-secondary-900">{{ detalle.diaSemana }}</div>
+                <div class="text-secondary-700">{{ detalle.horaTurno }}</div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>

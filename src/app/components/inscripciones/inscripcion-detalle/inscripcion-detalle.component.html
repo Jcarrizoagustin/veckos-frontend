@@ -1,0 +1,180 @@
+<div class="container mx-auto px-4">
+    <div class="flex items-center mb-6">
+      <button routerLink="/inscripciones" class="mr-4 text-secondary-600 hover:text-secondary-900">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+      <h1 class="text-2xl font-bold text-primary-800">
+        Detalle de Inscripción
+      </h1>
+    </div>
+  
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  
+    <!-- Inscripción Details -->
+    <div *ngIf="!loading && inscripcion">
+      
+      <!-- Header Card with Actions -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+          <div>
+            <h2 class="text-xl font-bold text-secondary-900">
+              <span class="cursor-pointer hover:text-primary-600" (click)="verUsuario()">
+                {{ inscripcion.nombreUsuario }} {{ inscripcion.apellidoUsuario }}
+              </span>
+              <span class="mx-2">·</span>
+              <span>{{ inscripcion.nombrePlan }}</span>
+            </h2>
+            
+            <div class="mt-2 flex items-center">
+              <span [ngClass]="estadoPagoClasses[inscripcion.estadoPago]" class="px-3 py-1 rounded-full text-xs font-semibold">
+                {{ inscripcion.estadoPago }}
+              </span>
+              <span *ngIf="getDiasRestantes() <= 7 && getDiasRestantes() > 0" class="ml-2 text-sm text-yellow-600">
+                Vence en {{ getDiasRestantes() }} días
+              </span>
+              <span *ngIf="getDiasRestantes() <= 0" class="ml-2 text-sm text-red-600">
+                Vencida
+              </span>
+            </div>
+          </div>
+          
+          <div class="flex flex-wrap gap-2 mt-4 md:mt-0">
+            <button *ngIf="inscripcion.estadoPago === 'ACTIVO' || inscripcion.estadoPago === 'PROXIMO_A_VENCER'" (click)="registrarPago()" class="btn-primary flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              Registrar Pago
+            </button>
+            
+            <button *ngIf="inscripcion.estadoPago === 'ACTIVO' || inscripcion.estadoPago === 'PROXIMO_A_VENCER'" (click)="renovarInscripcion()" class="btn-secondary flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Renovar
+            </button>
+            
+            <button (click)="cancelarInscripcion()" class="flex items-center px-4 py-2 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 bg-white hover:bg-red-50">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Info Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Detalles de la Inscripción -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-primary-800 mb-4">Detalles de la Inscripción</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-secondary-500">Frecuencia</p>
+              <p class="font-medium">{{ inscripcion.frecuencia }} días por semana</p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Estado</p>
+              <span [ngClass]="estadoPagoClasses[inscripcion.estadoPago]" class="px-2 py-1 rounded-full text-xs font-semibold">
+                {{ inscripcion.estadoPago }}
+              </span>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Fecha de Inicio</p>
+              <p class="font-medium">{{ getFechaFormateada(inscripcion.fechaInicio) }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Fecha de Fin</p>
+              <p class="font-medium">{{ getFechaFormateada(inscripcion.fechaFin) }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Días Restantes</p>
+              <p [ngClass]="getDiasRestantes() <= 7 ? 'text-yellow-600 font-bold' : 'font-medium'">
+                {{ getDiasRestantes() }}
+              </p>
+            </div>
+            <div>
+              <p class="text-sm text-secondary-500">Último Pago</p>
+              <p class="font-medium">{{ getFechaFormateada(inscripcion.ultimoPago) }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Horarios -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-primary-800 mb-4">Horarios</h3>
+          
+          <div *ngIf="!inscripcion.detalles || inscripcion.detalles.length === 0" class="text-center py-6 text-secondary-500">
+            No hay horarios configurados para esta inscripción
+          </div>
+          
+          <div *ngIf="inscripcion.detalles && inscripcion.detalles.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div *ngFor="let detalle of inscripcion.detalles" class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
+              <div class="font-semibold text-secondary-900">{{ nombresDias[detalle.diaSemana] }}</div>
+              <div class="text-secondary-700">{{ detalle.horaTurno }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pagos -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-primary-800">Pagos Realizados</h3>
+          <div *ngIf="pagos.length > 0" class="text-secondary-700">
+            <span>Total: </span>
+            <span class="font-bold text-secondary-900">${{ getTotalPagado() | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        
+        <div *ngIf="pagos.length === 0" class="text-center py-6 text-secondary-500">
+          No hay pagos registrados para esta inscripción
+        </div>
+        
+        <div *ngIf="pagos.length > 0" class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-secondary-200">
+            <thead class="bg-secondary-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                  Fecha
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                  Monto
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                  Método
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                  Descripción
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-secondary-200">
+              <tr *ngFor="let pago of pagos">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {{ getFechaFormateada(pago.fechaPago) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap font-bold">
+                  ${{ pago.monto | number:'1.2-2' }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {{ pago.metodoPago }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {{ pago.descripcion || 'Sin descripción' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

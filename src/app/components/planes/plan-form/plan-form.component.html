@@ -1,0 +1,109 @@
+<div class="container mx-auto px-4">
+    <div class="flex items-center mb-6">
+      <button (click)="cancel()" class="mr-4 text-secondary-600 hover:text-secondary-900">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+      <h1 class="text-2xl font-bold text-primary-800">
+        {{ isEditMode ? 'Editar' : 'Nuevo' }} Plan
+      </h1>
+    </div>
+  
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  
+    <!-- Form -->
+    <div *ngIf="!loading" class="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
+      <form [formGroup]="planForm" (ngSubmit)="onSubmit()">
+        <!-- Nombre -->
+        <div class="mb-6">
+          <label for="nombre" class="block text-sm font-medium text-secondary-700">
+            Nombre del Plan *
+          </label>
+          <input
+            type="text"
+            id="nombre"
+            formControlName="nombre"
+            class="mt-1 block w-full rounded-md border-secondary-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50"
+            [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-200': planForm.get('nombre')?.invalid && planForm.get('nombre')?.touched}"
+          />
+          <div *ngIf="planForm.get('nombre')?.invalid && planForm.get('nombre')?.touched" class="text-red-600 text-sm mt-1">
+            <span *ngIf="planForm.get('nombre')?.errors?.['required']">El nombre es obligatorio</span>
+            <span *ngIf="planForm.get('nombre')?.errors?.['maxlength']">El nombre no puede tener más de 50 caracteres</span>
+          </div>
+        </div>
+        
+        <!-- Precio -->
+        <div class="mb-6">
+          <label for="precio" class="block text-sm font-medium text-secondary-700">
+            Precio *
+          </label>
+          <div class="mt-1 relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="text-secondary-500 sm:text-sm">$</span>
+            </div>
+            <input
+              type="number"
+              id="precio"
+              formControlName="precio"
+              class="pl-7 block w-full rounded-md border-secondary-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50"
+              [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-200': planForm.get('precio')?.invalid && planForm.get('precio')?.touched}"
+              min="0"
+              step="0.01"
+            />
+          </div>
+          <div *ngIf="planForm.get('precio')?.invalid && planForm.get('precio')?.touched" class="text-red-600 text-sm mt-1">
+            <span *ngIf="planForm.get('precio')?.errors?.['required']">El precio es obligatorio</span>
+            <span *ngIf="planForm.get('precio')?.errors?.['min']">El precio debe ser mayor o igual a 0</span>
+          </div>
+        </div>
+        
+        <!-- Descripción -->
+        <div class="mb-6">
+          <label for="descripcion" class="block text-sm font-medium text-secondary-700">
+            Descripción
+          </label>
+          <textarea
+            id="descripcion"
+            formControlName="descripcion"
+            rows="4"
+            class="mt-1 block w-full rounded-md border-secondary-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50"
+            [ngClass]="{'border-red-300 focus:border-red-500 focus:ring-red-200': planForm.get('descripcion')?.invalid && planForm.get('descripcion')?.touched}"
+          ></textarea>
+          <div *ngIf="planForm.get('descripcion')?.invalid && planForm.get('descripcion')?.touched" class="text-red-600 text-sm mt-1">
+            <span *ngIf="planForm.get('descripcion')?.errors?.['maxlength']">La descripción no puede tener más de 500 caracteres</span>
+          </div>
+        </div>
+        
+        <!-- Form Actions -->
+        <div class="flex justify-end space-x-3">
+          <button
+            type="button"
+            (click)="cancel()"
+            class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            [disabled]="planForm.invalid || loading"
+            class="btn-primary"
+          >
+            <span *ngIf="loading" class="mr-2">
+              <svg class="animate-spin h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </span>
+            {{ isEditMode ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

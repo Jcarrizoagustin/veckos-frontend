@@ -1,0 +1,135 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { PlanService } from '../../../services/plan.service';
+import { PlanDto } from '../../../models';
+
+@Component({
+  selector: 'app-plan-form',
+  templateUrl: './plan-form.component.html',
+  styleUrls: ['./plan-form.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatButtonModule
+  ]
+})
+export class PlanFormComponent implements OnInit {
+  planForm!: FormGroup;
+  isEditMode = false;
+  planId?: number;
+  loading = false;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private planService: PlanService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) { }
+
+  ngOnInit(): void {
+    this.initForm();
+    
+    // Determinar si estamos en modo edición o creación
+    this.route.params.subscribe(params => {
+      if (params['id'] && params['id'] !== 'nuevo') {
+        this.isEditMode = true;
+        this.planId = +params['id'];
+        this.loadPlan(this.planId);
+      }
+    });
+  }
+
+  initForm(): void {
+    this.planForm = this.formBuilder.group({
+      nombre: ['', [Validators.required, Validators.maxLength(50)]],
+      precio: ['', [Validators.required, Validators.min(0)]],
+      descripcion: ['', [Validators.maxLength(500)]]
+    });
+  }
+
+  loadPlan(id: number): void {
+    this.loading = true;
+    this.planService.getById(id).subscribe({
+      next: (plan) => {
+        this.planForm.patchValue(plan);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar plan:', error);
+        this.snackBar.open('Error al cargar datos del plan', 'Cerrar', {
+          duration: 5000
+        });
+        this.loading = false;
+        this.router.navigate(['/planes']);
+      }
+    });
+  }
+
+  onSubmit(): void {
+    if (this.planForm.invalid) {
+      this.markFormGroupTouched(this.planForm);
+      return;
+    }
+
+    this.loading = true;
+    const plan: PlanDto = this.planForm.value;
+
+    if (this.isEditMode && this.planId) {
+      plan.id = this.planId;
+      this.planService.update(this.planId, plan).subscribe({
+        next: () => {
+          this.snackBar.open('Plan actualizado con éxito', 'Cerrar', {
+            duration: 3000
+          });
+          this.loading = false;
+          this.router.navigate(['/planes']);
+        },
+        error: (error) => {
+          console.error('Error al actualizar plan:', error);
+          this.snackBar.open('Error al actualizar plan', 'Cerrar', {
+            duration: 5000
+          });
+          this.loading = false;
+        }
+      });
+    } else {
+      this.planService.create(plan).subscribe({
+        next: () => {
+          this.snackBar.open('Plan creado con éxito', 'Cerrar', {
+            duration: 3000
+          });
+          this.loading = false;
+          this.router.navigate(['/planes']);
+        },
+        error: (error) => {
+          console.error('Error al crear plan:', error);
+          this.snackBar.open('Error al crear plan. Es posible que el nombre ya exista.', 'Cerrar', {
+            duration: 5000
+          });
+          this.loading = false;
+        }
+      });
+    }
+  }
+
+  cancel(): void {
+    this.router.navigate(['/planes']);
+  }
+
+  // Función para marcar todos los campos del formulario como tocados
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+}

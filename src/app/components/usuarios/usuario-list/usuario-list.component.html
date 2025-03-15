@@ -1,0 +1,97 @@
+<div class="container mx-auto px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-primary-800">Usuarios</h1>
+      <button (click)="createUsuario()" class="btn-primary flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Nuevo Usuario
+      </button>
+    </div>
+  
+    <!-- Search Bar -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+      <div class="flex items-center">
+        <div class="relative flex-grow">
+          <input
+            type="text"
+            placeholder="Buscar por nombre, apellido o DNI..."
+            [(ngModel)]="searchTerm"
+            (input)="filterUsuarios()"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+          <button *ngIf="searchTerm" (click)="onSearchClear()" class="absolute right-3 top-2 text-secondary-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <button 
+          (click)="buscarPorTermino()" 
+          [disabled]="!searchTerm || searchTerm.length < 3"
+          class="ml-2 px-4 py-2 bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50">
+          Buscar
+        </button>
+      </div>
+    </div>
+  
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  
+    <!-- User List -->
+    <div *ngIf="!loading">
+      <div *ngIf="filteredUsuarios.length === 0" class="bg-white rounded-lg shadow-md p-8 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-secondary-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-secondary-900">No se encontraron usuarios</h3>
+        <p class="mt-2 text-secondary-600">Intenta con otra búsqueda o crea un nuevo usuario.</p>
+      </div>
+  
+      <div *ngIf="filteredUsuarios.length > 0" class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="min-w-full divide-y divide-secondary-200">
+          <thead class="bg-secondary-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Nombre
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                DNI
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Estado
+              </th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Acciones
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-secondary-200">
+            <tr *ngFor="let usuario of filteredUsuarios" (click)="viewUsuario(usuario.id!)" class="hover:bg-secondary-50 cursor-pointer">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="font-medium text-secondary-900">{{ usuario.nombre }} {{ usuario.apellido }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-secondary-900">{{ usuario.dni }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span [ngClass]="estadoClasses[usuario.estado || 'INACTIVO']" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                  {{ usuario.estado }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button (click)="viewUsuario(usuario.id!); $event.stopPropagation();" class="text-primary-600 hover:text-primary-800">
+                  Ver Detalles
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

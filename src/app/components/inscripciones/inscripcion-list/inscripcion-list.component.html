@@ -1,0 +1,166 @@
+<div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+      <h1 class="text-2xl font-bold text-primary-800 mb-4 md:mb-0">Inscripciones</h1>
+      <div class="flex flex-wrap gap-2">
+        <button (click)="nuevaInscripcion()" class="btn-primary flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Nueva Inscripción
+        </button>
+        <button (click)="actualizarEstadosPagos()" class="btn-secondary flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Actualizar Estados
+        </button>
+      </div>
+    </div>
+  
+    <!-- Filters -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+        <!-- Estado Filters -->
+        <div class="flex flex-wrap gap-2">
+          <button 
+            (click)="cambiarFiltroEstado('TODOS')" 
+            [ngClass]="filtroEstado === 'TODOS' ? 'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-secondary-700 border-secondary-300'"
+            class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-primary-50">
+            Todos
+          </button>
+          <button 
+            (click)="cambiarFiltroEstado('ACTIVO')" 
+            [ngClass]="filtroEstado === 'ACTIVO' ? 'bg-green-100 text-green-800 border-green-300' : 'bg-white text-secondary-700 border-secondary-300'"
+            class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-green-50">
+            Activos
+          </button>
+          <button 
+            (click)="cambiarFiltroEstado('PROXIMO_A_VENCER')" 
+            [ngClass]="filtroEstado === 'PROXIMO_A_VENCER' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' : 'bg-white text-secondary-700 border-secondary-300'"
+            class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-yellow-50">
+            Próximos a Vencer
+          </button>
+          <button 
+            (click)="cambiarFiltroEstado('INACTIVO')" 
+            [ngClass]="filtroEstado === 'INACTIVO' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-white text-secondary-700 border-secondary-300'"
+            class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-red-50">
+            Inactivos
+          </button>
+        </div>
+  
+        <!-- Search Bar -->
+        <div class="flex">
+          <div class="relative flex-grow">
+            <input
+              type="text"
+              placeholder="Buscar por usuario o plan..."
+              [(ngModel)]="filtroBusqueda"
+              (keyup.enter)="buscar()"
+              class="w-full px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+          </div>
+          <button 
+            (click)="buscar()" 
+            class="px-4 py-2 bg-primary-600 text-white rounded-r-lg shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+            Buscar
+          </button>
+          <button 
+            *ngIf="filtroBusqueda || filtroEstado !== 'TODOS'"
+            (click)="limpiarFiltros()" 
+            class="ml-2 px-4 py-2 bg-secondary-200 text-secondary-700 rounded-lg shadow-sm hover:bg-secondary-300 focus:outline-none focus:ring-2 focus:ring-secondary-500">
+            Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  
+    <!-- Inscripciones List -->
+    <div *ngIf="!loading">
+      <div *ngIf="inscripcionesFiltradas.length === 0" class="bg-white rounded-lg shadow-md p-8 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-secondary-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-secondary-900">No se encontraron inscripciones</h3>
+        <p class="mt-2 text-secondary-600">Intenta con otros filtros o crea una nueva inscripción.</p>
+      </div>
+  
+      <div *ngIf="inscripcionesFiltradas.length > 0" class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="min-w-full divide-y divide-secondary-200">
+          <thead class="bg-secondary-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Usuario
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Plan
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Período
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Estado
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Días Restantes
+              </th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Acciones
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-secondary-200">
+            <tr *ngFor="let inscripcion of inscripcionesFiltradas" (click)="verDetalles(inscripcion.id)" class="hover:bg-secondary-50 cursor-pointer">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-secondary-900">{{ inscripcion.nombreUsuario }} {{ inscripcion.apellidoUsuario }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-secondary-900">{{ inscripcion.nombrePlan }}</div>
+                <div class="text-xs text-secondary-500">{{ inscripcion.frecuencia }} días/semana</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-secondary-900">{{ getFechaFormateada(inscripcion.fechaInicio) }}</div>
+                <div class="text-xs text-secondary-500">hasta {{ getFechaFormateada(inscripcion.fechaFin) }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span [ngClass]="estadoPagoClasses[inscripcion.estadoPago]" class="px-2 py-1 text-xs rounded-full">
+                  {{ inscripcion.estadoPago }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span [ngClass]="getDiasRestantes(inscripcion.fechaFin) <= 7 ? 'text-yellow-600 font-bold' : ''">
+                  {{ getDiasRestantes(inscripcion.fechaFin) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button 
+                  *ngIf="inscripcion.estadoPago === 'ACTIVO' || inscripcion.estadoPago === 'PROXIMO_A_VENCER'"
+                  (click)="renovarInscripcion(inscripcion.id, $event)" 
+                  class="text-primary-600 hover:text-primary-900 mr-3"
+                  title="Renovar inscripción">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+                <button 
+                  (click)="cancelarInscripcion(inscripcion.id, $event)" 
+                  class="text-red-600 hover:text-red-900"
+                  title="Cancelar inscripción">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
