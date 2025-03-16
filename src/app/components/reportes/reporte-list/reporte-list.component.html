@@ -1,0 +1,25 @@
+<div class="container mx-auto px-4">
+    <h1 class="text-2xl font-bold text-primary-800 mb-6">Reportes</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let reporte of reportes" 
+           class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+           (click)="navegarAReporte(reporte.ruta)">
+        <div class="p-6">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary-100 text-primary-700">
+              <mat-icon>{{ reporte.icono }}</mat-icon>
+            </div>
+            <h2 class="ml-4 text-xl font-semibold text-secondary-900">{{ reporte.titulo }}</h2>
+          </div>
+          <p class="text-secondary-600">{{ reporte.descripcion }}</p>
+          <div class="flex justify-end mt-4">
+            <button mat-button color="primary" [routerLink]="reporte.ruta" class="text-primary-600 hover:text-primary-800">
+              Ver reporte
+              <mat-icon class="ml-1">arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

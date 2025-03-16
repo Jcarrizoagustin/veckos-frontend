@@ -14,6 +14,10 @@ import { roleGuard } from './guards/role.guard';
 import { TurnoListComponent } from './components/turnos/turno-list/turno-list.component';
 import { TurnoFormComponent } from './components/turnos/turno-form/turno-form.component';
 import { TurnoDetalleComponent } from './components/turnos/turno-detalle/turno-detalle.component';
+import { ReporteListComponent } from './components/reportes/reporte-list/reporte-list.component';
+import { ReporteAsistenciaComponent } from './components/reportes/reporte-asistencia/reporte-asistencia.component';
+import { ReporteInscripcionesComponent } from './components/reportes/reporte-inscripciones/reporte-inscripciones.component';
+import { ReporteFinancieroComponent } from './components/reportes/reporte-financiero/reporte-financiero.component';
 
 export const routes: Routes = [
   { 
@@ -117,6 +121,30 @@ export const routes: Routes = [
   {
     path: 'turnos/:id',
     component: TurnoDetalleComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'reportes',
+    component: ReporteListComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'reportes/asistencia',
+    component: ReporteAsistenciaComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'reportes/financiero',
+    component: ReporteFinancieroComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN'] }
+  },
+  {
+    path: 'reportes/inscripciones',
+    component: ReporteInscripcionesComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
   },
