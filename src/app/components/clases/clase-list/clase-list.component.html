@@ -1,0 +1,79 @@
+<div class="container mx-auto px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-primary-800">Clases</h1>
+    </div>
+  
+    <!-- Filtro por fecha -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+      <h2 class="text-sm font-medium text-secondary-500 mb-3">Selecciona una fecha</h2>
+      <div class="flex items-center">
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [value]="fechaSeleccionada"
+            (dateChange)="onFechaChange($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        
+        <div class="ml-4">
+          <span class="text-secondary-700 font-medium">
+            {{ diasSemana[getDiaSemana(fechaSeleccionada)] }}
+          </span>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <mat-spinner [diameter]="40"></mat-spinner>
+    </div>
+  
+    <!-- Clases List -->
+    <div *ngIf="!loading">
+      <div *ngIf="filteredClases.length === 0" class="bg-white rounded-lg shadow-md p-8 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-secondary-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-secondary-900">No hay clases programadas para esta fecha</h3>
+        <p class="mt-2 text-secondary-600">Selecciona otra fecha o verifica la programación de turnos.</p>
+      </div>
+  
+      <div *ngIf="filteredClases.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let clase of filteredClases" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <div class="p-6">
+            <div class="flex justify-between items-start">
+              <h3 class="text-lg font-semibold text-primary-800">{{ formatHora(clase.hora) }}</h3>
+              <span [ngClass]="getEstadoClasse((clase.cantidadPresentes / clase.cantidadAsistencias) * 100)" class="px-2 py-1 rounded-full text-xs font-semibold">
+                {{ getClaseEstado(clase) }}
+              </span>
+            </div>
+            
+            <p class="mt-2 text-secondary-600">
+              <span class="font-medium">Alumnos:</span> {{ clase.cantidadAsistencias }}
+            </p>
+            <p class="mt-1 text-secondary-600">
+              <span class="font-medium">Presentes:</span> {{ clase.cantidadPresentes }}
+            </p>
+            
+            <p *ngIf="clase.descripcion" class="mt-2 text-secondary-600 text-sm line-clamp-2">
+              {{ clase.descripcion }}
+            </p>
+          </div>
+          
+          <div class="px-6 py-4 bg-secondary-50 border-t border-secondary-200">
+            <button 
+              (click)="verAsistencias(clase.id)" 
+              class="w-full flex justify-center items-center px-4 py-2 bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              Registrar Asistencias
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

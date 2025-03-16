@@ -740,7 +740,7 @@ export class MockDataService {
   }
 
   // Asistencias por clase
-  getMockAsistenciasByClaseId(claseId: number): AsistenciaInfoDto[] {
+  /*getMockAsistenciasByClaseId(claseId: number): AsistenciaInfoDto[] {
     // Buscar la clase
     const clases = this.getMockClases();
     const clase = clases.find(c => c.id === claseId);
@@ -772,7 +772,7 @@ export class MockDataService {
     });
 
     return asistencias;
-  }
+  }*/
 
   // ========== PAGOS ==========
 
@@ -857,4 +857,187 @@ export class MockDataService {
       }
     };
   }
+
+  // ========== CLASES POR FECHA ==========
+
+// Método para obtener clases por fecha específica
+getMockClasesByFechaEspecifica(fechaStr: string): ClaseInfoDto[] {
+  // Convertir la fecha string a Date
+  const fecha = new Date(fechaStr);
+  
+  // Obtener día de la semana (0 = domingo, 1 = lunes, etc.)
+  const diaSemana = fecha.getDay();
+  
+  // Convertir a nuestro enum DayOfWeek
+  const daysMapping: { [key: number]: DayOfWeek } = {
+    0: DayOfWeek.SUNDAY,
+    1: DayOfWeek.MONDAY,
+    2: DayOfWeek.TUESDAY,
+    3: DayOfWeek.WEDNESDAY,
+    4: DayOfWeek.THURSDAY,
+    5: DayOfWeek.FRIDAY,
+    6: DayOfWeek.SATURDAY
+  };
+  
+  const diaSemanaEnum = daysMapping[diaSemana];
+  
+  // Filtrar turnos para ese día de la semana
+  const turnosDelDia = this.getMockTurnos().filter(t => t.diaSemana === diaSemanaEnum);
+  
+  // Crear clases para cada turno
+  const clases: ClaseInfoDto[] = [];
+  
+  turnosDelDia.forEach((turno, index) => {
+    // Simular datos de asistencia
+    const cantidadAsistencias = Math.floor(Math.random() * 12) + 5; // Entre 5 y 16 asistentes
+    const cantidadPresentes = Math.floor(Math.random() * (cantidadAsistencias + 1)); // Entre 0 y cantidadAsistencias
+    
+    clases.push({
+      id: 500 + index,
+      turnoId: turno.id,
+      diaSemana: turno.diaSemana,
+      hora: turno.hora,
+      fecha: fechaStr,
+      descripcion: turno.descripcion || 'Clase regular',
+      cantidadAsistencias,
+      cantidadPresentes
+    });
+  });
+  
+  return clases;
+}
+
+// ========== ASISTENCIAS POR CLASE ==========
+
+// Método para obtener asistencias por clase
+getMockAsistenciasByClaseId(claseId: number): AsistenciaInfoDto[] {
+  // Primero, intentamos encontrar la clase
+  const clases = this.getMockClases();
+  const clase = clases.find(c => c.id === claseId);
+  
+  if (!clase) {
+    // Si no encontramos la clase, generamos una clase ficticia
+    return this.generarAsistenciasFicticias(claseId, 10);
+  }
+  
+  // Obtenemos los usuarios asignados al turno de la clase
+  const turnos = this.getMockTurnosConUsuariosByDiaSemana(clase.diaSemana);
+  const turno = turnos.find(t => t.id === clase.turnoId);
+  
+  if (!turno || !turno.usuarios || turno.usuarios.length === 0) {
+    // Si no hay usuarios, generamos asistencias ficticias
+    return this.generarAsistenciasFicticias(claseId, 8);
+  }
+  
+  // Generamos asistencias basadas en los usuarios reales del turno
+  const asistencias: AsistenciaInfoDto[] = [];
+  let idCounter = 1000;
+  
+  turno.usuarios.forEach(usuario => {
+    // 70% de probabilidad de estar presente
+    const presente = Math.random() < 0.7;
+    
+    asistencias.push({
+      id: idCounter++,
+      claseId,
+      fechaClase: clase.fecha,
+      horaClase: clase.hora,
+      nombreUsuario: usuario.nombre,
+      apellidoUsuario: usuario.apellido,
+      presente,
+      fechaRegistro: new Date().toISOString()
+    });
+  });
+  
+  return asistencias;
+}
+
+// Método auxiliar para generar asistencias ficticias
+private generarAsistenciasFicticias(claseId: number, cantidad: number): AsistenciaInfoDto[] {
+  const asistencias: AsistenciaInfoDto[] = [];
+  let idCounter = 2000;
+  
+  // Generar nombres ficticios
+  const nombres = ['Juan', 'María', 'Carlos', 'Ana', 'Pedro', 'Laura', 'Martín', 'Sofía', 'Luis', 'Valentina'];
+  const apellidos = ['García', 'Rodríguez', 'Martínez', 'López', 'González', 'Pérez', 'Fernández', 'Gómez', 'Díaz', 'Sánchez'];
+  
+  for (let i = 0; i < cantidad; i++) {
+    const nombreIndex = Math.floor(Math.random() * nombres.length);
+    const apellidoIndex = Math.floor(Math.random() * apellidos.length);
+    const presente = Math.random() < 0.7; // 70% de probabilidad de estar presente
+    
+    asistencias.push({
+      id: idCounter++,
+      claseId,
+      fechaClase: new Date().toISOString().split('T')[0],
+      horaClase: `${Math.floor(Math.random() * 12) + 7}:${Math.random() < 0.5 ? '00' : '30'}`, // Horario entre 7:00 y 18:30
+      nombreUsuario: nombres[nombreIndex],
+      apellidoUsuario: apellidos[apellidoIndex],
+      presente,
+      fechaRegistro: new Date().toISOString()
+    });
+  }
+  
+  return asistencias;
+}
+
+// ========== MÉTODO PARA REGISTRAR ASISTENCIAS ==========
+
+// Simular registro de asistencias por clase
+registrarAsistenciasPorClaseMock(claseId: number, usuariosPresentes: number[]): AsistenciaInfoDto[] {
+  // Generamos asistencias actualizadas según los IDs de usuarios presentes
+  const asistencias: AsistenciaInfoDto[] = [];
+  let idCounter = 3000;
+  
+  // Obtener la clase
+  const clases = this.getMockClases();
+  const clase = clases.find(c => c.id === claseId) || {
+    id: claseId,
+    fecha: new Date().toISOString().split('T')[0],
+    hora: '08:00',
+    diaSemana: DayOfWeek.MONDAY,
+    turnoId: 1
+  };
+  
+  // Obtener usuarios (si existen)
+  const usuarios = this.getMockUsuarios();
+  
+  // Crear asistencias para cada usuario
+  usuariosPresentes.forEach(usuarioId => {
+    const usuario = usuarios.find(u => u.id === usuarioId);
+    
+    if (usuario) {
+      asistencias.push({
+        id: idCounter++,
+        claseId,
+        fechaClase: clase.fecha,
+        horaClase: clase.hora,
+        nombreUsuario: usuario.nombre,
+        apellidoUsuario: usuario.apellido,
+        presente: true,
+        fechaRegistro: new Date().toISOString()
+      });
+    }
+  });
+  
+  // Para los usuarios no presentes
+  usuarios.forEach(usuario => {
+    if (!usuariosPresentes.includes(usuario.id)) {
+      asistencias.push({
+        id: idCounter++,
+        claseId,
+        fechaClase: clase.fecha,
+        horaClase: clase.hora,
+        nombreUsuario: usuario.nombre,
+        apellidoUsuario: usuario.apellido,
+        presente: false,
+        fechaRegistro: new Date().toISOString()
+      });
+    }
+  });
+  
+  return asistencias;
+}
+
+
 }

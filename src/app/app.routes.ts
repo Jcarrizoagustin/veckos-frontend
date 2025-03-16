@@ -18,6 +18,8 @@ import { ReporteListComponent } from './components/reportes/reporte-list/reporte
 import { ReporteAsistenciaComponent } from './components/reportes/reporte-asistencia/reporte-asistencia.component';
 import { ReporteInscripcionesComponent } from './components/reportes/reporte-inscripciones/reporte-inscripciones.component';
 import { ReporteFinancieroComponent } from './components/reportes/reporte-financiero/reporte-financiero.component';
+import { ClaseListComponent } from './components/clases/clase-list/clase-list.component';
+import { ClaseAsistenciaComponent } from './components/clases/clase-asistencia/clase-asistencia.component';
 
 export const routes: Routes = [
   { 
@@ -145,6 +147,18 @@ export const routes: Routes = [
   {
     path: 'reportes/inscripciones',
     component: ReporteInscripcionesComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'clases',
+    component: ClaseListComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'clases/:id/asistencias',
+    component: ClaseAsistenciaComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
   },
