@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -52,44 +52,8 @@ export class InscripcionFormComponent implements OnInit {
   
   // Data para formularios
   usuarios: UsuarioListItemDto[] = [];
-  planes: PlanDto[] = [{
-    id: 1,
-    nombre: "Fitness",
-    precio: 28999,
-    descripcion: "Plan inicial"
-  }];
-  turnos: { [key: string]: TurnoDto[] } = {
-    [DayOfWeek.MONDAY]:[{
-      id:1,
-      diaSemana: DayOfWeek.MONDAY,
-      hora:"7:30",
-      descripcion:"",
-    }],
-    [DayOfWeek.TUESDAY]:[{
-      id:2,
-      diaSemana: DayOfWeek.TUESDAY,
-      hora:"7:30",
-      descripcion:"",
-    }],
-    [DayOfWeek.WEDNESDAY]:[{
-      id:3,
-      diaSemana: DayOfWeek.WEDNESDAY,
-      hora:"7:30",
-      descripcion:"",
-    }],
-    [DayOfWeek.THURSDAY]:[{
-      id:4,
-      diaSemana: DayOfWeek.THURSDAY,
-      hora:"7:30",
-      descripcion:"",
-    }],
-    [DayOfWeek.FRIDAY]:[{
-      id:5,
-      diaSemana: DayOfWeek.FRIDAY,
-      hora:"7:30",
-      descripcion:"",
-    }],
-  }; // Turnos por día de la semana
+  planes: PlanDto[] = [];
+  turnos: { [key: string]: TurnoDto[] } = {}; 
   
   // Modo formulario
   isRenovacion = false;
@@ -150,6 +114,11 @@ export class InscripcionFormComponent implements OnInit {
         this.usuarioForm.get('usuarioId')?.setValue(this.usuarioIdSeleccionado);
       }
     });
+    
+    // Escuchar cambios en la frecuencia para validar el número de días seleccionados
+    this.planForm.get('frecuencia')?.valueChanges.subscribe(() => {
+      this.diasSeleccionados.updateValueAndValidity();
+    });
   }
 
   initForms(): void {
@@ -160,7 +129,7 @@ export class InscripcionFormComponent implements OnInit {
     
     // Formulario para selección de plan y frecuencia
     this.planForm = this.formBuilder.group({
-      planId: ['', Validators.required],
+      planId: ['', [Validators.required]],
       frecuencia: [3, [Validators.required, Validators.min(3), Validators.max(5)]]
     });
     
@@ -218,12 +187,13 @@ export class InscripcionFormComponent implements OnInit {
 
   cargarTurnos(): void {
     this.loadingTurnos = true;
+    
     // Inicializamos el objeto de turnos por día
     this.diasSemana.forEach(dia => {
       this.turnos[dia] = [];
     });
     
-    // Cargamos los turnos para cada día
+    // Cargar los turnos para cada día de la semana
     const promises = this.diasSemana.map(dia => 
       this.turnoService.getByDiaSemana(dia).toPromise()
     );
@@ -260,8 +230,8 @@ export class InscripcionFormComponent implements OnInit {
         // Cargar datos de turnos
         if (inscripcion.detalles && inscripcion.detalles.length > 0) {
           // Reconstruir selección de días y turnos
-          const diasArray = this.turnosForm.get('diasSeleccionados') as FormArray;
-          const turnosArray = this.turnosForm.get('seleccionesTurnos') as FormArray;
+          const diasArray = this.diasSeleccionados;
+          const turnosArray = this.seleccionesTurnos;
           
           // Limpiar arrays
           while (diasArray.length) {
@@ -271,15 +241,19 @@ export class InscripcionFormComponent implements OnInit {
             turnosArray.removeAt(0);
           }
           
-          // Agregar días y turnos seleccionados
+          // Agregar días seleccionados
           inscripcion.detalles.forEach(detalle => {
             diasArray.push(this.formBuilder.control(detalle.diaSemana));
-            
-            const turnoGroup = this.formBuilder.group({
-              diaSemana: [detalle.diaSemana],
-              turnoId: [detalle.turnoId]
-            });
-            turnosArray.push(turnoGroup);
+          });
+          
+          // Actualizar selecciones de turnos
+          this.onChangeDiasSeleccionados();
+          
+          // Asignar valores de turnoId
+          inscripcion.detalles.forEach((detalle, index) => {
+            if (index < turnosArray.length) {
+              turnosArray.at(index).get('turnoId')?.setValue(detalle.turnoId);
+            }
           });
         }
         
@@ -298,8 +272,9 @@ export class InscripcionFormComponent implements OnInit {
 
   // Validador personalizado para verificar cantidad de días seleccionados
   validarCantidadDias(formArray: FormArray): { [key: string]: any } | null {
-    const frecuencia = this.planForm.get('frecuencia')?.value;
-    if (formArray.length !== frecuencia) {
+    const frecuencia = this.planForm?.get('frecuencia')?.value;
+    
+    if (!frecuencia || formArray.length !== frecuencia) {
       return { cantidadIncorrecta: true };
     }
     return null;
@@ -320,7 +295,7 @@ export class InscripcionFormComponent implements OnInit {
     const seleccionesArray = this.seleccionesTurnos;
     
     // Limpiar array de selecciones de turnos
-    while (seleccionesArray.length) {
+    while (seleccionesArray.length > 0) {
       seleccionesArray.removeAt(0);
     }
     
@@ -348,6 +323,9 @@ export class InscripcionFormComponent implements OnInit {
       const frecuencia = this.planForm.get('frecuencia')?.value;
       if (diasArray.length < frecuencia) {
         diasArray.push(this.formBuilder.control(dia));
+        
+        // Actualizar selecciones de turnos
+        this.onChangeDiasSeleccionados();
       } else {
         this.snackBar.open(`Solo puede seleccionar ${frecuencia} días`, 'Cerrar', {
           duration: 3000
@@ -356,14 +334,41 @@ export class InscripcionFormComponent implements OnInit {
       }
     } else {
       diasArray.removeAt(index);
+      
+      // Actualizar selecciones de turnos
+      this.onChangeDiasSeleccionados();
     }
-    
-    // Actualizar selecciones de turnos
-    this.onChangeDiasSeleccionados();
   }
 
   // Avanzar al siguiente paso
   nextStep(stepper: any): void {
+    console.log('Current seleccionesTurnos:', this.seleccionesTurnos.value);
+    console.log('Form Data:', {
+      usuario: this.usuarioForm.value,
+      plan: this.planForm.value,
+      turnos: this.turnosForm.value
+    });
+    
+    // Depurar estado del formulario antes de avanzar
+    if (stepper.selectedIndex === 2) { // Estamos en el paso de turnos
+      if (this.turnosForm.invalid) {
+        this.markFormGroupTouched(this.turnosForm);
+        this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', {
+          duration: 3000
+        });
+        return;
+      }
+    }
+    
+    // Si estamos avanzando al paso 4 (confirmación), cargar datos para el resumen
+    if (stepper.selectedIndex === 2 && !this.turnosForm.invalid) {
+      // Forzar actualización de datos antes de mostrar el resumen
+      console.log('Preparando datos para resumen...');
+      console.log('Usuarios:', this.usuarios);
+      console.log('Planes:', this.planes);
+      console.log('Turnos:', this.turnos);
+    }
+    
     stepper.next();
   }
 
@@ -375,13 +380,25 @@ export class InscripcionFormComponent implements OnInit {
   // Obtener resumen para confirmación
   getResumenUsuario(): string {
     const usuarioId = this.usuarioForm.get('usuarioId')?.value;
-    const usuario = this.usuarios.find(u => u.id === usuarioId);
+    if (!usuarioId) return 'No seleccionado';
+    
+    // Convertir a número para asegurar una comparación correcta
+    const usuarioIdNum = Number(usuarioId);
+    const usuario = this.usuarios.find(u => u.id === usuarioIdNum);
+    
+    console.log('Usuario ID:', usuarioIdNum, 'Usuario encontrado:', usuario);
     return usuario ? `${usuario.nombre} ${usuario.apellido}` : 'No seleccionado';
   }
   
   getResumenPlan(): string {
     const planId = this.planForm.get('planId')?.value;
-    const plan = this.planes.find(p => p.id === planId);
+    if (!planId) return 'No seleccionado';
+    
+    // Convertir a número para asegurar una comparación correcta
+    const planIdNum = Number(planId);
+    const plan = this.planes.find(p => p.id === planIdNum);
+    
+    console.log('Plan ID:', planIdNum, 'Plan encontrado:', plan);
     return plan ? plan.nombre : 'No seleccionado';
   }
   
@@ -392,12 +409,42 @@ export class InscripcionFormComponent implements OnInit {
   
   getResumenTurnos(): string[] {
     const selecciones = this.seleccionesTurnos.value;
+    console.log('Selecciones de turnos:', selecciones);
+    console.log('Turnos disponibles:', this.turnos);
+    
     return selecciones.map((seleccion: any) => {
       const dia = this.nombresDias[seleccion.diaSemana];
-      const turnoId = seleccion.turnoId;
-      const turno = this.turnos[seleccion.diaSemana]?.find(t => t.id === turnoId);
+      
+      // Convertir a número para asegurar una comparación correcta
+      const turnoId = Number(seleccion.turnoId);
+      
+      // Buscar en el array de turnos correspondiente al día
+      const turnosDelDia = this.turnos[seleccion.diaSemana] || [];
+      const turno = turnosDelDia.find(t => Number(t.id) === turnoId);
+      
+      console.log('Día:', seleccion.diaSemana, 'Turno ID:', turnoId, 'Turno encontrado:', turno);
       const hora = turno ? turno.hora : 'No seleccionado';
       return `${dia} - ${hora}`;
+    });
+  }
+
+  // Función para marcar todos los campos del formulario como tocados
+  markFormGroupTouched(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      if (control instanceof FormControl) {
+        control.markAsTouched();
+      } else if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      } else if (control instanceof FormArray) {
+        for (let i = 0; i < control.length; i++) {
+          if (control.at(i) instanceof FormGroup) {
+            this.markFormGroupTouched(control.at(i) as FormGroup);
+          } else {
+            (control.at(i) as FormControl).markAsTouched();
+          }
+        }
+      }
     });
   }
 
@@ -422,6 +469,8 @@ export class InscripcionFormComponent implements OnInit {
         diaSemana: seleccion.diaSemana
       }))
     };
+    
+    console.log('Datos a enviar:', inscripcion);
     
     // Enviar datos según sea creación o renovación
     if (this.isRenovacion && this.inscripcionId) {

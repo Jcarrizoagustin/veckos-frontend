@@ -1,302 +1,304 @@
 <div class="container mx-auto px-4">
-    <div class="flex items-center mb-6">
-      <button (click)="cancel()" class="mr-4 text-secondary-600 hover:text-secondary-900">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-      </button>
-      <h1 class="text-2xl font-bold text-primary-800">
-        {{ isRenovacion ? 'Renovar' : 'Nueva' }} Inscripción
-      </h1>
-    </div>
-  
-    <!-- Loading Indicator -->
-    <div *ngIf="loading" class="flex justify-center my-8">
-      <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  <div class="flex items-center mb-6">
+    <button (click)="cancel()" class="mr-4 text-secondary-600 hover:text-secondary-900">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
-    </div>
-  
-    <!-- Stepper Form -->
-    <div *ngIf="!loading" class="bg-white rounded-lg shadow-md">
-      <mat-stepper linear #stepper>
-        <!-- Step 1: Selección de Usuario -->
-        <mat-step [stepControl]="usuarioForm">
-          <ng-template matStepLabel>Usuario</ng-template>
-          <div class="p-6">
-            <h2 class="text-xl font-semibold text-primary-800 mb-6">Selecciona el Usuario</h2>
-            
-            <form [formGroup]="usuarioForm">
-              <div *ngIf="loadingUsuarios" class="flex justify-center my-4">
-                <svg class="animate-spin h-6 w-6 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              </div>
-              
-              <div *ngIf="!loadingUsuarios">
-                <div class="mb-4">
-                  <label for="usuarioId" class="block text-sm font-medium text-secondary-700 mb-2">Usuario *</label>
-                  <select 
-                    id="usuarioId" 
-                    formControlName="usuarioId"
-                    class="w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                    <option value="">Seleccione un usuario</option>
-                    <option *ngFor="let usuario of usuarios" [value]="usuario.id">
-                      {{ usuario.nombre }} {{ usuario.apellido }} - {{ usuario.dni }}
-                    </option>
-                  </select>
-                  <div *ngIf="usuarioForm.get('usuarioId')?.invalid && usuarioForm.get('usuarioId')?.touched" class="text-red-600 text-sm mt-1">
-                    Debe seleccionar un usuario
-                  </div>
-                </div>
-              </div>
-            </form>
-            
-            <div class="flex justify-end mt-6">
-              <button (click)="cancel()" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
-                Cancelar
-              </button>
-              <button 
-                [disabled]="usuarioForm.invalid || loadingUsuarios" 
-                (click)="nextStep(stepper)" 
-                class="btn-primary">
-                Siguiente
-              </button>
-            </div>
-          </div>
-        </mat-step>
-  
-        <!-- Step 2: Selección de Plan y Frecuencia -->
-        <mat-step [stepControl]="planForm">
-          <ng-template matStepLabel>Plan</ng-template>
-          <div class="p-6">
-            <h2 class="text-xl font-semibold text-primary-800 mb-6">Selecciona el Plan</h2>
-            
-            <form [formGroup]="planForm">
-              <div *ngIf="loadingPlanes" class="flex justify-center my-4">
-                <svg class="animate-spin h-6 w-6 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              </div>
-              
-              <div *ngIf="!loadingPlanes">
-                <!-- Plan Selection -->
-                <div class="mb-6">
-                  <label for="planId" class="block text-sm font-medium text-secondary-700 mb-2">Plan *</label>
-                  <select 
-                    id="planId" 
-                    formControlName="planId"
-                    class="w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                    <option value="">Seleccione un plan</option>
-                    <option *ngFor="let plan of planes" [value]="plan.id">
-                      {{ plan.nombre }} - ${{ plan.precio }}
-                    </option>
-                  </select>
-                  <div *ngIf="planForm.get('planId')?.invalid && planForm.get('planId')?.touched" class="text-red-600 text-sm mt-1">
-                    Debe seleccionar un plan
-                  </div>
-                </div>
-                
-                <!-- Frecuencia Selection -->
-                <div>
-                  <label class="block text-sm font-medium text-secondary-700 mb-2">Frecuencia *</label>
-                  <div class="space-y-2">
-                    <div class="flex items-center">
-                      <input 
-                        type="radio" 
-                        id="frecuencia3" 
-                        [value]="3" 
-                        formControlName="frecuencia"
-                        class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300">
-                      <label for="frecuencia3" class="ml-3 block text-sm font-medium text-secondary-700">
-                        3 días por semana
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input 
-                        type="radio" 
-                        id="frecuencia5" 
-                        [value]="5" 
-                        formControlName="frecuencia"
-                        class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300">
-                      <label for="frecuencia5" class="ml-3 block text-sm font-medium text-secondary-700">
-                        5 días por semana
-                      </label>
-                    </div>
-                  </div>
-                  <div *ngIf="planForm.get('frecuencia')?.invalid && planForm.get('frecuencia')?.touched" class="text-red-600 text-sm mt-1">
-                    Debe seleccionar una frecuencia
-                  </div>
-                </div>
-              </div>
-            </form>
-            
-            <div class="flex justify-end mt-6">
-              <button (click)="prevStep(stepper)" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
-                Atrás
-              </button>
-              <button 
-                [disabled]="planForm.invalid || loadingPlanes" 
-                (click)="nextStep(stepper)" 
-                class="btn-primary">
-                Siguiente
-              </button>
-            </div>
-          </div>
-        </mat-step>
-  
-        <!-- Step 3: Selección de Turnos -->
-        <mat-step [stepControl]="turnosForm">
-          <ng-template matStepLabel>Turnos</ng-template>
-          <div class="p-6">
-            <h2 class="text-xl font-semibold text-primary-800 mb-6">Selecciona Días y Turnos</h2>
-            
-            <div *ngIf="loadingTurnos" class="flex justify-center my-4">
+    </button>
+    <h1 class="text-2xl font-bold text-primary-800">
+      {{ isRenovacion ? 'Renovar' : 'Nueva' }} Inscripción
+    </h1>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="flex justify-center my-8">
+    <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  </div>
+
+  <!-- Stepper Form -->
+  <div *ngIf="!loading" class="bg-white rounded-lg shadow-md">
+    <mat-stepper linear #stepper>
+      <!-- Step 1: Selección de Usuario -->
+      <mat-step [stepControl]="usuarioForm">
+        <ng-template matStepLabel>Usuario</ng-template>
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-primary-800 mb-6">Selecciona el Usuario</h2>
+          
+          <form [formGroup]="usuarioForm">
+            <div *ngIf="loadingUsuarios" class="flex justify-center my-4">
               <svg class="animate-spin h-6 w-6 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             </div>
             
-            <form [formGroup]="turnosForm" *ngIf="!loadingTurnos">
-              <!-- Días de la semana -->
-              <div class="mb-6">
-                <label class="block text-sm font-medium text-secondary-700 mb-2">
-                  Selecciona {{ planForm.get('frecuencia')?.value }} días de asistencia
-                </label>
-                
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-2">
-                  <button
-                    *ngFor="let dia of diasSemana"
-                    type="button"
-                    (click)="toggleDia(dia)"
-                    [ngClass]="isDiaSeleccionado(dia) ? 'bg-primary-100 border-primary-500 text-primary-800' : 'bg-white border-secondary-300 text-secondary-700'"
-                    class="border rounded-md py-2 px-3 flex items-center justify-center text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  >
-                    {{ nombresDias[dia] }}
-                  </button>
+            <div *ngIf="!loadingUsuarios">
+              <div class="mb-4">
+                <label for="usuarioId" class="block text-sm font-medium text-secondary-700 mb-2">Usuario *</label>
+                <select 
+                  id="usuarioId" 
+                  formControlName="usuarioId"
+                  class="w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
+                  <option value="">Seleccione un usuario</option>
+                  <option *ngFor="let usuario of usuarios" [value]="usuario.id">
+                    {{ usuario.nombre }} {{ usuario.apellido }} - {{ usuario.dni }}
+                  </option>
+                </select>
+                <div *ngIf="usuarioForm.get('usuarioId')?.invalid && usuarioForm.get('usuarioId')?.touched" class="text-red-600 text-sm mt-1">
+                  Debe seleccionar un usuario
                 </div>
-                
-                <div *ngIf="diasSeleccionados.invalid && diasSeleccionados.touched" class="text-red-600 text-sm mt-2">
-                  <span *ngIf="diasSeleccionados.errors?.['required']">Debe seleccionar al menos un día</span>
-                  <span *ngIf="diasSeleccionados.errors?.['cantidadIncorrecta']">Debe seleccionar exactamente {{ planForm.get('frecuencia')?.value }} días</span>
+              </div>
+            </div>
+          </form>
+          
+          <div class="flex justify-end mt-6">
+            <button (click)="cancel()" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
+              Cancelar
+            </button>
+            <button 
+              [disabled]="usuarioForm.invalid || loadingUsuarios" 
+              (click)="nextStep(stepper)" 
+              class="btn-primary">
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- Step 2: Selección de Plan y Frecuencia -->
+      <mat-step [stepControl]="planForm">
+        <ng-template matStepLabel>Plan</ng-template>
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-primary-800 mb-6">Selecciona el Plan</h2>
+          
+          <form [formGroup]="planForm">
+            <div *ngIf="loadingPlanes" class="flex justify-center my-4">
+              <svg class="animate-spin h-6 w-6 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+            
+            <div *ngIf="!loadingPlanes">
+              <!-- Plan Selection -->
+              <div class="mb-6">
+                <label for="planId" class="block text-sm font-medium text-secondary-700 mb-2">Plan *</label>
+                <select 
+                  id="planId" 
+                  formControlName="planId"
+                  class="w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
+                  <option value="">Seleccione un plan</option>
+                  <option *ngFor="let plan of planes" [value]="plan.id">
+                    {{ plan.nombre }} - ${{ plan.precio }}
+                  </option>
+                </select>
+                <div *ngIf="planForm.get('planId')?.invalid && planForm.get('planId')?.touched" class="text-red-600 text-sm mt-1">
+                  Debe seleccionar un plan
                 </div>
               </div>
               
-              <!-- Selección de turnos para cada día -->
-              <div *ngIf="seleccionesTurnos.length > 0" class="space-y-4">
-                <h3 class="text-lg font-medium text-secondary-900">Selecciona el horario para cada día</h3>
+              <!-- Frecuencia Selection -->
+              <div>
+                <label class="block text-sm font-medium text-secondary-700 mb-2">Frecuencia *</label>
+                <div class="space-y-2">
+                  <div class="flex items-center">
+                    <input 
+                      type="radio" 
+                      id="frecuencia3" 
+                      [value]="3" 
+                      formControlName="frecuencia"
+                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300">
+                    <label for="frecuencia3" class="ml-3 block text-sm font-medium text-secondary-700">
+                      3 días por semana
+                    </label>
+                  </div>
+                  <div class="flex items-center">
+                    <input 
+                      type="radio" 
+                      id="frecuencia5" 
+                      [value]="5" 
+                      formControlName="frecuencia"
+                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300">
+                    <label for="frecuencia5" class="ml-3 block text-sm font-medium text-secondary-700">
+                      5 días por semana
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="planForm.get('frecuencia')?.invalid && planForm.get('frecuencia')?.touched" class="text-red-600 text-sm mt-1">
+                  Debe seleccionar una frecuencia
+                </div>
+              </div>
+            </div>
+          </form>
+          
+          <div class="flex justify-end mt-6">
+            <button (click)="prevStep(stepper)" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
+              Atrás
+            </button>
+            <button 
+              [disabled]="planForm.invalid || loadingPlanes" 
+              (click)="nextStep(stepper)" 
+              class="btn-primary">
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- Step 3: Selección de Turnos -->
+      <mat-step [stepControl]="turnosForm">
+        <ng-template matStepLabel>Turnos</ng-template>
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-primary-800 mb-6">Selecciona Días y Turnos</h2>
+          
+          <div *ngIf="loadingTurnos" class="flex justify-center my-4">
+            <svg class="animate-spin h-6 w-6 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          
+          <form [formGroup]="turnosForm" *ngIf="!loadingTurnos">
+            <!-- Días de la semana -->
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-secondary-700 mb-2">
+                Selecciona {{ planForm.get('frecuencia')?.value }} días de asistencia
+              </label>
+              
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-2">
+                <button
+                  *ngFor="let dia of diasSemana"
+                  type="button"
+                  (click)="toggleDia(dia)"
+                  [ngClass]="isDiaSeleccionado(dia) ? 'bg-primary-100 border-primary-500 text-primary-800' : 'bg-white border-secondary-300 text-secondary-700'"
+                  class="border rounded-md py-2 px-3 flex items-center justify-center text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  {{ nombresDias[dia] }}
+                </button>
+              </div>
+              
+              <div *ngIf="diasSeleccionados.invalid && diasSeleccionados.touched" class="text-red-600 text-sm mt-2">
+                <span *ngIf="diasSeleccionados.errors?.['required']">Debe seleccionar al menos un día</span>
+                <span *ngIf="diasSeleccionados.errors?.['cantidadIncorrecta']">Debe seleccionar exactamente {{ planForm.get('frecuencia')?.value }} días</span>
+              </div>
+            </div>
+            
+            <!-- Selección de turnos para cada día -->
+            <div *ngIf="seleccionesTurnos.length > 0" class="space-y-4" formArrayName="seleccionesTurnos">
+              <h3 class="text-lg font-medium text-secondary-900">Selecciona el horario para cada día</h3>
+              
+              <div *ngFor="let seleccion of seleccionesTurnos.controls; let i = index" 
+                   [formGroupName]="i" 
+                   class="p-4 border border-secondary-200 rounded-lg">
+                <h4 class="font-medium text-secondary-800">{{ nombresDias[seleccion.get('diaSemana')?.value] }}</h4>
                 
-                <div *ngFor="let seleccion of seleccionesTurnos.controls; let i = index" class="p-4 border border-secondary-200 rounded-lg">
-                  <h4 class="font-medium text-secondary-800">{{ nombresDias[seleccion.get('diaSemana')?.value] }}</h4>
+                <div class="mt-2">
+                  <select 
+                    formControlName="turnoId"
+                    class="w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
+                    <option value="">Seleccione un horario</option>
+                    <option *ngFor="let turno of turnos[seleccion.get('diaSemana')?.value]" [value]="turno.id">
+                      {{ turno.hora }} {{ turno.descripcion ? '- ' + turno.descripcion : '' }}
+                    </option>
+                  </select>
                   
-                  <div class="mt-2">
-                    <select 
-                      formControlName="turnoId"
-                      class="w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                      <option value="">Seleccione un horario</option>
-                      <option *ngFor="let turno of turnos[seleccion.get('diaSemana')?.value]" [value]="turno.id">
-                        {{ turno.hora }} {{ turno.descripcion ? '- ' + turno.descripcion : '' }}
-                      </option>
-                    </select>
-                    
-                    <div *ngIf="seleccion.get('turnoId')?.invalid && seleccion.get('turnoId')?.touched" class="text-red-600 text-sm mt-1">
-                      Debe seleccionar un horario
-                    </div>
+                  <div *ngIf="seleccion.get('turnoId')?.invalid && seleccion.get('turnoId')?.touched" class="text-red-600 text-sm mt-1">
+                    Debe seleccionar un horario
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          
+          <div class="flex justify-end mt-6">
+            <button (click)="prevStep(stepper)" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
+              Atrás
+            </button>
+            <button 
+              [disabled]="turnosForm.invalid || loadingTurnos" 
+              (click)="nextStep(stepper)" 
+              class="btn-primary">
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- Step 4: Confirmación -->
+      <mat-step [stepControl]="confirmacionForm">
+        <ng-template matStepLabel>Confirmación</ng-template>
+        <div class="p-6">
+          <h2 class="text-xl font-semibold text-primary-800 mb-6">Revisa los datos de la inscripción</h2>
+          
+          <div class="space-y-6">
+            <div class="bg-secondary-50 p-4 rounded-lg">
+              <h3 class="text-lg font-medium text-secondary-900 mb-2">Resumen</h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm text-secondary-500">Usuario</p>
+                  <p class="font-medium">{{ getResumenUsuario() }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-secondary-500">Plan</p>
+                  <p class="font-medium">{{ getResumenPlan() }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-secondary-500">Frecuencia</p>
+                  <p class="font-medium">{{ getResumenFrecuencia() }}</p>
+                </div>
+              </div>
+              
+              <div class="mt-4">
+                <p class="text-sm text-secondary-500">Días y Horarios</p>
+                <ul class="mt-1 space-y-1">
+                  <li *ngFor="let turno of getResumenTurnos()" class="font-medium">{{ turno }}</li>
+                </ul>
+              </div>
+            </div>
+            
+            <form [formGroup]="confirmacionForm">
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <input
+                    id="aceptaTerminos"
+                    formControlName="aceptaTerminos"
+                    type="checkbox"
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300 rounded"
+                  >
+                </div>
+                <div class="ml-3 text-sm">
+                  <label for="aceptaTerminos" class="font-medium text-secondary-700">Confirmo que los datos ingresados son correctos</label>
+                  <div *ngIf="confirmacionForm.get('aceptaTerminos')?.invalid && confirmacionForm.get('aceptaTerminos')?.touched" class="text-red-600 mt-1">
+                    Debe confirmar que los datos son correctos
                   </div>
                 </div>
               </div>
             </form>
-            
-            <div class="flex justify-end mt-6">
-              <button (click)="prevStep(stepper)" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
-                Atrás
-              </button>
-              <button 
-                [disabled]="turnosForm.invalid || loadingTurnos" 
-                (click)="nextStep(stepper)" 
-                class="btn-primary">
-                Siguiente
-              </button>
-            </div>
           </div>
-        </mat-step>
-  
-        <!-- Step 4: Confirmación -->
-        <mat-step [stepControl]="confirmacionForm">
-          <ng-template matStepLabel>Confirmación</ng-template>
-          <div class="p-6">
-            <h2 class="text-xl font-semibold text-primary-800 mb-6">Revisa los datos de la inscripción</h2>
-            
-            <div class="space-y-6">
-              <div class="bg-secondary-50 p-4 rounded-lg">
-                <h3 class="text-lg font-medium text-secondary-900 mb-2">Resumen</h3>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <p class="text-sm text-secondary-500">Usuario</p>
-                    <p class="font-medium">{{ getResumenUsuario() }}</p>
-                  </div>
-                  <div>
-                    <p class="text-sm text-secondary-500">Plan</p>
-                    <p class="font-medium">{{ getResumenPlan() }}</p>
-                  </div>
-                  <div>
-                    <p class="text-sm text-secondary-500">Frecuencia</p>
-                    <p class="font-medium">{{ getResumenFrecuencia() }}</p>
-                  </div>
-                </div>
-                
-                <div class="mt-4">
-                  <p class="text-sm text-secondary-500">Días y Horarios</p>
-                  <ul class="mt-1 space-y-1">
-                    <li *ngFor="let turno of getResumenTurnos()" class="font-medium">{{ turno }}</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <form [formGroup]="confirmacionForm">
-                <div class="flex items-start">
-                  <div class="flex items-center h-5">
-                    <input
-                      id="aceptaTerminos"
-                      formControlName="aceptaTerminos"
-                      type="checkbox"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300 rounded"
-                    >
-                  </div>
-                  <div class="ml-3 text-sm">
-                    <label for="aceptaTerminos" class="font-medium text-secondary-700">Confirmo que los datos ingresados son correctos</label>
-                    <div *ngIf="confirmacionForm.get('aceptaTerminos')?.invalid && confirmacionForm.get('aceptaTerminos')?.touched" class="text-red-600 mt-1">
-                      Debe confirmar que los datos son correctos
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            
-            <div class="flex justify-end mt-6">
-              <button (click)="prevStep(stepper)" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
-                Atrás
-              </button>
-              <button 
-                [disabled]="confirmacionForm.invalid || loading" 
-                (click)="onSubmit()" 
-                class="btn-primary">
-                <span *ngIf="loading" class="mr-2">
-                  <svg class="animate-spin h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                </span>
-                {{ isRenovacion ? 'Renovar' : 'Crear' }} Inscripción
-              </button>
-            </div>
+          
+          <div class="flex justify-end mt-6">
+            <button (click)="prevStep(stepper)" class="px-4 py-2 border border-secondary-300 rounded-md shadow-sm text-sm font-medium text-secondary-700 bg-white hover:bg-secondary-50 mr-3">
+              Atrás
+            </button>
+            <button 
+              [disabled]="confirmacionForm.invalid || loading" 
+              (click)="onSubmit()" 
+              class="btn-primary">
+              <span *ngIf="loading" class="mr-2">
+                <svg class="animate-spin h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </span>
+              {{ isRenovacion ? 'Renovar' : 'Crear' }} Inscripción
+            </button>
           </div>
-        </mat-step>
-      </mat-stepper>
-    </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
   </div>
+</div>
