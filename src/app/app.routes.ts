@@ -20,6 +20,7 @@ import { ReporteInscripcionesComponent } from './components/reportes/reporte-ins
 import { ReporteFinancieroComponent } from './components/reportes/reporte-financiero/reporte-financiero.component';
 import { ClaseListComponent } from './components/clases/clase-list/clase-list.component';
 import { ClaseAsistenciaComponent } from './components/clases/clase-asistencia/clase-asistencia.component';
+import { GuiaUsuarioComponent } from './components/guia-usuario/guia-usuario.component';
 
 export const routes: Routes = [
   { 
@@ -161,6 +162,12 @@ export const routes: Routes = [
     component: ClaseAsistenciaComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'ayuda',
+    component: GuiaUsuarioComponent,
+    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
   },
   // Otras rutas aquí
   { 

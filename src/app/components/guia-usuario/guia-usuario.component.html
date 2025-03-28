@@ -1,0 +1,90 @@
+<div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h1 class="text-2xl font-bold text-primary-800 mb-4">Guía de Usuario - Vecko's Centro de Entrenamiento</h1>
+      <p class="text-lg text-secondary-600 mb-6">
+        Esta guía te ayudará a entender las principales funcionalidades del sistema de gestión y cómo utilizarlas eficientemente.
+      </p>
+      
+      <!-- Introducción con tarjetas de funcionalidades -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <div *ngFor="let func of funcionalidades" class="bg-secondary-50 rounded-lg p-4 border border-secondary-200">
+          <div class="flex items-center mb-2">
+            <mat-icon class="text-primary-600 mr-2">{{func.icono}}</mat-icon>
+            <h3 class="text-lg font-semibold text-secondary-900">{{func.titulo}}</h3>
+          </div>
+          <p class="text-secondary-600 mb-3">{{func.descripcion}}</p>
+          <button 
+            [routerLink]="func.ruta" 
+            class="text-primary-600 hover:text-primary-800 text-sm font-medium flex items-center">
+            Ir a {{func.titulo}}
+            <mat-icon class="text-sm ml-1">arrow_forward</mat-icon>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Sección de funcionalidades detalladas -->
+      <h2 class="text-xl font-bold text-primary-800 mb-4">Funcionalidades Principales</h2>
+      
+      <mat-accordion class="mb-8">
+        <mat-expansion-panel *ngFor="let func of funcionalidades">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="flex items-center">
+              <mat-icon class="text-primary-600 mr-2">{{func.icono}}</mat-icon>
+              {{func.titulo}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <div class="py-2">
+            <p class="mb-4 text-secondary-700">{{func.descripcion}}</p>
+            <h4 class="font-medium mb-2 text-secondary-900">Cómo usar esta función:</h4>
+            <ol class="list-decimal pl-5 space-y-2 text-secondary-700">
+              <li *ngFor="let paso of func.pasos">{{paso}}</li>
+            </ol>
+            <div class="mt-4">
+              <button 
+                [routerLink]="func.ruta" 
+                mat-button 
+                color="primary" 
+                class="bg-primary-50 hover:bg-primary-100 text-primary-700 py-1 px-4 rounded">
+                Ir a {{func.titulo}}
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      
+      <!-- Sección de flujos de trabajo comunes -->
+      <h2 class="text-xl font-bold text-primary-800 mb-4">Flujos de Trabajo Comunes</h2>
+      
+      <div class="space-y-6 mb-8">
+        <div *ngFor="let flujo of flujosTrabajo" class="bg-white rounded-lg border border-secondary-200 p-4">
+          <h3 class="text-lg font-semibold text-secondary-900 mb-3">{{flujo.titulo}}</h3>
+          <div class="space-y-2">
+            <div *ngFor="let paso of flujo.pasos; let i = index" class="flex">
+              <div class="bg-primary-100 text-primary-800 font-semibold rounded-full h-6 w-6 flex items-center justify-center mr-3 flex-shrink-0">
+                {{i+1}}
+              </div>
+              <div class="text-secondary-700 pt-0.5">{{paso}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Ayuda y soporte -->
+      <div class="bg-primary-50 rounded-lg p-6 border border-primary-200">
+        <h2 class="text-xl font-bold text-primary-800 mb-2">¿Necesitas más ayuda?</h2>
+        <p class="text-secondary-700 mb-4">
+          Si tienes dudas adicionales sobre el uso del sistema o encuentras algún problema, 
+          no dudes en contactar al administrador.
+        </p>
+        <div class="flex space-x-4">
+          <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md shadow-sm font-medium">
+            Contactar soporte
+          </button>
+          <button class="bg-secondary-200 hover:bg-secondary-300 text-secondary-800 px-4 py-2 rounded-md shadow-sm font-medium">
+            Ver manual completo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

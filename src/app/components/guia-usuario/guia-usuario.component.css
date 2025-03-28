@@ -1,0 +1,51 @@
+/* Estilos específicos para el componente de Guía de Usuario */
+
+/* Estilos para las tarjetas de funcionalidades */
+.feature-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Estilo para los iconos en las tarjetas */
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Estilos para los pasos numerados en los flujos de trabajo */
+  .step-number {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Estilo para los acordeones de funcionalidad */
+  .mat-expansion-panel {
+    margin-bottom: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .mat-expansion-panel-header {
+    height: 64px;
+  }
+  
+  /* Estilos para los botones de acción */
+  .action-button {
+    transition: all 0.2s ease;
+  }
+  
+  .action-button:hover {
+    transform: translateY(-2px);
+  }
