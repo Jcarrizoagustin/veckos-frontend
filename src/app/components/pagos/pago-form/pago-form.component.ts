@@ -96,14 +96,14 @@ export class PagoFormComponent implements OnInit {
         if (inscripcion && inscripcion.nombrePlan) {
           // Sugerir un monto basado en el nombre del plan (solo como ejemplo)
           // En una implementación real, podrías consultar el precio real del plan
-          let montoSugerido = 0;
-          if (inscripcion.nombrePlan.includes('Fitness')) {
+          let montoSugerido = inscripcion.precioPlan;
+          /*if (inscripcion.nombrePlan.includes('Fitness')) {
             montoSugerido = 25000;
           } else if (inscripcion.nombrePlan.includes('Wellness')) {
             montoSugerido = 32000;
           } else if (inscripcion.nombrePlan.includes('Sport')) {
             montoSugerido = 38000;
-          }
+          }*/
           
           // Solo sugerir el monto si no se ha ingresado uno
           if (!this.pagoForm.get('monto')?.value) {

@@ -107,6 +107,7 @@ export class MockDataService {
           apellidoUsuario: 'Pérez',
           nombrePlan: 'Plan Fitness',
           planId: 1,
+          precioPlan:29999,
           fechaInicio: '2023-02-01',
           fechaFin: '2023-03-01',
           frecuencia: 3,
@@ -154,6 +155,7 @@ export class MockDataService {
           apellidoUsuario: 'González',
           nombrePlan: 'Plan Wellness',
           planId: 2,
+          precioPlan:29999,
           fechaInicio: '2023-01-15',
           fechaFin: '2023-02-15',
           frecuencia: 5,
@@ -213,6 +215,7 @@ export class MockDataService {
           apellidoUsuario: 'Rodríguez',
           nombrePlan: 'Plan Sport',
           planId: 3,
+          precioPlan:29999,
           fechaInicio: '2023-01-01',
           fechaFin: '2023-02-01',
           frecuencia: 3,
@@ -275,6 +278,7 @@ export class MockDataService {
           apellidoUsuario: 'López',
           nombrePlan: 'Plan Sport',
           planId: 3,
+          precioPlan:29999,
           fechaInicio: '2023-01-05',
           fechaFin: '2023-02-05',
           frecuencia: 5,
@@ -431,6 +435,7 @@ export class MockDataService {
         apellidoUsuario: 'Pérez',
         nombrePlan: 'Plan Fitness',
         planId: 1,
+        precioPlan: 34999,
         fechaInicio: '2023-02-01',
         fechaFin: '2023-03-01',
         frecuencia: 3,
@@ -464,6 +469,7 @@ export class MockDataService {
         apellidoUsuario: 'González',
         nombrePlan: 'Plan Wellness',
         planId: 2,
+        precioPlan: 29999,
         fechaInicio: '2023-01-15',
         fechaFin: '2023-02-15',
         frecuencia: 5,
@@ -509,6 +515,7 @@ export class MockDataService {
         apellidoUsuario: 'Rodríguez',
         nombrePlan: 'Plan Sport',
         planId: 3,
+        precioPlan: 38999,
         fechaInicio: '2023-01-01',
         fechaFin: '2023-02-01',
         frecuencia: 3,
@@ -542,6 +549,7 @@ export class MockDataService {
         apellidoUsuario: 'Fernández',
         nombrePlan: 'Plan Fitness',
         planId: 1,
+        precioPlan: 34999,
         fechaInicio: '2022-12-01',
         fechaFin: '2023-01-01',
         frecuencia: 3,
@@ -575,6 +583,7 @@ export class MockDataService {
         apellidoUsuario: 'López',
         nombrePlan: 'Plan Sport',
         planId: 3,
+        precioPlan: 38999,
         fechaInicio: '2023-01-05',
         fechaFin: '2023-02-05',
         frecuencia: 5,
@@ -792,9 +801,7 @@ export class MockDataService {
       // Método de pago aleatorio
       const metodosPago = [
         MetodoPago.EFECTIVO,
-        MetodoPago.TRANSFERENCIA,
-        MetodoPago.TARJETA_CREDITO,
-        MetodoPago.TARJETA_DEBITO
+        MetodoPago.TRANSFERENCIA
       ];
       const metodoPago = metodosPago[Math.floor(Math.random() * metodosPago.length)];
 

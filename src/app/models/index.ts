@@ -106,6 +106,7 @@ export interface LoginDto {
     apellidoUsuario: string;
     nombrePlan: string;
     planId: number;
+    precioPlan: number;
     fechaInicio: Date | string;
     fechaFin: Date | string;
     frecuencia: number;
@@ -174,10 +175,7 @@ export interface LoginDto {
   // Pago
   export enum MetodoPago {
     EFECTIVO = 'EFECTIVO',
-    TRANSFERENCIA = 'TRANSFERENCIA',
-    TARJETA_DEBITO = 'TARJETA_DEBITO',
-    TARJETA_CREDITO = 'TARJETA_CREDITO',
-    OTRO = 'OTRO'
+    TRANSFERENCIA = 'TRANSFERENCIA'
   }
   
   export interface PagoCrearDto {

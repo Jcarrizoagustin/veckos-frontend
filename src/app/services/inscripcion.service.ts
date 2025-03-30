@@ -87,6 +87,7 @@ export class InscripcionService {
         apellidoUsuario: usuario.apellido,
         nombrePlan: plan.nombre,
         planId: plan.id,
+        precioPlan:29440,
         fechaInicio: new Date().toISOString().split('T')[0],
         fechaFin: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0],
         frecuencia: inscripcion.frecuencia,
