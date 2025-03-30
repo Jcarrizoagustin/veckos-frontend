@@ -36,6 +36,8 @@ export class TurnoListComponent implements OnInit {
     'FRIDAY': 'Viernes'
   };
 
+  daysOfWeek: DayOfWeek[] = [DayOfWeek.MONDAY,DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY]
+
   constructor(
     private turnoService: TurnoService,
     private router: Router,

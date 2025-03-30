@@ -20,8 +20,8 @@
           Todos
         </button>
         <button 
-          *ngFor="let dia of ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']"
-          (click)="filtrarPorDia('TODOS')"
+          *ngFor="let dia of daysOfWeek"
+          (click)="filtrarPorDia(dia)"
           [ngClass]="diaSemanaFilter === dia ? 'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-secondary-700 border-secondary-300'"
           class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-primary-50">
           {{ diasSemana[dia] }}
