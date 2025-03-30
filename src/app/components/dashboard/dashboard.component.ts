@@ -17,7 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   ]
 })
 export class DashboardComponent implements OnInit {
-  diaSemanaMock: DayOfWeek[] = [DayOfWeek.MONDAY,DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY]
+  diaSemanaMock: DayOfWeek[] = [DayOfWeek.MONDAY,DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY]
   loading = true;
   stats: any = {};
   diaSemanaActual: DayOfWeek = this.getDiaSemanaActual();
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     [EstadoPago.ACTIVO]: 'bg-green-100 text-green-800 border-green-200',
     [EstadoPago.INACTIVO]: 'bg-red-100 text-red-800 border-red-200',
     [EstadoPago.PROXIMO_A_VENCER]: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    [EstadoPago.RESERVADO]: 'bg-blue-100 text-blue-800 border-blue-200'
+    [EstadoPago.PENDIENTE]: 'bg-blue-100 text-blue-800 border-blue-200'
   };
 
   constructor(

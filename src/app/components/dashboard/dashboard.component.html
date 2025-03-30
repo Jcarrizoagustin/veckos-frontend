@@ -60,7 +60,7 @@
           
           <div *ngIf="turno.usuarios?.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
             <div *ngFor="let usuario of turno.usuarios" 
-                 [ngClass]="estadoClasses[usuario.inscripcionActiva?.estadoPago || 'INACTIVO']"
+                 [ngClass]="estadoClasses[usuario?.estado || 'INACTIVO']"
                  class="flex items-center p-2 rounded border">
               <div class="flex-grow truncate">
                 <span class="font-medium">{{ usuario.nombre }} {{ usuario.apellido }}</span>

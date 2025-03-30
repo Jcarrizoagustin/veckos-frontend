@@ -31,7 +31,7 @@ export class InscripcionDetalleComponent implements OnInit {
     [EstadoPago.ACTIVO]: 'bg-green-100 text-green-800',
     [EstadoPago.INACTIVO]: 'bg-red-100 text-red-800',
     [EstadoPago.PROXIMO_A_VENCER]: 'bg-yellow-100 text-yellow-800',
-    [EstadoPago.RESERVADO]: 'bg-blue-100 text-blue-800'
+    [EstadoPago.PENDIENTE]: 'bg-blue-100 text-blue-800'
   };
   
   nombresDias: { [key: string]: string } = {

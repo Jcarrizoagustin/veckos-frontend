@@ -96,7 +96,7 @@ export interface LoginDto {
     ACTIVO = 'ACTIVO',
     INACTIVO = 'INACTIVO',
     PROXIMO_A_VENCER = 'PROXIMO_A_VENCER',
-    RESERVADO = 'RESERVADO'
+    PENDIENTE = 'PENDIENTE'
   }
   
   export interface InscripcionInfoDto {

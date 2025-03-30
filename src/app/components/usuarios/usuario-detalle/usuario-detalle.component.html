@@ -278,7 +278,7 @@
             
             <div *ngIf="usuario.inscripcionActiva && usuario.inscripcionActiva.detalles.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <div *ngFor="let detalle of usuario.inscripcionActiva.detalles" class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
-                <div class="font-semibold text-secondary-900">{{ detalle.diaSemana }}</div>
+                <div class="font-semibold text-secondary-900">{{ diasSemana[detalle.diaSemana] }}</div>
                 <div class="text-secondary-700">{{ detalle.horaTurno }}</div>
               </div>
             </div>

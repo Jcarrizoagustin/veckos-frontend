@@ -25,197 +25,6 @@ import { DayOfWeek, EstadoPago, InscripcionInfoDto } from '../../../models';
 })
 export class InscripcionListComponent implements OnInit {
   inscripciones:InscripcionInfoDto[] = [];
-  inscripcionesMock: InscripcionInfoDto[] = [
-    {
-      id: 101,
-      usuarioId: 1,
-      nombreUsuario: 'Juan',
-      apellidoUsuario: 'Pérez',
-      nombrePlan: 'Plan Fitness',
-      planId:1,
-      fechaInicio: '2023-02-01',
-      fechaFin: '2023-03-01',
-      frecuencia: 3,
-      estadoPago: EstadoPago.ACTIVO,
-      ultimoPago: '2023-02-01',
-      detalles: [
-        {
-          id: 201,
-          diaSemana: DayOfWeek.MONDAY,
-          turnoId: 1,
-          horaTurno: '08:00'
-        },
-        {
-          id: 202,
-          diaSemana: DayOfWeek.WEDNESDAY,
-          turnoId: 3,
-          horaTurno: '08:00'
-        },
-        {
-          id: 203,
-          diaSemana: DayOfWeek.FRIDAY,
-          turnoId: 5,
-          horaTurno: '08:00'
-        }
-      ]
-    },
-    {
-      id: 102,
-      usuarioId: 2,
-      nombreUsuario: 'María',
-      apellidoUsuario: 'González',
-      nombrePlan: 'Plan Wellness',
-      planId:2,
-      fechaInicio: '2023-01-15',
-      fechaFin: '2023-02-15',
-      frecuencia: 5,
-      estadoPago: EstadoPago.ACTIVO,
-      ultimoPago: '2023-01-15',
-      detalles: [
-        {
-          id: 204,
-          diaSemana: DayOfWeek.MONDAY,
-          turnoId: 2,
-          horaTurno: '18:00'
-        },
-        {
-          id: 205,
-          diaSemana: DayOfWeek.TUESDAY,
-          turnoId: 7,
-          horaTurno: '18:00'
-        },
-        {
-          id: 206,
-          diaSemana: DayOfWeek.WEDNESDAY,
-          turnoId: 12,
-          horaTurno: '18:00'
-        },
-        {
-          id: 207,
-          diaSemana: DayOfWeek.THURSDAY,
-          turnoId: 17,
-          horaTurno: '18:00'
-        },
-        {
-          id: 208,
-          diaSemana: DayOfWeek.FRIDAY,
-          turnoId: 22,
-          horaTurno: '18:00'
-        }
-      ]
-    },
-    {
-      id: 103,
-      usuarioId: 3,
-      nombreUsuario: 'Carlos',
-      apellidoUsuario: 'Rodríguez',
-      nombrePlan: 'Plan Sport',
-      planId:3,
-      fechaInicio: '2023-01-01',
-      fechaFin: '2023-02-01',
-      frecuencia: 3,
-      estadoPago: EstadoPago.PROXIMO_A_VENCER,
-      ultimoPago: '2023-01-01',
-      detalles: [
-        {
-          id: 209,
-          diaSemana: DayOfWeek.TUESDAY,
-          turnoId: 8,
-          horaTurno: '19:30'
-        },
-        {
-          id: 210,
-          diaSemana: DayOfWeek.THURSDAY,
-          turnoId: 18,
-          horaTurno: '19:30'
-        },
-        {
-          id: 211,
-          diaSemana: DayOfWeek.SATURDAY,
-          turnoId: 25,
-          horaTurno: '10:00'
-        }
-      ]
-    },
-    {
-      id: 104,
-      usuarioId: 4,
-      nombreUsuario: 'Laura',
-      apellidoUsuario: 'Fernández',
-      nombrePlan: 'Plan Fitness',
-      planId:1,
-      fechaInicio: '2022-12-01',
-      fechaFin: '2023-01-01',
-      frecuencia: 3,
-      estadoPago: EstadoPago.INACTIVO,
-      ultimoPago: '2022-12-01',
-      detalles: [
-        {
-          id: 212,
-          diaSemana: DayOfWeek.MONDAY,
-          turnoId: 1,
-          horaTurno: '08:00'
-        },
-        {
-          id: 213,
-          diaSemana: DayOfWeek.WEDNESDAY,
-          turnoId: 11,
-          horaTurno: '08:00'
-        },
-        {
-          id: 214,
-          diaSemana: DayOfWeek.FRIDAY,
-          turnoId: 21,
-          horaTurno: '08:00'
-        }
-      ]
-    },
-    {
-      id: 105,
-      usuarioId: 5,
-      nombreUsuario: 'Martín',
-      apellidoUsuario: 'López',
-      nombrePlan: 'Plan Sport',
-      planId:3,
-      fechaInicio: '2023-01-05',
-      fechaFin: '2023-02-05',
-      frecuencia: 5,
-      estadoPago: EstadoPago.ACTIVO,
-      ultimoPago: '2023-01-05',
-      detalles: [
-        {
-          id: 215,
-          diaSemana: DayOfWeek.MONDAY,
-          turnoId: 1,
-          horaTurno: '08:00'
-        },
-        {
-          id: 216,
-          diaSemana: DayOfWeek.TUESDAY,
-          turnoId: 6,
-          horaTurno: '08:00'
-        },
-        {
-          id: 217,
-          diaSemana: DayOfWeek.WEDNESDAY,
-          turnoId: 11,
-          horaTurno: '08:00'
-        },
-        {
-          id: 218,
-          diaSemana: DayOfWeek.THURSDAY,
-          turnoId: 16,
-          horaTurno: '08:00'
-        },
-        {
-          id: 219,
-          diaSemana: DayOfWeek.FRIDAY,
-          turnoId: 21,
-          horaTurno: '08:00'
-        }
-      ]
-    }
-  ];
   inscripcionesFiltradas: InscripcionInfoDto[] = [];
   loading = false;
   filtroEstado: string = 'TODOS';
@@ -226,7 +35,7 @@ export class InscripcionListComponent implements OnInit {
     [EstadoPago.ACTIVO]: 'bg-green-100 text-green-800',
     [EstadoPago.INACTIVO]: 'bg-red-100 text-red-800',
     [EstadoPago.PROXIMO_A_VENCER]: 'bg-yellow-100 text-yellow-800',
-    [EstadoPago.RESERVADO]: 'bg-blue-100 text-blue-800'
+    [EstadoPago.PENDIENTE]: 'bg-blue-100 text-blue-800'
   };
 
   constructor(
@@ -249,10 +58,9 @@ export class InscripcionListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar inscripciones:', error);
-        this.inscripciones = this.inscripcionesMock
-        /*this.snackBar.open('Error al cargar inscripciones', 'Cerrar', {
+        this.snackBar.open('Error al cargar inscripciones', 'Cerrar', {
           duration: 5000
-        });*/
+        });
         this.aplicarFiltros()
         this.loading = false;
       }

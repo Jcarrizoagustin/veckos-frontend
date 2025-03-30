@@ -21,6 +21,9 @@ import { ReporteFinancieroComponent } from './components/reportes/reporte-financ
 import { ClaseListComponent } from './components/clases/clase-list/clase-list.component';
 import { ClaseAsistenciaComponent } from './components/clases/clase-asistencia/clase-asistencia.component';
 import { GuiaUsuarioComponent } from './components/guia-usuario/guia-usuario.component';
+import { PagoFormComponent } from './components/pagos/pago-form/pago-form.component';
+import { PagoListComponent } from './components/pagos/pago-list/pago-list.component';
+import { PagoDetalleComponent } from './components/pagos/pago-detalle/pago-detalle.component';
 
 export const routes: Routes = [
   { 
@@ -160,6 +163,24 @@ export const routes: Routes = [
   {
     path: 'clases/:id/asistencias',
     component: ClaseAsistenciaComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'pagos',
+    component: PagoListComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'pagos/nuevo',
+    component: PagoFormComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+  },
+  {
+    path: 'pagos/:id',
+    component: PagoDetalleComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
   },

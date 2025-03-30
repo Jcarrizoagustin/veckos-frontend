@@ -1,0 +1,81 @@
+<div class="container mx-auto px-4">
+    <div class="flex items-center mb-6">
+      <button (click)="volver()" class="mr-4 text-secondary-600 hover:text-secondary-900">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+      <h1 class="text-2xl font-bold text-primary-800">
+        Detalle de Pago
+      </h1>
+    </div>
+  
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <svg class="animate-spin h-8 w-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  
+    <!-- Detalle del Pago -->
+    <div *ngIf="!loading && pago" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Información Principal -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-primary-800 mb-4">Información del Pago</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <p class="text-sm text-secondary-500">Monto</p>
+            <p class="text-2xl font-bold text-green-600">${{ pago.monto | number:'1.2-2' }}</p>
+          </div>
+          
+          <div>
+            <p class="text-sm text-secondary-500">Fecha de Pago</p>
+            <p class="font-medium">{{ formatFecha(pago.fechaPago) }}</p>
+          </div>
+          
+          <div>
+            <p class="text-sm text-secondary-500">Método de Pago</p>
+            <p class="font-medium">{{ pago.metodoPago }}</p>
+          </div>
+          
+          <div *ngIf="pago.descripcion">
+            <p class="text-sm text-secondary-500">Descripción</p>
+            <p class="font-medium">{{ pago.descripcion }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Información Relacionada -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-primary-800 mb-4">Información Relacionada</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <p class="text-sm text-secondary-500">Usuario</p>
+            <p class="font-medium">
+              <a (click)="verUsuario()" class="text-primary-600 hover:text-primary-800 cursor-pointer">
+                {{ pago.nombreUsuario }} {{ pago.apellidoUsuario }}
+              </a>
+            </p>
+          </div>
+          
+          <div>
+            <p class="text-sm text-secondary-500">Plan</p>
+            <p class="font-medium">{{ pago.nombrePlan }}</p>
+          </div>
+          
+          <div *ngIf="inscripcion">
+            <p class="text-sm text-secondary-500">Período de Inscripción</p>
+            <p class="font-medium">
+              {{ formatFecha(inscripcion.fechaInicio) }} - {{ formatFecha(inscripcion.fechaFin) }}
+              <a (click)="verInscripcion()" class="ml-2 text-primary-600 hover:text-primary-800 cursor-pointer">
+                (Ver Inscripción)
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

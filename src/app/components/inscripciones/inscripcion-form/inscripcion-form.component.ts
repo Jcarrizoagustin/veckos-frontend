@@ -153,7 +153,7 @@ export class InscripcionFormComponent implements OnInit {
 
   cargarUsuarios(): void {
     this.loadingUsuarios = true;
-    this.usuarioService.getActivos().subscribe({
+    this.usuarioService.getPendientes().subscribe({
       next: (usuarios) => {
         this.usuarios = usuarios;
         this.loadingUsuarios = false;
@@ -462,7 +462,7 @@ export class InscripcionFormComponent implements OnInit {
     // Construir objeto de inscripción
     const inscripcion: InscripcionCrearDto = {
       usuarioId: this.usuarioForm.get('usuarioId')?.value,
-      planId: this.planForm.get('planId')?.value,
+      planId: Number(this.planForm.get('planId')?.value),
       frecuencia: this.planForm.get('frecuencia')?.value,
       detalles: this.seleccionesTurnos.value.map((seleccion: any) => ({
         turnoId: seleccion.turnoId,

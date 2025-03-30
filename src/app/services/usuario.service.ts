@@ -11,7 +11,7 @@ import { MockDataService } from './mock-data.service';
 export class UsuarioService {
   private apiUrl = `${environment.apiBaseUrl}/usuarios`;
   // Flag para usar datos mock (para desarrollo)
-  private useMockData = true; // Cambia a false para usar la API real
+  private useMockData = false; // Cambia a false para usar la API real
 
   constructor(
     private http: HttpClient,
@@ -30,6 +30,13 @@ export class UsuarioService {
       return of(this.mockDataService.getMockUsuarios().filter(u => u.estado === 'ACTIVO'));
     }
     return this.http.get<UsuarioListItemDto[]>(`${this.apiUrl}/activos`);
+  }
+
+  getPendientes(): Observable<UsuarioListItemDto[]> {
+    if (this.useMockData) {
+      return of(this.mockDataService.getMockUsuarios().filter(u => u.estado === 'PENDIENTE'));
+    }
+    return this.http.get<UsuarioListItemDto[]>(`${this.apiUrl}/pendientes`);
   }
 
   getById(id: number): Observable<UsuarioDto> {
