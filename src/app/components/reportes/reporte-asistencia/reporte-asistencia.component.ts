@@ -102,6 +102,7 @@ export class ReporteAsistenciaComponent implements OnInit {
   }
 
   generarReporte(): void {
+    console.log("Gemeramdop reprortes")
     if (this.filtrosForm.invalid) {
       this.markFormGroupTouched(this.filtrosForm);
       return;
@@ -157,10 +158,20 @@ export class ReporteAsistenciaComponent implements OnInit {
     return date;
   }
 
-  formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];
+  formatDate(date: any): string {
+    // Verificar si es string
+    if (typeof date === 'string') {
+      return date.split('T')[0];
+    }
+    
+    // Si es un objeto Date
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    }
+    
+    // Si no es ninguno de los anteriores
+    return '';
   }
-
   markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();

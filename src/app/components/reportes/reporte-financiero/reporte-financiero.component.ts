@@ -108,8 +108,19 @@ export class ReporteFinancieroComponent implements OnInit {
     return date;
   }
 
-  formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];
+  formatDate(date: any): string {
+    // Verificar si es string
+    if (typeof date === 'string') {
+      return date.split('T')[0];
+    }
+    
+    // Si es un objeto Date
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    }
+    
+    // Si no es ninguno de los anteriores
+    return '';
   }
 
   formatCurrency(amount: number): string {
