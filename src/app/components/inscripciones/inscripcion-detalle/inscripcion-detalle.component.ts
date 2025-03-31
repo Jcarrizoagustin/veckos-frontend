@@ -153,4 +153,8 @@ export class InscripcionDetalleComponent implements OnInit {
   getTotalPagado(): number {
     return this.pagos.reduce((total, pago) => total + pago.monto, 0);
   }
+
+  formatHora(hora: string): string {
+    return hora.substring(0, 5); // Format from "00:00:00" to "00:00"
+  }
 }

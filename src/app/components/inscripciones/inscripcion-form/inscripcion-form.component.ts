@@ -424,7 +424,7 @@ export class InscripcionFormComponent implements OnInit {
       
       console.log('Día:', seleccion.diaSemana, 'Turno ID:', turnoId, 'Turno encontrado:', turno);
       const hora = turno ? turno.hora : 'No seleccionado';
-      return `${dia} - ${hora}`;
+      return `${dia} - ${this.formatHora(hora)}`;
     });
   }
 
@@ -508,6 +508,10 @@ export class InscripcionFormComponent implements OnInit {
         }
       });
     }
+  }
+
+  formatHora(hora: string): string {
+    return hora.substring(0, 5); // Format from "00:00:00" to "00:00"
   }
   
   // Navegación

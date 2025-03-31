@@ -107,4 +107,8 @@ export class DashboardComponent implements OnInit {
     };
     return daysMapping[day];
   }
+
+  formatHora(hora: string): string {
+    return hora.substring(0, 5); // Format from "00:00:00" to "00:00"
+  }
 }

@@ -201,7 +201,7 @@
                     class="w-full px-3 py-2 border border-secondary-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
                     <option value="">Seleccione un horario</option>
                     <option *ngFor="let turno of turnos[seleccion.get('diaSemana')?.value]" [value]="turno.id">
-                      {{ turno.hora }} {{ turno.descripcion ? '- ' + turno.descripcion : '' }}
+                      {{ formatHora(turno.hora) }} {{ turno.descripcion ? '- ' + turno.descripcion : '' }}
                     </option>
                   </select>
                   
