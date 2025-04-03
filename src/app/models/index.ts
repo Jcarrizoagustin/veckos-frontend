@@ -192,11 +192,14 @@ export interface LoginDto {
     inscripcionId: number;
     nombreUsuario: string;
     apellidoUsuario: string;
+    dniUsuario: string;
+    cuilUsuario: string;
     nombrePlan: string;
     monto: number;
     fechaPago: Date | string;
     metodoPago: MetodoPago;
-    cuenta: string;
+    cbuCuenta: string;
+    descripcionCuenta: string;
     descripcion?: string;
   }
 

@@ -810,11 +810,14 @@ export class MockDataService {
         inscripcionId: inscripcion.id,
         nombreUsuario: inscripcion.nombreUsuario,
         apellidoUsuario: inscripcion.apellidoUsuario,
+        dniUsuario: "38225111",
+        cuilUsuario:"20382251118",
         nombrePlan: inscripcion.nombrePlan,
         monto: plan.precio,
         fechaPago,
         metodoPago,
-        cuenta: "52525205050505050 Naranja X",
+        cbuCuenta: "52525205050505050951265",
+        descripcionCuenta: "Naranja X",
         descripcion: `Pago de mensualidad - ${inscripcion.nombrePlan}`
       });
     });
