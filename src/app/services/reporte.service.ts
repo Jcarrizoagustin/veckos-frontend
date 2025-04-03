@@ -102,9 +102,7 @@ export class ReporteService {
       if (agruparPorMetodoPago) {
         reporte.ingresosPorMetodoPago = [
           ['EFECTIVO', 35000],
-          ['TRANSFERENCIA', 42000],
-          ['TARJETA_CREDITO', 28000],
-          ['TARJETA_DEBITO', 20000]
+          ['TRANSFERENCIA', 42000]
         ];
       }
       

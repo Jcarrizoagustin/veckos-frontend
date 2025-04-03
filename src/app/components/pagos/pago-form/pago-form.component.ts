@@ -10,7 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { PagoService } from '../../../services/pago.service';
 import { InscripcionService } from '../../../services/inscripcion.service';
 import { UsuarioService } from '../../../services/usuario.service';
-import { PagoCrearDto, MetodoPago, InscripcionInfoDto, UsuarioDetalleDto, UsuarioDto } from '../../../models';
+import { PagoCrearDto, MetodoPago, InscripcionInfoDto, UsuarioDetalleDto, UsuarioDto, CuentaDto } from '../../../models';
+import { CuentaService } from '../../../services/cuenta.service';
 
 @Component({
   selector: 'app-pago-form',
@@ -30,10 +31,12 @@ import { PagoCrearDto, MetodoPago, InscripcionInfoDto, UsuarioDetalleDto, Usuari
 export class PagoFormComponent implements OnInit {
   pagoForm!: FormGroup;
   loading = false;
+  loadingCuentas = false;
   inscripcionId?: number;
   usuarioId?: number;
   inscripcion?: InscripcionInfoDto;
   usuario?: UsuarioDto;
+  cuentas: CuentaDto[] = [];
   
   // Métodos de pago disponibles
   metodosPago = Object.values(MetodoPago);
@@ -45,11 +48,13 @@ export class PagoFormComponent implements OnInit {
     private usuarioService: UsuarioService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cuentaService: CuentaService
   ) { }
 
   ngOnInit(): void {
     this.initForm();
+    this.loadInitialData();
     
     // Obtener parámetros de URL (inscripcionId y usuarioId)
     this.route.queryParams.subscribe(params => {
@@ -77,11 +82,33 @@ export class PagoFormComponent implements OnInit {
       monto: ['', [Validators.required, Validators.min(1)]],
       fechaPago: [new Date().toISOString().split('T')[0], [Validators.required]],
       metodoPago: [MetodoPago.EFECTIVO, [Validators.required]],
+      cuentaId: ['', [Validators.required]],
       descripcion: ['']
     });
     
     // No deshabilitamos el formulario inicialmente
     // Solo control de inscripcionId estará deshabilitado si se pasa por parámetro
+  }
+
+  loadInitialData(): void {
+    this.cargarPlanes();
+  }
+
+  cargarPlanes(): void {
+    this.loadingCuentas = true;
+    this.cuentaService.getAll().subscribe({
+      next: (cuentas) => {
+        this.cuentas = cuentas;
+        this.loadingCuentas = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar planes:', error);
+        this.snackBar.open('Error al cargar planes', 'Cerrar', {
+          duration: 5000
+        });
+        this.loadingCuentas = false;
+      }
+    });
   }
 
   cargarInscripcion(): void {

@@ -33,14 +33,14 @@ export class ReporteListComponent {
       descripcion: 'Analiza los ingresos por período, método de pago y plan.',
       icono: 'payments',
       ruta: '/reportes/financiero'
-    },
+    }/** ,
     {
       id: 'inscripciones',
       titulo: 'Reporte de Inscripciones',
       descripcion: 'Revisa las estadísticas de inscripciones, renovaciones y distribución por plan.',
       icono: 'how_to_reg',
       ruta: '/reportes/inscripciones'
-    }
+    }*/
   ];
 
   constructor(private router: Router) {}

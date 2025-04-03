@@ -39,6 +39,13 @@ export class UsuarioService {
     return this.http.get<UsuarioListItemDto[]>(`${this.apiUrl}/pendientes`);
   }
 
+  getUsuarioDtoById(id: number): Observable<UsuarioDetalleDto> {
+    if(this.useMockData){
+      return of(this.mockDataService.getMockUsuarioDetalle(id));
+    }
+    return this.http.get<UsuarioDetalleDto>(`${this.apiUrl}/${id}`)
+  }
+
   getById(id: number): Observable<UsuarioDto> {
     if (this.useMockData) {
       return of(this.mockDataService.getMockUsuarioDetalle(id));

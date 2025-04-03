@@ -172,6 +172,12 @@ export class ReporteAsistenciaComponent implements OnInit {
     // Si no es ninguno de los anteriores
     return '';
   }
+
+  formatFecha(fecha?: string | Date): string {
+    if (!fecha) return 'N/A';
+    return new Date(fecha).toLocaleDateString();
+  }
+  
   markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();

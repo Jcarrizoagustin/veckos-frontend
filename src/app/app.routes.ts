@@ -24,6 +24,9 @@ import { GuiaUsuarioComponent } from './components/guia-usuario/guia-usuario.com
 import { PagoFormComponent } from './components/pagos/pago-form/pago-form.component';
 import { PagoListComponent } from './components/pagos/pago-list/pago-list.component';
 import { PagoDetalleComponent } from './components/pagos/pago-detalle/pago-detalle.component';
+import { IngresoComponent } from './components/ingreso/ingreso.component';
+import { CuentaFormComponent } from './components/cuentas/cuenta-form/cuenta-form.component';
+import { CuentaListComponent } from './components/cuentas/cuenta-list/cuenta-list.component';
 
 export const routes: Routes = [
   { 
@@ -187,6 +190,30 @@ export const routes: Routes = [
   {
     path: 'ayuda',
     component: GuiaUsuarioComponent,
+    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+  },
+  {
+    path: 'ingreso',
+    component: IngresoComponent,
+    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+  },
+  {
+    path: 'cuentas/edit/:id',
+    component: CuentaFormComponent,
+    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+  },
+  {
+    path: 'cuentas',
+    component: CuentaListComponent,
+    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+  },
+  {
+    path: 'cuentas/new',
+    component: CuentaFormComponent,
     canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
   },

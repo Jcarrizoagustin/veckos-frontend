@@ -163,7 +163,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
         <p class="text-sm text-secondary-500">Período</p>
-        <p class="font-medium">{{ reporte.fechaInicio }} a {{ reporte.fechaFin }}</p>
+        <p class="font-medium">{{ formatFecha(reporte.fechaInicio) }} a {{ formatFecha(reporte.fechaFin) }}</p>
       </div>
       
       <div class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
@@ -205,7 +205,7 @@
           <tbody class="bg-white divide-y divide-secondary-200">
             <tr *ngFor="let asistencia of reporte.asistencias">
               <td class="px-6 py-4 whitespace-nowrap">
-                {{ asistencia.fechaClase }}
+                {{ formatFecha(asistencia.fechaClase) }}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 {{ asistencia.horaClase }}
@@ -278,7 +278,7 @@
             <tbody class="bg-white divide-y divide-secondary-200">
               <tr *ngFor="let item of reporte.asistenciasPorDia | keyvalue">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  {{ item.key }}
+                  {{ formatFecha(formatDate(item.key)) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right">
                   {{ item.value }}

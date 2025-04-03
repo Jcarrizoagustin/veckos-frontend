@@ -1,0 +1,147 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-lg mx-auto">
+    <h1 class="text-3xl font-bold text-primary-800 mb-8 text-center">Control de Ingreso</h1>
+    
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <form [formGroup]="ingresoForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="flex items-center">
+          <div class="w-full">
+            <input type="text" 
+                   formControlName="dni" 
+                   placeholder="Ingrese el DNI del cliente" 
+                   autocomplete="off" 
+                   inputmode="numeric"
+                   class="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            <button *ngIf="ingresoForm.get('dni')?.value" 
+                    type="button"
+                    (click)="clearSearch()" 
+                    class="absolute right-[5.5rem] top-[1.35rem] text-secondary-500 hover:text-secondary-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div *ngIf="ingresoForm.get('dni')?.invalid && ingresoForm.get('dni')?.touched" class="text-red-600 text-sm mt-1 ml-1">
+              <span *ngIf="ingresoForm.get('dni')?.errors?.['required']">El DNI es obligatorio</span>
+              <span *ngIf="ingresoForm.get('dni')?.errors?.['pattern']">El DNI debe tener entre 7 y 8 dígitos numéricos</span>
+            </div>
+          </div>
+          
+          <button type="submit" 
+                  [disabled]="ingresoForm.invalid || loading" 
+                  class="ml-4 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+            Verificar
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex justify-center my-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+    </div>
+    
+    <!-- Error Message -->
+          <div *ngIf="errorMessage" class="bg-red-100 text-red-800 p-4 rounded-lg mb-8 text-center animate-fade-in">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+      {{ errorMessage }}
+    </div>
+    
+    <!-- Result -->
+    <div *ngIf="usuario && searchComplete" class="mb-8 animate-pulse-in">
+      <div [ngClass]="getEstadoClasses()" class="border-l-8 rounded-lg shadow-md overflow-hidden">
+        <div class="p-4 bg-white">
+          <div class="flex items-center mb-4">
+            <div class="mr-3 bg-secondary-100 p-2 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-secondary-700" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-secondary-900">{{ usuario.nombre }} {{ usuario.apellido }}</h3>
+              <p class="text-secondary-600">DNI: {{ usuario.dni }}</p>
+            </div>
+          </div>
+          
+          <div class="flex justify-between items-center mb-4 p-3 rounded-lg" 
+               [ngClass]="usuario.tieneInscripcionActiva && (usuario.inscripcionActiva?.estadoPago === 'ACTIVO' || usuario.inscripcionActiva?.estadoPago === 'PROXIMO_A_VENCER') ? 'bg-green-50' : 'bg-red-50'">
+            <div class="text-3xl font-bold" 
+                 [ngClass]="usuario.tieneInscripcionActiva && (usuario.inscripcionActiva?.estadoPago === 'ACTIVO' || usuario.inscripcionActiva?.estadoPago === 'PROXIMO_A_VENCER') ? 'text-green-700' : 'text-red-700'">
+              {{ getEstadoTexto() }}
+            </div>
+            <div class="p-2 rounded-full" 
+                 [ngClass]="usuario.tieneInscripcionActiva && (usuario.inscripcionActiva?.estadoPago === 'ACTIVO' || usuario.inscripcionActiva?.estadoPago === 'PROXIMO_A_VENCER') ? 'bg-green-100' : 'bg-red-100'">
+              <svg *ngIf="usuario.tieneInscripcionActiva && (usuario.inscripcionActiva?.estadoPago === 'ACTIVO' || usuario.inscripcionActiva?.estadoPago === 'PROXIMO_A_VENCER')" 
+                   xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <svg *ngIf="!usuario.tieneInscripcionActiva || (usuario.inscripcionActiva?.estadoPago !== 'ACTIVO' && usuario.inscripcionActiva?.estadoPago !== 'PROXIMO_A_VENCER')" 
+                   xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm font-semibold">Edad</p>
+              <p>{{ usuario.edad }} años</p>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">Teléfono</p>
+              <p>{{ usuario.telefono || 'No registrado' }}</p>
+            </div>
+            
+            <div *ngIf="usuario.tieneInscripcionActiva">
+              <p class="text-sm font-semibold">Plan</p>
+              <p>{{ usuario.inscripcionActiva?.nombrePlan }}</p>
+            </div>
+            <div *ngIf="usuario.tieneInscripcionActiva">
+              <p class="text-sm font-semibold">Frecuencia</p>
+              <p>{{ usuario.inscripcionActiva?.frecuencia }} días/semana</p>
+            </div>
+            
+            <div *ngIf="usuario.tieneInscripcionActiva">
+              <p class="text-sm font-semibold">Fecha Vencimiento</p>
+              <p>{{ formatFecha(usuario.inscripcionActiva?.fechaFin) }}</p>
+            </div>
+            <div *ngIf="usuario.tieneInscripcionActiva">
+              <p class="text-sm font-semibold">Días Restantes</p>
+              <p [ngClass]="getDiasRestantes() <= 7 ? 'font-bold' : ''">
+                {{ getDiasRestantes() }} días
+              </p>
+            </div>
+          </div>
+          
+          <div *ngIf="!usuario.tieneInscripcionActiva" class="mt-4 p-4 bg-red-50 rounded-lg text-center">
+            <p class="text-red-800 font-medium">El cliente no tiene una inscripción activa</p>
+          </div>
+          
+          <div class="mt-6 flex justify-end space-x-3">
+            <a [routerLink]="['/usuarios', usuario.id]" 
+               class="px-4 py-2 border border-primary-300 text-primary-700 rounded-md hover:bg-primary-50">
+              Ver Perfil
+            </a>
+            <a *ngIf="!usuario.tieneInscripcionActiva" 
+               [routerLink]="['/inscripciones/nuevo']" 
+               [queryParams]="{usuarioId: usuario.id}"
+               class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">
+              Nueva Inscripción
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tips -->
+    <div *ngIf="!usuario && !loading && !errorMessage" class="text-center text-secondary-600">
+      <p>Ingrese el DNI del cliente para verificar su estado</p>
+      <p class="text-sm mt-2">Use esta herramienta para verificar rápidamente si un cliente puede ingresar al gimnasio</p>
+    </div>
+  </div>
+</div>

@@ -13,6 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReporteService } from '../../../services/reporte.service';
+import { ExportarReporteService } from '../../../services/exportar-reporte.service';
 
 @Component({
   selector: 'app-reporte-financiero',
@@ -44,7 +45,8 @@ export class ReporteFinancieroComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private reporteService: ReporteService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private exportarReporteService: ExportarReporteService
   ) { }
 
   ngOnInit(): void {
@@ -95,11 +97,11 @@ export class ReporteFinancieroComponent implements OnInit {
     });
   }
 
-  exportarExcel(): void {
+  /*exportarExcel(): void {
     this.snackBar.open('Exportación a Excel no implementada en esta versión', 'Cerrar', {
       duration: 3000
     });
-  }
+  }*/
 
   // Helpers
   getPrimerDiaMes(): Date {
@@ -123,6 +125,11 @@ export class ReporteFinancieroComponent implements OnInit {
     return '';
   }
 
+  formatFecha(fecha?: string | Date): string {
+    if (!fecha) return 'N/A';
+    return new Date(fecha).toLocaleDateString();
+  }
+
   formatCurrency(amount: number): string {
     return amount.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
   }
@@ -134,5 +141,31 @@ export class ReporteFinancieroComponent implements OnInit {
         this.markFormGroupTouched(control);
       }
     });
+  }
+
+  // Reportes export
+  /*exportarExcel(): void {
+    this.exportarReporteService.exportarPagosExcel().subscribe(blob => {
+      this.descargarArchivo(blob, 'pagos.xlsx');
+    });
+  }*/
+  
+  exportarExcelPorPeriodo(): void {
+    const formValues = this.filtrosForm.value;
+    let fechaInicio = this.formatDate(formValues.fechaInicio);
+    let fechaFin = this.formatDate(formValues.fechaFin);
+    this.exportarReporteService.exportarReportePorPeriodoExcel(fechaInicio, fechaFin).subscribe(blob => {
+      this.descargarArchivo(blob, `reporteFinanciero_${fechaInicio}_a_${fechaFin}.xlsx`);
+    });
+  }
+  
+  private descargarArchivo(data: Blob, nombreArchivo: string): void {
+    const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = nombreArchivo;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 }

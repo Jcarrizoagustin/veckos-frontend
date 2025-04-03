@@ -183,6 +183,7 @@ export interface LoginDto {
     monto: number;
     fechaPago?: Date | string;
     metodoPago: MetodoPago;
+    cuentaId: number;
     descripcion?: string;
   }
   
@@ -195,7 +196,16 @@ export interface LoginDto {
     monto: number;
     fechaPago: Date | string;
     metodoPago: MetodoPago;
+    cuenta: string;
     descripcion?: string;
+  }
+
+  //Cuenta
+
+  export interface CuentaDto {
+    id:number,
+    cbu:string,
+    descripcion: string
   }
   
   // Common

@@ -38,7 +38,7 @@ export class MockDataService {
         dni: '32456789',
         edad: 28,
         planActivo: 'Plan Fitness',
-        estado: EstadoUsuario.ACTIVO
+        estado: EstadoUsuario.INACTIVO
       },
       {
         id: 2,
@@ -96,10 +96,10 @@ export class MockDataService {
         cuil: '20324567890',
         telefono: '1122334455',
         correo: 'juan.perez@email.com',
-        estado: EstadoUsuario.ACTIVO,
+        estado: EstadoUsuario.INACTIVO,
         fechaAlta: '2023-01-10T10:00:00',
         edad: 28,
-        tieneInscripcionActiva: true,
+        tieneInscripcionActiva: false,
         inscripcionActiva: {
           id: 101,
           usuarioId: 1,
@@ -319,8 +319,8 @@ export class MockDataService {
         }
       }
     ];
-
-    return mockDetalles.find(u => u.id === id) || mockDetalles[0];
+    return mockDetalles[0]
+    //return mockDetalles.find(u => u.id === id) || mockDetalles[0];
   }
 
   // ========== PLANES ==========
@@ -814,6 +814,7 @@ export class MockDataService {
         monto: plan.precio,
         fechaPago,
         metodoPago,
+        cuenta: "52525205050505050 Naranja X",
         descripcion: `Pago de mensualidad - ${inscripcion.nombrePlan}`
       });
     });

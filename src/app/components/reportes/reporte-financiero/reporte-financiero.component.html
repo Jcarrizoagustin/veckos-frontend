@@ -47,7 +47,7 @@
             </div>
           </div>
   
-          <!-- Opciones adicionales -->
+          <!-- Opciones adicionales
           <div>
             <div class="flex items-center">
               <input 
@@ -60,7 +60,7 @@
                 Agrupar por mes
               </label>
             </div>
-          </div>
+          </div>-->
   
           <div>
             <div class="flex items-center">
@@ -108,13 +108,13 @@
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-lg font-semibold text-primary-800">Resultados Financieros</h2>
         <div class="flex space-x-2">
-          <button (click)="exportarPDF()" class="btn-secondary flex items-center">
+          <!--<button (click)="exportarPDF()" class="btn-secondary flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
             PDF
-          </button>
-          <button (click)="exportarExcel()" class="btn-secondary flex items-center">
+          </button>-->
+          <button (click)="exportarExcelPorPeriodo()" class="btn-secondary flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
@@ -127,7 +127,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
           <p class="text-sm text-secondary-500">Período</p>
-          <p class="font-medium">{{ reporte.fechaInicio }} a {{ reporte.fechaFin }}</p>
+          <p class="font-medium">{{ formatFecha(reporte.fechaInicio) }} A {{ formatFecha(reporte.fechaFin) }}</p>
         </div>
         
         <div class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
@@ -221,6 +221,9 @@
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
                   Método
                 </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                  Cuenta
+                </th>
                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">
                   Monto
                 </th>
@@ -229,7 +232,7 @@
             <tbody class="bg-white divide-y divide-secondary-200">
               <tr *ngFor="let pago of reporte.pagos">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  {{ pago.fechaPago }}
+                  {{ formatFecha(pago.fechaPago) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   {{ pago.nombreUsuario }} {{ pago.apellidoUsuario }}
@@ -239,6 +242,9 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   {{ pago.metodoPago }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {{ pago.cuenta }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right font-medium text-green-600">
                   {{ formatCurrency(pago.monto) }}
