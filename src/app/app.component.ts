@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from './services/auth.service';
+import { NotificationComponent } from "./components/notification/notification.component";
 
 @Component({
   selector: 'app-root',
@@ -18,8 +19,9 @@ import { AuthService } from './services/auth.service';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    AsyncPipe
-  ]
+    AsyncPipe,
+    NotificationComponent
+]
 })
 export class AppComponent {
   title = 'Veckos Centro de Entrenamiento';

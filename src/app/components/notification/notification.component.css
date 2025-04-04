@@ -1,0 +1,121 @@
+.notificaciones-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 350px;
+    max-width: 90vw;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .notificacion {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.4s ease-out forwards;
+    position: relative;
+  }
+  
+  .notificacion-icono {
+    flex-shrink: 0;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .notificacion-mensaje {
+    flex-grow: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .notificacion-cerrar {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    margin-left: 8px;
+    opacity: 0.7;
+  }
+  
+  .notificacion-cerrar:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Estilos por tipo de notificación */
+  .notificacion-exito {
+    background-color: #d1fae5;
+    border-left: 4px solid #10b981;
+    color: #065f46;
+  }
+  
+  .notificacion-error {
+    background-color: #fee2e2;
+    border-left: 4px solid #ef4444;
+    color: #b91c1c;
+  }
+  
+  .notificacion-info {
+    background-color: #dbeafe;
+    border-left: 4px solid #3b82f6;
+    color: #1e40af;
+  }
+  
+  .notificacion-advertencia {
+    background-color: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+  }
+  
+  /* Iconos específicos para cada tipo */
+  .notificacion-exito .notificacion-icono {
+    color: #10b981;
+  }
+  
+  .notificacion-error .notificacion-icono {
+    color: #ef4444;
+  }
+  
+  .notificacion-info .notificacion-icono {
+    color: #3b82f6;
+  }
+  
+  .notificacion-advertencia .notificacion-icono {
+    color: #f59e0b;
+  }
+  
+  /* Animaciones */
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  .notificacion.fadeOut {
+    animation: fadeOut 0.3s forwards;
+  }

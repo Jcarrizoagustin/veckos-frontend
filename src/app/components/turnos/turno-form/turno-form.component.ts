@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { TurnoService } from '../../../services/turno.service';
 import { DayOfWeek, TurnoDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-turno-form',
@@ -41,7 +41,7 @@ export class TurnoFormComponent implements OnInit {
     private turnoService: TurnoService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService,
   ) { }
 
   ngOnInit(): void {
@@ -74,9 +74,7 @@ export class TurnoFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar turno:', error);
-        this.snackBar.open('Error al cargar datos del turno', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error("Ocurrio un error al cargar el turno");
         this.loading = false;
         this.router.navigate(['/turnos']);
       }
@@ -96,34 +94,26 @@ export class TurnoFormComponent implements OnInit {
       turno.id = this.turnoId;
       this.turnoService.update(this.turnoId, turno).subscribe({
         next: () => {
-          this.snackBar.open('Turno actualizado con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito("Turno editado con exito");
           this.loading = false;
           this.router.navigate(['/turnos']);
         },
         error: (error) => {
-          console.error('Error al actualizar turno:', error);
-          this.snackBar.open('Error al actualizar turno. Es posible que ya exista un turno en el mismo día y hora.', 'Cerrar', {
-            duration: 5000
-          });
+          console.error(error);
+          this.notificationService.error("Ocurrio un error al actualizar el turno");
           this.loading = false;
         }
       });
     } else {
       this.turnoService.create(turno).subscribe({
         next: () => {
-          this.snackBar.open('Turno creado con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito("Turno creado con exito");
           this.loading = false;
           this.router.navigate(['/turnos']);
         },
         error: (error) => {
-          console.error('Error al crear turno:', error);
-          this.snackBar.open('Error al crear turno. Es posible que ya exista un turno en el mismo día y hora.', 'Cerrar', {
-            duration: 5000
-          });
+          console.error(error);
+          this.notificationService.error("Ocurrio un error al crear el turno");
           this.loading = false;
         }
       });
