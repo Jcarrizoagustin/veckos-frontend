@@ -85,7 +85,21 @@ export class PagoFormComponent implements OnInit {
       cuentaId: ['', [Validators.required]],
       descripcion: ['']
     });
-    
+
+    this.pagoForm.get('metodoPago')?.valueChanges.subscribe(value => {
+      const cuentaBancariaControl = this.pagoForm.get('cuentaId');
+      
+      if (value === 'TRANSFERENCIA') {
+        cuentaBancariaControl?.enable();
+        cuentaBancariaControl?.setValidators(Validators.required);
+      } else {
+        cuentaBancariaControl?.disable();
+        cuentaBancariaControl?.clearValidators();
+        cuentaBancariaControl?.setValue('');
+      }
+      
+      cuentaBancariaControl?.updateValueAndValidity();
+    });
     // No deshabilitamos el formulario inicialmente
     // Solo control de inscripcionId estará deshabilitado si se pasa por parámetro
   }
