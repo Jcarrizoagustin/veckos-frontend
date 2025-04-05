@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuarioService } from '../../../services/usuario.service';
 import { EstadoUsuario, UsuarioDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -31,7 +31,7 @@ export class UsuarioFormComponent implements OnInit {
     private usuarioService: UsuarioService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -79,9 +79,7 @@ export class UsuarioFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuario:', error);
-        this.snackBar.open('Error al cargar datos del usuario', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar datos del usuario');
         this.loading = false;
         this.router.navigate(['/usuarios']);
       }
@@ -100,34 +98,26 @@ export class UsuarioFormComponent implements OnInit {
     if (this.isEditMode && this.usuarioId) {
       this.usuarioService.update(this.usuarioId, usuario).subscribe({
         next: () => {
-          this.snackBar.open('Usuario actualizado con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Usuario actualizado con éxito');
           this.loading = false;
           this.router.navigate(['/usuarios', this.usuarioId]);
         },
         error: (error) => {
           console.error('Error al actualizar usuario:', error);
-          this.snackBar.open('Error al actualizar usuario', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al actualizar usuario');
           this.loading = false;
         }
       });
     } else {
       this.usuarioService.create(usuario).subscribe({
         next: (newUsuario) => {
-          this.snackBar.open('Usuario creado con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Usuario creado con éxito');
           this.loading = false;
           this.router.navigate(['/usuarios', newUsuario.id]);
         },
         error: (error) => {
           console.error('Error al crear usuario:', error);
-          this.snackBar.open('Error al crear usuario. Posiblemente el DNI ya existe.', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al crear usuario. Posiblemente el DNI ya existe.');
           this.loading = false;
         }
       });

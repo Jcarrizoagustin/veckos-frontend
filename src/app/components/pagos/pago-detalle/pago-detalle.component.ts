@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PagoService } from '../../../services/pago.service';
 import { InscripcionService } from '../../../services/inscripcion.service';
 import { PagoInfoDto, InscripcionInfoDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-pago-detalle',
@@ -31,7 +31,7 @@ export class PagoDetalleComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -50,9 +50,7 @@ export class PagoDetalleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar pago:', error);
-        this.snackBar.open('Error al cargar datos del pago', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar datos del pago');
         this.loading = false;
         this.router.navigate(['/pagos']);
       }

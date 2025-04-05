@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReporteService } from '../../services/reporte.service';
 import { TurnoService } from '../../services/turno.service';
 import { DayOfWeek, EstadoPago, TurnoDto } from '../../models';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificacionService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private reporteService: ReporteService,
     private turnoService: TurnoService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -63,9 +63,7 @@ export class DashboardComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar estadísticas:', error);
-        this.snackBar.open('Error al cargar estadísticas del dashboard', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar estadísticas del dashboard');
         this.loading = false;
       }
     });
@@ -85,9 +83,7 @@ export class DashboardComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar turnos:', error);
-        this.snackBar.open('Error al cargar turnos', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar turnos');
         this.loading = false;
       }
     });

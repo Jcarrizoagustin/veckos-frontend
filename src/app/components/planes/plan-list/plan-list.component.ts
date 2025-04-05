@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PlanService } from '../../../services/plan.service';
 import { PlanDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-plan-list',
@@ -29,7 +29,7 @@ export class PlanListComponent implements OnInit {
   constructor(
     private planService: PlanService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -60,9 +60,7 @@ export class PlanListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar planes:', error);
-        this.snackBar.open('Error al cargar planes', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar planes');
         this.loading = false;
       }
     });
@@ -103,15 +101,11 @@ export class PlanListComponent implements OnInit {
       this.planService.delete(id).subscribe({
         next: () => {
           this.loadPlanes();
-          this.snackBar.open('Plan eliminado correctamente', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Plan eliminado correctamente');
         },
         error: (error) => {
           console.error('Error al eliminar plan:', error);
-          this.snackBar.open('Error al eliminar plan. Es posible que tenga inscripciones asociadas.', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.exito('Error al eliminar plan. Es posible que tenga inscripciones asociadas.');
           this.loading = false;
         }
       });

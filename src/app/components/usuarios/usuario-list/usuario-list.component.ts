@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuarioService } from '../../../services/usuario.service';
 import { EstadoUsuario, UsuarioDto, UsuarioListItemDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-usuario-list',
@@ -33,7 +33,7 @@ export class UsuarioListComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private snackBar: MatSnackBar,
+    private notificationService: NotificacionService,
     private router: Router
   ) { }
 
@@ -51,9 +51,7 @@ export class UsuarioListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuarios:', error);
-        this.snackBar.open('Error al cargar usuarios', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar usuarios');
         this.loading = false;
       }
     });
@@ -86,9 +84,7 @@ export class UsuarioListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al buscar usuarios:', error);
-        this.snackBar.open('Error al buscar usuarios', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al buscar usuarios');
         this.loading = false;
       }
     });

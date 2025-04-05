@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { PlanService } from '../../../services/plan.service';
 import { PlanDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-plan-form',
@@ -30,7 +30,7 @@ export class PlanFormComponent implements OnInit {
     private planService: PlanService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -63,9 +63,7 @@ export class PlanFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar plan:', error);
-        this.snackBar.open('Error al cargar datos del plan', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar datos del plan');
         this.loading = false;
         this.router.navigate(['/planes']);
       }
@@ -85,34 +83,26 @@ export class PlanFormComponent implements OnInit {
       plan.id = this.planId;
       this.planService.update(this.planId, plan).subscribe({
         next: () => {
-          this.snackBar.open('Plan actualizado con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Plan actualizado con éxito');
           this.loading = false;
           this.router.navigate(['/planes']);
         },
         error: (error) => {
           console.error('Error al actualizar plan:', error);
-          this.snackBar.open('Error al actualizar plan', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al actualizar plan');
           this.loading = false;
         }
       });
     } else {
       this.planService.create(plan).subscribe({
         next: () => {
-          this.snackBar.open('Plan creado con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Plan creado con éxito');
           this.loading = false;
           this.router.navigate(['/planes']);
         },
         error: (error) => {
           console.error('Error al crear plan:', error);
-          this.snackBar.open('Error al crear plan. Es posible que el nombre ya exista.', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al crear plan. Es posible que el nombre ya exista.');
           this.loading = false;
         }
       });

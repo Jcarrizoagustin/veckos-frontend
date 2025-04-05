@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CuentaService } from '../../../services/cuenta.service';
 import { CuentaDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-cuenta-form',
@@ -24,7 +25,8 @@ export class CuentaFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private cuentaService: CuentaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +63,7 @@ export class CuentaFormComponent implements OnInit {
       },
       error: (err) => {
         this.error = 'Error al cargar los datos de la cuenta.';
+        this.notificationService.error("Error al cargar la cuenta.");
         console.error('Error fetching cuenta:', err);
         this.loading = false;
       }
@@ -90,10 +93,12 @@ export class CuentaFormComponent implements OnInit {
     this.loading = true;
     this.cuentaService.createCuenta(cuenta).subscribe({
       next: () => {
+        this.notificationService.exito("Cuenta creada con exito");
         this.router.navigate(['/cuentas']);
       },
       error: (err) => {
         this.error = 'Error al crear la cuenta. Por favor, intenta nuevamente.';
+        this.notificationService.error("Error al crear una cuenta");
         console.error('Error creating cuenta:', err);
         this.loading = false;
       }
@@ -104,10 +109,12 @@ export class CuentaFormComponent implements OnInit {
     this.loading = true;
     this.cuentaService.updateCuenta(cuenta).subscribe({
       next: () => {
+        this.notificationService.exito("Exito al actualizar la cuenta");
         this.router.navigate(['/cuentas']);
       },
       error: (err) => {
         this.error = 'Error al actualizar la cuenta. Por favor, intenta nuevamente.';
+        this.notificationService.error("Error al actualizar la cuenta");
         console.error('Error updating cuenta:', err);
         this.loading = false;
       }

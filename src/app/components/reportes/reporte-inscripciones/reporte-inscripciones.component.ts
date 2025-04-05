@@ -9,8 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReporteService } from '../../../services/reporte.service';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-reporte-inscripciones',
@@ -40,7 +40,7 @@ export class ReporteInscripcionesComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private reporteService: ReporteService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -73,24 +73,18 @@ export class ReporteInscripcionesComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al generar reporte:', error);
-        this.snackBar.open('Error al generar reporte de inscripciones', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al generar reporte de inscripciones');
         this.loading = false;
       }
     });
   }
 
   exportarPDF(): void {
-    this.snackBar.open('Exportación a PDF no implementada en esta versión', 'Cerrar', {
-      duration: 3000
-    });
+    this.notificationService.info('Exportación a PDF no implementada en esta versión');
   }
 
   exportarExcel(): void {
-    this.snackBar.open('Exportación a Excel no implementada en esta versión', 'Cerrar', {
-      duration: 3000
-    });
+    this.notificationService.info('Exportación a Excel no implementada en esta versión');
   }
 
   // Helpers

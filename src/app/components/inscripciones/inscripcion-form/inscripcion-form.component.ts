@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { InscripcionService } from '../../../services/inscripcion.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { PlanService } from '../../../services/plan.service';
@@ -23,6 +22,7 @@ import {
   TurnoDto, 
   InscripcionCrearDto 
 } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-inscripcion-form',
@@ -92,7 +92,7 @@ export class InscripcionFormComponent implements OnInit {
     private usuarioService: UsuarioService,
     private planService: PlanService,
     private turnoService: TurnoService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -160,9 +160,7 @@ export class InscripcionFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuarios:', error);
-        this.snackBar.open('Error al cargar usuarios', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar usuarios');
         this.loadingUsuarios = false;
       }
     });
@@ -177,9 +175,7 @@ export class InscripcionFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar planes:', error);
-        this.snackBar.open('Error al cargar planes', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar planes');
         this.loadingPlanes = false;
       }
     });
@@ -209,9 +205,7 @@ export class InscripcionFormComponent implements OnInit {
       })
       .catch(error => {
         console.error('Error al cargar turnos:', error);
-        this.snackBar.open('Error al cargar turnos', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar turnos');
         this.loadingTurnos = false;
       });
   }
@@ -261,9 +255,7 @@ export class InscripcionFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar datos de inscripción:', error);
-        this.snackBar.open('Error al cargar datos de inscripción', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar datos de inscripción');
         this.loading = false;
         this.router.navigate(['/inscripciones']);
       }
@@ -327,9 +319,7 @@ export class InscripcionFormComponent implements OnInit {
         // Actualizar selecciones de turnos
         this.onChangeDiasSeleccionados();
       } else {
-        this.snackBar.open(`Solo puede seleccionar ${frecuencia} días`, 'Cerrar', {
-          duration: 3000
-        });
+        this.notificationService.advertencia(`Solo puede seleccionar ${frecuencia} días`);
         return;
       }
     } else {
@@ -353,9 +343,7 @@ export class InscripcionFormComponent implements OnInit {
     if (stepper.selectedIndex === 2) { // Estamos en el paso de turnos
       if (this.turnosForm.invalid) {
         this.markFormGroupTouched(this.turnosForm);
-        this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', {
-          duration: 3000
-        });
+        this.notificationService.info('Por favor complete todos los campos requeridos');
         return;
       }
     }
@@ -451,9 +439,7 @@ export class InscripcionFormComponent implements OnInit {
   // Submitting del formulario
   onSubmit(): void {
     if (this.usuarioForm.invalid || this.planForm.invalid || this.turnosForm.invalid || this.confirmacionForm.invalid) {
-      this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', {
-        duration: 5000
-      });
+      this.notificationService.advertencia('Por favor complete todos los campos requeridos');
       return;
     }
     
@@ -476,34 +462,26 @@ export class InscripcionFormComponent implements OnInit {
     if (this.isRenovacion && this.inscripcionId) {
       this.inscripcionService.renovarConCambios(this.inscripcionId, inscripcion).subscribe({
         next: (response) => {
-          this.snackBar.open('Inscripción renovada con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Inscripción renovada con éxito');
           this.loading = false;
           this.router.navigate(['/inscripciones', response.id]);
         },
         error: (error) => {
           console.error('Error al renovar inscripción:', error);
-          this.snackBar.open('Error al renovar inscripción', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al renovar inscripción');
           this.loading = false;
         }
       });
     } else {
       this.inscripcionService.create(inscripcion).subscribe({
         next: (response) => {
-          this.snackBar.open('Inscripción creada con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Inscripción creada con éxito');
           this.loading = false;
           this.router.navigate(['/inscripciones', response.id]);
         },
         error: (error) => {
           console.error('Error al crear inscripción:', error);
-          this.snackBar.open('Error al crear inscripción', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al crear inscripción');
           this.loading = false;
         }
       });

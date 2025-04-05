@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PagoService } from '../../../services/pago.service';
 import { PagoInfoDto, MetodoPago } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-pago-list',
@@ -37,7 +37,7 @@ export class PagoListComponent implements OnInit {
   constructor(
     private pagoService: PagoService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -57,9 +57,7 @@ export class PagoListComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al cargar pagos por periodo:', error);
-          this.snackBar.open('Error al cargar pagos', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al cargar pagos');
           this.loading = false;
         }
       });
@@ -73,9 +71,7 @@ export class PagoListComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al cargar pagos:', error);
-          this.snackBar.open('Error al cargar pagos', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al cargar pagos');
           this.loading = false;
         }
       });
@@ -96,17 +92,13 @@ export class PagoListComponent implements OnInit {
   buscarPagos(): void {
     // Validar fechas
     if (!this.fechaInicio || !this.fechaFin) {
-      this.snackBar.open('Por favor ingrese fechas válidas', 'Cerrar', {
-        duration: 3000
-      });
+      this.notificationService.advertencia('Por favor ingrese fechas válidas');
       return;
     }
     
     // Validar que fecha inicio sea menor o igual a fecha fin
     if (this.fechaInicio > this.fechaFin) {
-      this.snackBar.open('La fecha de inicio debe ser menor o igual a la fecha de fin', 'Cerrar', {
-        duration: 3000
-      });
+      this.notificationService.advertencia('La fecha de inicio debe ser menor o igual a la fecha de fin');
       return;
     }
     

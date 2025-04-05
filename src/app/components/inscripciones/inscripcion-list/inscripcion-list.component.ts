@@ -5,9 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { InscripcionService } from '../../../services/inscripcion.service';
 import { DayOfWeek, EstadoPago, InscripcionInfoDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-inscripcion-list',
@@ -41,7 +41,7 @@ export class InscripcionListComponent implements OnInit {
   constructor(
     private inscripcionService: InscripcionService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -58,9 +58,7 @@ export class InscripcionListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar inscripciones:', error);
-        this.snackBar.open('Error al cargar inscripciones', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.exito('Error al cargar inscripciones');
         this.aplicarFiltros()
         this.loading = false;
       }
@@ -120,16 +118,12 @@ export class InscripcionListComponent implements OnInit {
     
     this.inscripcionService.renovar(id).subscribe({
       next: () => {
-        this.snackBar.open('Inscripción renovada con éxito', 'Cerrar', {
-          duration: 3000
-        });
+        this.notificationService.exito('Inscripción renovada con éxito');
         this.cargarInscripciones();
       },
       error: (error) => {
         console.error('Error al renovar inscripción:', error);
-        this.snackBar.open('Error al renovar inscripción', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al renovar inscripción');
         this.loading = false;
       }
     });
@@ -142,16 +136,12 @@ export class InscripcionListComponent implements OnInit {
       
       this.inscripcionService.delete(id).subscribe({
         next: () => {
-          this.snackBar.open('Inscripción cancelada con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Inscripción cancelada con éxito');
           this.cargarInscripciones();
         },
         error: (error) => {
           console.error('Error al cancelar inscripción:', error);
-          this.snackBar.open('Error al cancelar inscripción', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al cancelar inscripción');
           this.loading = false;
         }
       });
@@ -163,16 +153,12 @@ export class InscripcionListComponent implements OnInit {
     
     this.inscripcionService.actualizarEstadosPagos().subscribe({
       next: () => {
-        this.snackBar.open('Estados de pago actualizados con éxito', 'Cerrar', {
-          duration: 3000
-        });
+        this.notificationService.exito('Estados de pago actualizados con éxito');
         this.cargarInscripciones();
       },
       error: (error) => {
         console.error('Error al actualizar estados de pago:', error);
-        this.snackBar.open('Error al actualizar estados de pago', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al actualizar estados de pago');
         this.loading = false;
       }
     });

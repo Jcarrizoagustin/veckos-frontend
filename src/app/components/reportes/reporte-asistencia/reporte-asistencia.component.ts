@@ -11,10 +11,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReporteService } from '../../../services/reporte.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { UsuarioListItemDto, ReporteAsistenciaRequestDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-reporte-asistencia',
@@ -49,7 +49,7 @@ export class ReporteAsistenciaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private reporteService: ReporteService,
     private usuarioService: UsuarioService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -93,9 +93,7 @@ export class ReporteAsistenciaComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuarios:', error);
-        this.snackBar.open('Error al cargar usuarios', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar usuarios');
         this.loading = false;
       }
     });
@@ -131,24 +129,18 @@ export class ReporteAsistenciaComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al generar reporte:', error);
-        this.snackBar.open('Error al generar reporte de asistencia', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al generar reporte de asistencia');
         this.loading = false;
       }
     });
   }
 
   exportarPDF(): void {
-    this.snackBar.open('Exportación a PDF no implementada en esta versión', 'Cerrar', {
-      duration: 3000
-    });
+    this.notificationService.info('Exportación a PDF no implementada en esta versión');
   }
 
   exportarExcel(): void {
-    this.snackBar.open('Exportación a Excel no implementada en esta versión', 'Cerrar', {
-      duration: 3000
-    });
+    this.notificationService.info('Exportación a Excel no implementada en esta versión');
   }
 
   // Helpers

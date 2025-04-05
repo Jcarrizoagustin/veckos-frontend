@@ -18,6 +18,7 @@ import {
   TurnoConUsuariosDto,
   DayOfWeek
 } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-clase-asistencia',
@@ -52,7 +53,8 @@ export class ClaseAsistenciaComponent implements OnInit {
     private turnoService: TurnoService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -78,9 +80,7 @@ export class ClaseAsistenciaComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar la clase:', error);
-        this.snackBar.open('Error al cargar la información de la clase', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar la información de la clase');
         this.loading = false;
         this.router.navigate(['/clases']);
       }
@@ -104,9 +104,7 @@ export class ClaseAsistenciaComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuarios del turno:', error);
-        this.snackBar.open('Error al cargar usuarios asignados al turno', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar usuarios asignados al turno');
       }
     });
   }
@@ -132,9 +130,7 @@ export class ClaseAsistenciaComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar asistencias:', error);
-        this.snackBar.open('Error al cargar el registro de asistencias', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar el registro de asistencias');
         this.loadingAsistencias = false;
         this.loading = false;
       }
@@ -165,17 +161,13 @@ export class ClaseAsistenciaComponent implements OnInit {
     // Registrar asistencias por clase (endpoint que recibe la clase y los usuarios presentes)
     this.asistenciaService.registrarPorClase(this.claseId, usuariosPresentes).subscribe({
       next: (response) => {
-        this.snackBar.open('Asistencias registradas correctamente', 'Cerrar', {
-          duration: 3000
-        });
+        this.notificationService.exito('Asistencias registradas correctamente');
         this.guardando = false;
         this.cargarAsistencias(); // Recargar para mostrar los cambios
       },
       error: (error) => {
         console.error('Error al registrar asistencias:', error);
-        this.snackBar.open('Error al registrar las asistencias', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al registrar las asistencias');
         this.guardando = false;
       }
     });

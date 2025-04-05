@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TurnoService } from '../../../services/turno.service';
 import { TurnoDto, UsuarioInfoDto, TurnoConUsuariosDto, DayOfWeek } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-turno-detalle',
@@ -42,7 +42,7 @@ export class TurnoDetalleComponent implements OnInit {
     private turnoService: TurnoService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -61,9 +61,7 @@ export class TurnoDetalleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar turno:', error);
-        this.snackBar.open('Error al cargar datos del turno', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar datos del turno');
         this.loading = false;
         this.router.navigate(['/turnos']);
       }
@@ -82,9 +80,7 @@ export class TurnoDetalleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuarios asignados:', error);
-        this.snackBar.open('Error al cargar usuarios asignados al turno', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar usuarios asignados al turno');
         this.loading = false;
       }
     });
@@ -99,16 +95,12 @@ export class TurnoDetalleComponent implements OnInit {
       this.loading = true;
       this.turnoService.delete(this.turnoId).subscribe({
         next: () => {
-          this.snackBar.open('Turno eliminado correctamente', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Turno eliminado correctamente');
           this.router.navigate(['/turnos']);
         },
         error: (error) => {
           console.error('Error al eliminar turno:', error);
-          this.snackBar.open('Error al eliminar turno. Es posible que tenga inscripciones o clases asociadas.', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al eliminar turno. Es posible que tenga inscripciones o clases asociadas.');
           this.loading = false;
         }
       });

@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ClaseService } from '../../../services/clase.service';
 import { ClaseInfoDto, DayOfWeek } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-clase-list',
@@ -51,7 +52,8 @@ export class ClaseListComponent implements OnInit {
   constructor(
     private claseService: ClaseService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -98,9 +100,7 @@ export class ClaseListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar clases:', error);
-        this.snackBar.open('Error al cargar clases', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar clases');
         this.loading = false;
       }
     });

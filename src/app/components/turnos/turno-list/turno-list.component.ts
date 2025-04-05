@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TurnoService } from '../../../services/turno.service';
 import { DayOfWeek, TurnoDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-turno-list',
@@ -41,7 +41,7 @@ export class TurnoListComponent implements OnInit {
   constructor(
     private turnoService: TurnoService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -58,9 +58,7 @@ export class TurnoListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar turnos:', error);
-        this.snackBar.open('Error al cargar turnos', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar turnos');
         this.loading = false;
       }
     });
@@ -101,16 +99,12 @@ export class TurnoListComponent implements OnInit {
       this.loading = true;
       this.turnoService.delete(id).subscribe({
         next: () => {
-          this.snackBar.open('Turno eliminado correctamente', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Turno eliminado correctamente');
           this.loadTurnos();
         },
         error: (error) => {
           console.error('Error al eliminar turno:', error);
-          this.snackBar.open('Error al eliminar turno. Es posible que tenga inscripciones o clases asociadas.', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al eliminar turno. Es posible que tenga inscripciones o clases asociadas.');
           this.loading = false;
         }
       });

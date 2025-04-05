@@ -11,9 +11,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReporteService } from '../../../services/reporte.service';
 import { ExportarReporteService } from '../../../services/exportar-reporte.service';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-reporte-financiero',
@@ -45,7 +45,7 @@ export class ReporteFinancieroComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private reporteService: ReporteService,
-    private snackBar: MatSnackBar,
+    private notificationService: NotificacionService,
     private exportarReporteService: ExportarReporteService
   ) { }
 
@@ -83,22 +83,18 @@ export class ReporteFinancieroComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al generar reporte:', error);
-        this.snackBar.open('Error al generar reporte financiero', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al generar reporte financiero');
         this.loading = false;
       }
     });
   }
 
   exportarPDF(): void {
-    this.snackBar.open('Exportación a PDF no implementada en esta versión', 'Cerrar', {
-      duration: 3000
-    });
+    this.notificationService.info('Exportación a PDF no implementada en esta versión');
   }
 
   /*exportarExcel(): void {
-    this.snackBar.open('Exportación a Excel no implementada en esta versión', 'Cerrar', {
+    this.notificationService.exito('Exportación a Excel no implementada en esta versión', 'Cerrar', {
       duration: 3000
     });
   }*/

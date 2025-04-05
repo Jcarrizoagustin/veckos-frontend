@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +11,7 @@ import { InscripcionService } from '../../../services/inscripcion.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { PagoCrearDto, MetodoPago, InscripcionInfoDto, UsuarioDetalleDto, UsuarioDto, CuentaDto } from '../../../models';
 import { CuentaService } from '../../../services/cuenta.service';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-pago-form',
@@ -48,8 +48,8 @@ export class PagoFormComponent implements OnInit {
     private usuarioService: UsuarioService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar,
-    private cuentaService: CuentaService
+    private cuentaService: CuentaService,
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -103,9 +103,7 @@ export class PagoFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar planes:', error);
-        this.snackBar.open('Error al cargar planes', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar planes');
         this.loadingCuentas = false;
       }
     });
@@ -144,9 +142,7 @@ export class PagoFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar inscripción:', error);
-        this.snackBar.open('Error al cargar datos de la inscripción', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar datos de la inscripción');
         this.loading = false;
       }
     });
@@ -163,9 +159,7 @@ export class PagoFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar usuario:', error);
-        this.snackBar.open('Error al cargar datos del usuario', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar datos del usuario');
         this.loading = false;
       }
     });
@@ -191,9 +185,7 @@ export class PagoFormComponent implements OnInit {
 
     this.pagoService.registrar(pago).subscribe({
       next: () => {
-        this.snackBar.open('Pago registrado con éxito', 'Cerrar', {
-          duration: 3000
-        });
+        this.notificationService.exito('Pago registrado con éxito');
         this.loading = false;
         
         // Navegar de vuelta a la inscripción
@@ -207,9 +199,7 @@ export class PagoFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al registrar pago:', error);
-        this.snackBar.open('Error al registrar pago', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al registrar pago');
         this.loading = false;
       }
     });

@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { InscripcionService } from '../../../services/inscripcion.service';
 import { PagoService } from '../../../services/pago.service';
 import { InscripcionInfoDto, EstadoPago, PagoInfoDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-inscripcion-detalle',
@@ -49,7 +49,7 @@ export class InscripcionDetalleComponent implements OnInit {
     private pagoService: PagoService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -69,9 +69,7 @@ export class InscripcionDetalleComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar inscripción:', error);
-        this.snackBar.open('Error al cargar inscripción', 'Cerrar', {
-          duration: 5000
-        });
+        this.notificationService.error('Error al cargar inscripción');
         this.loading = false;
         this.router.navigate(['/inscripciones']);
       }
@@ -108,16 +106,12 @@ export class InscripcionDetalleComponent implements OnInit {
       
       this.inscripcionService.delete(this.inscripcionId).subscribe({
         next: () => {
-          this.snackBar.open('Inscripción cancelada con éxito', 'Cerrar', {
-            duration: 3000
-          });
+          this.notificationService.exito('Inscripción cancelada con éxito');
           this.router.navigate(['/inscripciones']);
         },
         error: (error) => {
           console.error('Error al cancelar inscripción:', error);
-          this.snackBar.open('Error al cancelar inscripción', 'Cerrar', {
-            duration: 5000
-          });
+          this.notificationService.error('Error al cancelar inscripción');
           this.loading = false;
         }
       });

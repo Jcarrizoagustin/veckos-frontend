@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { CuentaService } from '../../../services/cuenta.service';
 import { CuentaDto } from '../../../models';
+import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-cuenta-list',
@@ -18,7 +19,8 @@ export class CuentaListComponent implements OnInit {
 
   constructor(
     private cuentaService: CuentaService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificacionService
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class CuentaListComponent implements OnInit {
       },
       error: (err) => {
         this.error = 'Error al cargar las cuentas. Por favor, intenta nuevamente.';
+        this.notificationService.error("Error al cargar las cuentas. Por favor, intenta nuevamente.");
         console.error('Error fetching cuentas:', err);
         this.loading = false;
       }
@@ -54,10 +57,12 @@ export class CuentaListComponent implements OnInit {
     if (confirm('¿Estás seguro de que deseas eliminar esta cuenta?')) {
       this.cuentaService.deleteCuenta(id).subscribe({
         next: () => {
+          this.notificationService.exito("Exito al eliminar la cuenta");
           this.cuentas = this.cuentas.filter(cuenta => cuenta.id !== id);
         },
         error: (err) => {
           this.error = 'Error al eliminar la cuenta. Por favor, intenta nuevamente.';
+          this.notificationService.error("Error al eliminar la cuenta");
           console.error('Error deleting cuenta:', err);
         }
       });
