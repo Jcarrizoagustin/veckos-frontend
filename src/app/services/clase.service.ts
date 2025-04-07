@@ -9,7 +9,7 @@ import { MockDataService } from './mock-data.service';
   providedIn: 'root'
 })
 export class ClaseService {
-  private apiUrl = `${environment.apiBaseUrl}/clases`;
+  private apiUrl = `${environment.apiBaseUrl}/api/clases`;
   // Flag para usar datos mock (para desarrollo)
   private useMockData = false; // Cambia a false para usar la API real
 

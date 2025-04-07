@@ -9,7 +9,7 @@ import { MockDataService } from './mock-data.service';
   providedIn: 'root'
 })
 export class InscripcionService {
-  private apiUrl = `${environment.apiBaseUrl}/inscripciones`;
+  private apiUrl = `${environment.apiBaseUrl}/api/inscripciones`;
   // Flag para usar datos mock (para desarrollo)
   private useMockData = false; // Cambia a false para usar la API real
 

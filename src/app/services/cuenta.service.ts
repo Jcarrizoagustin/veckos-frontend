@@ -9,7 +9,7 @@ import { CuentaDto } from '../models';
 })
 export class CuentaService {
 
-  private apiUrl = `${environment.apiBaseUrl}/cuentas`;
+  private apiUrl = `${environment.apiBaseUrl}/api/cuentas`;
   private useMockData = false; // Cambia a false para usar la API real
 
   constructor(

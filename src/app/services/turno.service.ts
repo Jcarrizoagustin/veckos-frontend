@@ -9,7 +9,7 @@ import { MockDataService } from './mock-data.service';
   providedIn: 'root'
 })
 export class TurnoService {
-  private apiUrl = `${environment.apiBaseUrl}/turnos`;
+  private apiUrl = `${environment.apiBaseUrl}/api/turnos`;
   // Flag para usar datos mock (para desarrollo)
   private useMockData = false; // Cambia a false para usar la API real
 
