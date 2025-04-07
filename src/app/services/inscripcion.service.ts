@@ -19,56 +19,56 @@ export class InscripcionService {
   ) {}
 
   getAll(): Observable<InscripcionInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockInscripciones());
-    }
+    }*/
     return this.http.get<InscripcionInfoDto[]>(this.apiUrl);
   }
 
   getById(id: number): Observable<InscripcionInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockInscripcionById(id));
-    }
+    }*/
     return this.http.get<InscripcionInfoDto>(`${this.apiUrl}/${id}`);
   }
 
   getByUsuarioId(usuarioId: number): Observable<InscripcionInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockInscripcionesByUsuarioId(usuarioId));
-    }
+    }*/
     return this.http.get<InscripcionInfoDto[]>(`${this.apiUrl}/usuario/${usuarioId}`);
   }
 
   getActivaByUsuarioId(usuarioId: number): Observable<InscripcionInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       const inscripciones = this.mockDataService.getMockInscripcionesByUsuarioId(usuarioId);
       const activa = inscripciones.find(i => 
         i.estadoPago === EstadoPago.ACTIVO || i.estadoPago === EstadoPago.PROXIMO_A_VENCER
       );
       return of(activa || inscripciones[0]);
-    }
+    }*/
     return this.http.get<InscripcionInfoDto>(`${this.apiUrl}/usuario/${usuarioId}/activa`);
   }
 
   getByEstado(estado: EstadoPago): Observable<InscripcionInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockInscripcionesByEstado(estado));
-    }
+    }*/
     return this.http.get<InscripcionInfoDto[]>(`${this.apiUrl}/por-estado/${estado}`);
   }
 
   getByVencimiento(fechaInicio: string, fechaFin: string): Observable<InscripcionInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Filtramos inscripciones que vencen en el período
       const inscripciones = this.mockDataService.getMockInscripciones()
         .filter(i => i.fechaFin >= fechaInicio && i.fechaFin <= fechaFin);
       return of(inscripciones);
-    }
+    }*/
     return this.http.get<InscripcionInfoDto[]>(`${this.apiUrl}/por-vencimiento?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 
   create(inscripcion: InscripcionCrearDto): Observable<InscripcionInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Crear una inscripción simulada
       const usuarios = this.mockDataService.getMockUsuarios();
       const planes = this.mockDataService.getMockPlanes();
@@ -102,12 +102,12 @@ export class InscripcionService {
       };
       
       return of(nuevaInscripcion);
-    }
+    }*/
     return this.http.post<InscripcionInfoDto>(this.apiUrl, inscripcion);
   }
 
   update(id: number, inscripcion: any): Observable<InscripcionInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Simulamos actualización obteniendo la inscripción existente y actualizando campos
       const inscripcionExistente = this.mockDataService.getMockInscripcionById(id);
       return of({ 
@@ -116,12 +116,12 @@ export class InscripcionService {
         fechaFin: inscripcion.fechaFin || inscripcionExistente.fechaFin,
         ultimoPago: inscripcion.ultimoPago || inscripcionExistente.ultimoPago
       });
-    }
+    }*/
     return this.http.put<InscripcionInfoDto>(`${this.apiUrl}/${id}`, inscripcion);
   }
 
   renovar(id: number): Observable<InscripcionInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Simulamos renovación copiando la inscripción existente y actualizando fechas
       const inscripcionExistente = this.mockDataService.getMockInscripcionById(id);
       const fechaInicio = new Date(inscripcionExistente.fechaFin);
@@ -138,7 +138,7 @@ export class InscripcionService {
         estadoPago: EstadoPago.ACTIVO,
         ultimoPago: new Date().toISOString().split('T')[0]
       });
-    }
+    }*/
     return this.http.post<InscripcionInfoDto>(`${this.apiUrl}/${id}/renovar`, {});
   }
 

@@ -100,8 +100,7 @@ export class IngresoComponent {
     if (!this.usuario) return '';
 
     if (this.usuario.tieneInscripcionActiva && 
-        (this.usuario.inscripcionActiva?.estadoPago === 'ACTIVO' || 
-         this.usuario.inscripcionActiva?.estadoPago === 'PROXIMO_A_VENCER')) {
+        (this.usuario.inscripcionActiva?.estadoPago === 'PAGA')) {
       return 'bg-green-100 border-green-500 text-green-800';
     } else {
       return 'bg-red-100 border-red-500 text-red-800';
@@ -109,16 +108,8 @@ export class IngresoComponent {
   }
 
   getEstadoTexto(): string {
-    if (!this.usuario) return '';
-
-    if (this.usuario.tieneInscripcionActiva) {
-      if (this.usuario.inscripcionActiva?.estadoPago === 'ACTIVO') {
-        return 'ACTIVO';
-      } else if (this.usuario.inscripcionActiva?.estadoPago === 'PROXIMO_A_VENCER') {
-        return 'PRÓXIMO A VENCER';
-      } else {
-        return 'INACTIVO';
-      }
+    if (this.usuario?.estadoUsuario === 'ACTIVO') {
+      return 'ACTIVO';
     } else {
       return 'INACTIVO';
     }
@@ -127,9 +118,7 @@ export class IngresoComponent {
   getIconoEstado(): string {
     if (!this.usuario) return '';
 
-    if (this.usuario.tieneInscripcionActiva && 
-        (this.usuario.inscripcionActiva?.estadoPago === 'ACTIVO' || 
-         this.usuario.inscripcionActiva?.estadoPago === 'PROXIMO_A_VENCER')) {
+    if (this.usuario?.estadoUsuario === 'ACTIVO') {
       return 'check_circle';
     } else {
       return 'cancel';

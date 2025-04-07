@@ -20,41 +20,41 @@ export class UsuarioService {
 
   getAll(): Observable<UsuarioListItemDto[]> {
     if (this.useMockData) {
-      return of(this.mockDataService.getMockUsuarios());
+      return of([]);
     }
     return this.http.get<UsuarioListItemDto[]>(this.apiUrl);
   }
 
   getActivos(): Observable<UsuarioListItemDto[]> {
     if (this.useMockData) {
-      return of(this.mockDataService.getMockUsuarios().filter(u => u.estado === 'ACTIVO'));
+      return of([]);
     }
     return this.http.get<UsuarioListItemDto[]>(`${this.apiUrl}/activos`);
   }
 
   getPendientes(): Observable<UsuarioListItemDto[]> {
     if (this.useMockData) {
-      return of(this.mockDataService.getMockUsuarios().filter(u => u.estado === 'PENDIENTE'));
+      return of([]);
     }
     return this.http.get<UsuarioListItemDto[]>(`${this.apiUrl}/pendientes`);
   }
 
   getUsuarioDtoById(id: number): Observable<UsuarioDetalleDto> {
-    if(this.useMockData){
-      return of(this.mockDataService.getMockUsuarioDetalle(id));
-    }
+    /*if(this.useMockData){
+      return of(null);
+    }*/
     return this.http.get<UsuarioDetalleDto>(`${this.apiUrl}/${id}`)
   }
 
   getById(id: number): Observable<UsuarioDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockUsuarioDetalle(id));
-    }
+    }*/
     return this.http.get<UsuarioDto>(`${this.apiUrl}/${id}`);
   }
 
   buscar(termino: string): Observable<UsuarioListItemDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       const mockUsuarios = this.mockDataService.getMockUsuarios();
       const filteredUsuarios = mockUsuarios.filter(u => 
         u.nombre.toLowerCase().includes(termino.toLowerCase()) || 
@@ -62,7 +62,7 @@ export class UsuarioService {
         u.dni.includes(termino)
       );
       return of(filteredUsuarios);
-    }
+    }*/
     return this.http.get<UsuarioListItemDto[]>(`${this.apiUrl}/buscar?termino=${termino}`);
   }
 

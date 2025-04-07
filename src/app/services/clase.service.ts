@@ -19,14 +19,14 @@ export class ClaseService {
   ) {}
 
   getAll(): Observable<ClaseInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockClases());
-    }
+    }*/
     return this.http.get<ClaseInfoDto[]>(this.apiUrl);
   }
 
   getById(id: number): Observable<ClaseInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Buscar en las clases disponibles
       const clase = this.mockDataService.getMockClases().find(c => c.id === id);
       if (clase) {
@@ -44,44 +44,44 @@ export class ClaseService {
         cantidadAsistencias: 10,
         cantidadPresentes: 7
       });
-    }
+    }*/
     return this.http.get<ClaseInfoDto>(`${this.apiUrl}/${id}`);
   }
 
   getByTurnoId(turnoId: number): Observable<ClaseInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockClases().filter(c => c.turnoId === turnoId));
-    }
+    }*/
     return this.http.get<ClaseInfoDto[]>(`${this.apiUrl}/turno/${turnoId}`);
   }
 
   getByFecha(fecha: string): Observable<ClaseInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockClasesByFechaEspecifica(fecha));
-    }
+    }*/
     return this.http.get<ClaseInfoDto[]>(`${this.apiUrl}/fecha?fecha=${fecha}`);
   }
 
   getByPeriodo(fechaInicio: string, fechaFin: string): Observable<ClaseInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Para mantenerlo simple, solo retornamos las clases del día inicial
       return of(this.mockDataService.getMockClasesByFechaEspecifica(fechaInicio));
-    }
+    }*/
     return this.http.get<ClaseInfoDto[]>(`${this.apiUrl}/periodo?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 
   getByUsuarioId(usuarioId: number, fechaInicio: string, fechaFin: string): Observable<ClaseInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Una implementación muy básica que devuelve algunas clases filtradas
       const todasLasClases = this.mockDataService.getMockClases();
       // Filtramos aproximadamente el 30% de las clases (aleatoriamente)
       return of(todasLasClases.filter(() => Math.random() < 0.3));
-    }
+    }*/
     return this.http.get<ClaseInfoDto[]>(`${this.apiUrl}/usuario/${usuarioId}?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 
   create(clase: ClaseDto): Observable<ClaseInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       const nuevaClase: ClaseInfoDto = {
         id: Math.floor(Math.random() * 1000) + 1000,
         turnoId: clase.turnoId,
@@ -93,12 +93,12 @@ export class ClaseService {
         cantidadPresentes: 0
       };
       return of(nuevaClase);
-    }
+    }*/
     return this.http.post<ClaseInfoDto>(this.apiUrl, clase);
   }
 
   update(id: number, clase: ClaseDto): Observable<ClaseInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       const claseUpdated: ClaseInfoDto = {
         id: id,
         turnoId: clase.turnoId,
@@ -110,22 +110,22 @@ export class ClaseService {
         cantidadPresentes: 7 // Valores ficticios
       };
       return of(claseUpdated);
-    }
+    }*/
     return this.http.put<ClaseInfoDto>(`${this.apiUrl}/${id}`, clase);
   }
 
   delete(id: number): Observable<void> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(undefined);
-    }
+    }*/
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   getEstadisticasAsistenciasPeriodo(fechaInicio: string, fechaFin: string): Observable<number> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Devolver un porcentaje aleatorio entre 50% y 90%
       return of(Math.floor(Math.random() * 40) + 50);
-    }
+    }*/
     return this.http.get<number>(`${this.apiUrl}/estadisticas/periodo?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 }

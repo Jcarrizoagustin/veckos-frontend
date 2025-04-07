@@ -19,7 +19,7 @@ export class AsistenciaService {
   ) {}
 
   getAll(): Observable<AsistenciaInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Combinamos todas las asistencias de todas las clases
       const asistencias: AsistenciaInfoDto[] = [];
       const clases = this.mockDataService.getMockClases();
@@ -31,12 +31,12 @@ export class AsistenciaService {
       });
       
       return of(asistencias);
-    }
+    }*/
     return this.http.get<AsistenciaInfoDto[]>(this.apiUrl);
   }
 
   getById(id: number): Observable<AsistenciaInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Generar una asistencia ficticia
       return of({
         id: id,
@@ -48,37 +48,37 @@ export class AsistenciaService {
         presente: Math.random() > 0.3, // 70% de probabilidad de estar presente
         fechaRegistro: new Date().toISOString()
       });
-    }
+    }*/
     return this.http.get<AsistenciaInfoDto>(`${this.apiUrl}/${id}`);
   }
 
   getByUsuarioId(usuarioId: number): Observable<AsistenciaInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockAsistenciasByUsuarioId(usuarioId));
-    }
+    }*/
     return this.http.get<AsistenciaInfoDto[]>(`${this.apiUrl}/usuario/${usuarioId}`);
   }
 
   getByClaseId(claseId: number): Observable<AsistenciaInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockAsistenciasByClaseId(claseId));
-    }
+    }*/
     return this.http.get<AsistenciaInfoDto[]>(`${this.apiUrl}/clase/${claseId}`);
   }
 
   getByUsuarioIdAndFecha(usuarioId: number, fechaInicio: string, fechaFin: string): Observable<AsistenciaInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Filtramos las asistencias del usuario por fecha (simplificado)
       const asistenciasUsuario = this.mockDataService.getMockAsistenciasByUsuarioId(usuarioId);
       
       // En la práctica, deberíamos filtrar por fecha, pero para simplificar:
       return of(asistenciasUsuario.slice(0, 10)); // Tomamos solo las primeras 10
-    }
+    }*/
     return this.http.get<AsistenciaInfoDto[]>(`${this.apiUrl}/usuario/${usuarioId}/fecha?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 
   registrar(asistencia: AsistenciaRegistrarDto): Observable<AsistenciaInfoDto> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Crear una asistencia ficticia
       const nuevaAsistencia: AsistenciaInfoDto = {
         id: Math.floor(Math.random() * 1000) + 5000,
@@ -91,34 +91,34 @@ export class AsistenciaService {
         fechaRegistro: new Date().toISOString()
       };
       return of(nuevaAsistencia);
-    }
+    }*/
     return this.http.post<AsistenciaInfoDto>(this.apiUrl, asistencia);
   }
 
   registrarPorClase(claseId: number, usuariosPresentes: number[]): Observable<AsistenciaInfoDto[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.registrarAsistenciasPorClaseMock(claseId, usuariosPresentes));
-    }
+    }*/
     return this.http.post<AsistenciaInfoDto[]>(`${this.apiUrl}/clase/${claseId}`, usuariosPresentes);
   }
 
   delete(id: number): Observable<void> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(undefined);
-    }
+    }*/
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   getEstadisticasUsuario(usuarioId: number, fechaInicio: string, fechaFin: string): Observable<number> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Devolver un porcentaje aleatorio entre 60% y 95%
       return of(Math.floor(Math.random() * 35) + 60);
-    }
+    }*/
     return this.http.get<number>(`${this.apiUrl}/estadisticas/usuario/${usuarioId}?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 
   getRanking(fechaInicio: string, fechaFin: string): Observable<any[]> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Generar un ranking ficticio con usuarios reales
       const usuarios = this.mockDataService.getMockUsuarios();
       return of(usuarios.map(usuario => ({
@@ -126,7 +126,7 @@ export class AsistenciaService {
         nombreCompleto: `${usuario.nombre} ${usuario.apellido}`,
         porcentajeAsistencia: Math.floor(Math.random() * 35) + 60 // Entre 60% y 95%
       })));
-    }
+    }*/
     return this.http.get<any[]>(`${this.apiUrl}/ranking?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 }

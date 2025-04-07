@@ -24,8 +24,7 @@ export interface LoginDto {
   export enum EstadoUsuario {
     ACTIVO = 'ACTIVO',
     INACTIVO = 'INACTIVO',
-    PENDIENTE = 'PENDIENTE',
-    PROXIMO_A_VENCER = "PROXIMO_A_VENCER"
+    PENDIENTE = 'PENDIENTE'
   }
   
   export interface UsuarioDto {
@@ -59,9 +58,9 @@ export interface LoginDto {
     cuil?: string;
     telefono?: string;
     correo?: string;
-    estado: EstadoUsuario;
     fechaAlta: Date | string;
     inscripcionActiva?: InscripcionInfoDto;
+    estadoUsuario: EstadoUsuario,
     edad: number;
     tieneInscripcionActiva: boolean;
   }
@@ -93,10 +92,13 @@ export interface LoginDto {
   
   // Inscripción
   export enum EstadoPago {
-    ACTIVO = 'ACTIVO',
-    INACTIVO = 'INACTIVO',
-    PROXIMO_A_VENCER = 'PROXIMO_A_VENCER',
+    PAGA = 'PAGA',
     PENDIENTE = 'PENDIENTE'
+  }
+
+  export enum EstadoInscripcion {
+    EN_CURSO = "EN_CURSO",
+    COMPLETADA = "COMPLETADA"
   }
   
   export interface InscripcionInfoDto {
@@ -111,6 +113,7 @@ export interface LoginDto {
     fechaFin: Date | string;
     frecuencia: number;
     estadoPago: EstadoPago;
+    estadoInscripcion: EstadoInscripcion
     ultimoPago?: Date | string;
     detalles: DetalleInscripcionInfoDto[];
   }

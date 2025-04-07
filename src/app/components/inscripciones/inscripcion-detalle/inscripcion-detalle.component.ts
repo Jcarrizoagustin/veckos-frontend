@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { InscripcionService } from '../../../services/inscripcion.service';
 import { PagoService } from '../../../services/pago.service';
-import { InscripcionInfoDto, EstadoPago, PagoInfoDto } from '../../../models';
+import { InscripcionInfoDto, EstadoPago, PagoInfoDto, EstadoInscripcion } from '../../../models';
 import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
@@ -28,10 +28,13 @@ export class InscripcionDetalleComponent implements OnInit {
   
   // Mapeos para UI
   estadoPagoClasses: { [key: string]: string } = {
-    [EstadoPago.ACTIVO]: 'bg-green-100 text-green-800',
-    [EstadoPago.INACTIVO]: 'bg-red-100 text-red-800',
-    [EstadoPago.PROXIMO_A_VENCER]: 'bg-yellow-100 text-yellow-800',
+    [EstadoPago.PAGA]: 'bg-green-100 text-green-800',
     [EstadoPago.PENDIENTE]: 'bg-blue-100 text-blue-800'
+  };
+
+  estadoInscripcionClasses: { [key: string]: string } = {
+    [EstadoInscripcion.EN_CURSO]: 'bg-green-100 text-green-800',
+    [EstadoInscripcion.COMPLETADA]: 'bg-blue-100 text-blue-800'
   };
   
   nombresDias: { [key: string]: string } = {
@@ -150,5 +153,9 @@ export class InscripcionDetalleComponent implements OnInit {
 
   formatHora(hora: string): string {
     return hora.substring(0, 5); // Format from "00:00:00" to "00:00"
+  }
+
+  avisoPagoEfectuado():void {
+    this.notificationService.info("La susbscripcion se encuentra paga");
   }
 }

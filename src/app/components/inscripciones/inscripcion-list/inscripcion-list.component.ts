@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { InscripcionService } from '../../../services/inscripcion.service';
-import { DayOfWeek, EstadoPago, InscripcionInfoDto } from '../../../models';
+import { DayOfWeek, EstadoInscripcion, EstadoPago, InscripcionInfoDto } from '../../../models';
 import { NotificacionService } from '../../../services/notification.service';
 
 @Component({
@@ -32,10 +32,13 @@ export class InscripcionListComponent implements OnInit {
   
   // Mapeos para UI
   estadoPagoClasses: { [key: string]: string } = {
-    [EstadoPago.ACTIVO]: 'bg-green-100 text-green-800',
-    [EstadoPago.INACTIVO]: 'bg-red-100 text-red-800',
-    [EstadoPago.PROXIMO_A_VENCER]: 'bg-yellow-100 text-yellow-800',
+    [EstadoPago.PAGA]: 'bg-green-100 text-green-800',
     [EstadoPago.PENDIENTE]: 'bg-blue-100 text-blue-800'
+  };
+
+  estadoInscripcionClasses: { [key: string]: string } = {
+    [EstadoInscripcion.EN_CURSO]: 'bg-green-100 text-green-800',
+    [EstadoInscripcion.COMPLETADA]: 'bg-blue-100 text-blue-800'
   };
 
   constructor(
@@ -71,7 +74,7 @@ export class InscripcionListComponent implements OnInit {
     
     if (this.filtroEstado !== 'TODOS') {
       inscripcionesFiltradas = inscripcionesFiltradas.filter(
-        inscripcion => inscripcion.estadoPago === this.filtroEstado
+        inscripcion => inscripcion.estadoInscripcion === this.filtroEstado
       );
     }
     

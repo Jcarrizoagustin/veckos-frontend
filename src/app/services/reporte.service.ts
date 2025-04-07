@@ -19,7 +19,7 @@ export class ReporteService {
   ) {}
 
   generarReporteAsistencia(request: ReporteAsistenciaRequestDto): Observable<any> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Generar un reporte de asistencia simulado
       const reporte: any = {
         fechaInicio: request.fechaInicio,
@@ -71,13 +71,13 @@ export class ReporteService {
       }
 
       return of(reporte);
-    }
+    }*/
     
     return this.http.post<any>(`${this.apiUrl}/asistencia`, request);
   }
 
   generarReporteFinanciero(fechaInicio: string, fechaFin: string, agruparPorMes: boolean = false, agruparPorMetodoPago: boolean = false): Observable<any> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Generar un reporte financiero simulado
       const reporte: any = {
         fechaInicio,
@@ -107,13 +107,13 @@ export class ReporteService {
       }
       
       return of(reporte);
-    }
+    }*/
     
     return this.http.get<any>(`${this.apiUrl}/financiero?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&agruparPorMes=${agruparPorMes}&agruparPorMetodoPago=${agruparPorMetodoPago}`);
   }
 
   generarReporteInscripciones(fechaInicio: string, fechaFin: string): Observable<any> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       // Generar un reporte de inscripciones simulado
       const inscripciones = this.mockDataService.getMockInscripciones();
       
@@ -140,15 +140,15 @@ export class ReporteService {
       };
       
       return of(reporte);
-    }
+    }*/
     
     return this.http.get<any>(`${this.apiUrl}/inscripciones?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
   }
 
   getDashboardStats(): Observable<any> {
-    if (this.useMockData) {
+    /*if (this.useMockData) {
       return of(this.mockDataService.getMockDashboardStats());
-    }
+    }*/
     
     return this.http.get<any>(`${this.apiUrl}/dashboard/stats`);
   }

@@ -15,7 +15,8 @@ import {
   EstadoPago, 
   AsistenciaInfoDto,
   PagoInfoDto,
-  InscripcionInfoDto
+  InscripcionInfoDto,
+  EstadoInscripcion
 } from '../../../models';
 import { NotificacionService } from '../../../services/notification.service';
 
@@ -44,15 +45,17 @@ export class UsuarioDetalleComponent implements OnInit {
   estadoClasses: { [key: string]: string } = {
     [EstadoUsuario.ACTIVO]: 'bg-green-100 text-green-800',
     [EstadoUsuario.INACTIVO]: 'bg-red-100 text-red-800',
-    [EstadoPago.PROXIMO_A_VENCER]: 'bg-yellow-100 text-yellow-800',
     [EstadoPago.PENDIENTE]: 'bg-blue-100 text-blue-800'
   };
   
   estadoPagoClasses: { [key: string]: string } = {
-    [EstadoPago.ACTIVO]: 'bg-green-100 text-green-800',
-    [EstadoPago.INACTIVO]: 'bg-red-100 text-red-800',
-    [EstadoPago.PROXIMO_A_VENCER]: 'bg-yellow-100 text-yellow-800',
+    [EstadoPago.PAGA]: 'bg-green-100 text-green-800',
     [EstadoPago.PENDIENTE]: 'bg-blue-100 text-blue-800'
+  };
+
+  estadoInscripcionClasses: { [key: string]: string } = {
+    [EstadoInscripcion.EN_CURSO]: 'bg-green-100 text-green-800',
+    [EstadoInscripcion.COMPLETADA]: 'bg-blue-100 text-blue-800'
   };
 
   diasSemana: { [key: string]: string } = {
@@ -201,5 +204,9 @@ export class UsuarioDetalleComponent implements OnInit {
   
   getTotalPagado(): number {
     return this.pagosRecientes.reduce((total, pago) => total + pago.monto, 0);
+  }
+
+  avisoPagoEfectuado():void {
+    this.notificationService.info("La susbscripcion se encuentra paga");
   }
 }

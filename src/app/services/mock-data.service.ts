@@ -29,7 +29,7 @@ export class MockDataService {
   // ========== USUARIOS ==========
 
   // Lista básica de usuarios
-  getMockUsuarios(): UsuarioListItemDto[] {
+  /*getMockUsuarios(): UsuarioListItemDto[] {
     return [
       {
         id: 1,
@@ -56,7 +56,7 @@ export class MockDataService {
         dni: '35789012',
         edad: 25,
         planActivo: 'Plan Sport',
-        estado: EstadoUsuario.PROXIMO_A_VENCER
+        estado: EstadoUsuario.INACTIVO
       },
       {
         id: 4,
@@ -96,10 +96,10 @@ export class MockDataService {
         cuil: '20324567890',
         telefono: '1122334455',
         correo: 'juan.perez@email.com',
-        estado: EstadoUsuario.INACTIVO,
         fechaAlta: '2023-01-10T10:00:00',
         edad: 28,
         tieneInscripcionActiva: false,
+        estadoUsuario: EstadoUsuario.INACTIVO,
         inscripcionActiva: {
           id: 101,
           usuarioId: 1,
@@ -111,7 +111,7 @@ export class MockDataService {
           fechaInicio: '2023-02-01',
           fechaFin: '2023-03-01',
           frecuencia: 3,
-          estadoPago: EstadoPago.ACTIVO,
+          estadoPago: EstadoPago.PAGA,
           ultimoPago: '2023-02-01',
           detalles: [
             {
@@ -144,10 +144,10 @@ export class MockDataService {
         cuil: '27298765432',
         telefono: '1156789012',
         correo: 'maria.gonzalez@email.com',
-        estado: EstadoUsuario.ACTIVO,
         fechaAlta: '2022-11-05T14:30:00',
         edad: 34,
         tieneInscripcionActiva: true,
+        estadoUsuario: EstadoUsuario.ACTIVO,
         inscripcionActiva: {
           id: 102,
           usuarioId: 2,
@@ -159,7 +159,7 @@ export class MockDataService {
           fechaInicio: '2023-01-15',
           fechaFin: '2023-02-15',
           frecuencia: 5,
-          estadoPago: EstadoPago.ACTIVO,
+          estadoPago: EstadoPago.PAGA,
           ultimoPago: '2023-01-15',
           detalles: [
             {
@@ -204,10 +204,10 @@ export class MockDataService {
         cuil: '20357890123',
         telefono: '1145678901',
         correo: 'carlos.rodriguez@email.com',
-        estado: EstadoUsuario.ACTIVO,
         fechaAlta: '2022-12-20T09:15:00',
         edad: 25,
         tieneInscripcionActiva: true,
+        estadoUsuario: EstadoUsuario.ACTIVO,
         inscripcionActiva: {
           id: 103,
           usuarioId: 3,
@@ -219,7 +219,7 @@ export class MockDataService {
           fechaInicio: '2023-01-01',
           fechaFin: '2023-02-01',
           frecuencia: 3,
-          estadoPago: EstadoPago.PROXIMO_A_VENCER,
+          estadoPago: EstadoPago.PAGA,
           ultimoPago: '2023-01-01',
           detalles: [
             {
@@ -252,7 +252,7 @@ export class MockDataService {
         cuil: '27276543210',
         telefono: '1189012345',
         correo: 'laura.fernandez@email.com',
-        estado: EstadoUsuario.INACTIVO,
+        estadoUsuario: EstadoUsuario.INACTIVO,
         fechaAlta: '2021-09-15T16:45:00',
         edad: 41,
         tieneInscripcionActiva: false,
@@ -267,7 +267,7 @@ export class MockDataService {
         cuil: '20369012345',
         telefono: '1123456789',
         correo: 'martin.lopez@email.com',
-        estado: EstadoUsuario.ACTIVO,
+        estadoUsuario: EstadoUsuario.ACTIVO,
         fechaAlta: '2023-01-05T11:20:00',
         edad: 22,
         tieneInscripcionActiva: true,
@@ -282,7 +282,7 @@ export class MockDataService {
           fechaInicio: '2023-01-05',
           fechaFin: '2023-02-05',
           frecuencia: 5,
-          estadoPago: EstadoPago.ACTIVO,
+          estadoPago: EstadoPago.PAGA,
           ultimoPago: '2023-01-05',
           detalles: [
             {
@@ -407,8 +407,7 @@ export class MockDataService {
           estado: usuario.estado,
           fechaAlta: new Date(2020 + Math.floor(Math.random() * 3), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
           inscripcionActiva: {
-            estadoPago: usuario.estado === EstadoUsuario.ACTIVO ? EstadoPago.ACTIVO : 
-                        usuario.estado === EstadoUsuario.PROXIMO_A_VENCER ? EstadoPago.PROXIMO_A_VENCER : EstadoPago.INACTIVO
+            estadoPago: usuario.estado === EstadoUsuario.ACTIVO ? EstadoPago.PAGA : EstadoPago.PENDIENTE
           }
         } as UsuarioInfoDto));
 
@@ -439,7 +438,7 @@ export class MockDataService {
         fechaInicio: '2023-02-01',
         fechaFin: '2023-03-01',
         frecuencia: 3,
-        estadoPago: EstadoPago.ACTIVO,
+        estadoPago: EstadoPago.PAGA,
         ultimoPago: '2023-02-01',
         detalles: [
           {
@@ -473,7 +472,7 @@ export class MockDataService {
         fechaInicio: '2023-01-15',
         fechaFin: '2023-02-15',
         frecuencia: 5,
-        estadoPago: EstadoPago.ACTIVO,
+        estadoPago: EstadoPago.PAGA,
         ultimoPago: '2023-01-15',
         detalles: [
           {
@@ -519,7 +518,7 @@ export class MockDataService {
         fechaInicio: '2023-01-01',
         fechaFin: '2023-02-01',
         frecuencia: 3,
-        estadoPago: EstadoPago.PROXIMO_A_VENCER,
+        estadoPago: EstadoPago.PAGA,
         ultimoPago: '2023-01-01',
         detalles: [
           {
@@ -553,7 +552,7 @@ export class MockDataService {
         fechaInicio: '2022-12-01',
         fechaFin: '2023-01-01',
         frecuencia: 3,
-        estadoPago: EstadoPago.INACTIVO,
+        estadoPago: EstadoPago.PAGA,
         ultimoPago: '2022-12-01',
         detalles: [
           {
@@ -587,7 +586,7 @@ export class MockDataService {
         fechaInicio: '2023-01-05',
         fechaFin: '2023-02-05',
         frecuencia: 5,
-        estadoPago: EstadoPago.ACTIVO,
+        estadoPago: EstadoPago.PAGA,
         ultimoPago: '2023-01-05',
         detalles: [
           {
@@ -749,7 +748,7 @@ export class MockDataService {
   }
 
   // Asistencias por clase
-  /*getMockAsistenciasByClaseId(claseId: number): AsistenciaInfoDto[] {
+  getMockAsistenciasByClaseId(claseId: number): AsistenciaInfoDto[] {
     // Buscar la clase
     const clases = this.getMockClases();
     const clase = clases.find(c => c.id === claseId);
@@ -781,7 +780,7 @@ export class MockDataService {
     });
 
     return asistencias;
-  }*/
+  }
 
   // ========== PAGOS ==========
 
@@ -846,7 +845,7 @@ export class MockDataService {
   getMockDashboardStats() {
     return {
       usuariosActivos: this.getMockUsuarios().filter(u => u.estado === EstadoUsuario.ACTIVO).length,
-      usuariosProximosAVencer: this.getMockUsuarios().filter(u => u.estado === EstadoUsuario.PROXIMO_A_VENCER).length,
+      usuariosProximosAVencer: this.getMockUsuarios().filter(u => u.estado === EstadoUsuario.ACTIVO).length,
       ingresosMesActual: 120000,
       ingresosMesAnterior: 105000,
       porcentajeCrecimientoIngresos: 14.3,
@@ -1048,7 +1047,7 @@ registrarAsistenciasPorClaseMock(claseId: number, usuariosPresentes: number[]): 
   });
   
   return asistencias;
-}
+}*/
 
 
 }

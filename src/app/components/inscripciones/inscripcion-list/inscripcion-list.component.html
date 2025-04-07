@@ -29,22 +29,16 @@
             Todos
           </button>
           <button 
-            (click)="cambiarFiltroEstado('ACTIVO')" 
+            (click)="cambiarFiltroEstado('EN_CURSO')" 
             [ngClass]="filtroEstado === 'ACTIVO' ? 'bg-green-100 text-green-800 border-green-300' : 'bg-white text-secondary-700 border-secondary-300'"
             class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-green-50">
-            Activos
+            En curso
           </button>
           <button 
-            (click)="cambiarFiltroEstado('PROXIMO_A_VENCER')" 
+            (click)="cambiarFiltroEstado('COMPLETADA')" 
             [ngClass]="filtroEstado === 'PROXIMO_A_VENCER' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' : 'bg-white text-secondary-700 border-secondary-300'"
             class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-yellow-50">
-            Próximos a Vencer
-          </button>
-          <button 
-            (click)="cambiarFiltroEstado('INACTIVO')" 
-            [ngClass]="filtroEstado === 'INACTIVO' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-white text-secondary-700 border-secondary-300'"
-            class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-red-50">
-            Inactivos
+            Completados
           </button>
         </div>
   
@@ -109,11 +103,14 @@
                 Estado
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
+                Estado pago
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">
                 Días Restantes
               </th>
-              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">
+              <!--<th scope="col" class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">
                 Acciones
-              </th>
+              </th>-->
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-secondary-200">
@@ -130,6 +127,11 @@
                 <div class="text-xs text-secondary-500">hasta {{ getFechaFormateada(inscripcion.fechaFin) }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
+                <span [ngClass]="estadoInscripcionClasses[inscripcion.estadoInscripcion]" class="px-2 py-1 text-xs rounded-full">
+                  {{ inscripcion.estadoInscripcion }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
                 <span [ngClass]="estadoPagoClasses[inscripcion.estadoPago]" class="px-2 py-1 text-xs rounded-full">
                   {{ inscripcion.estadoPago }}
                 </span>
@@ -139,9 +141,9 @@
                   {{ getDiasRestantes(inscripcion.fechaFin) }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button 
-                  *ngIf="inscripcion.estadoPago === 'ACTIVO' || inscripcion.estadoPago === 'PROXIMO_A_VENCER'"
+               <!--<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+               <button 
+                  *ngIf="inscripcion.estadoPago === 'PAGA'"
                   (click)="renovarInscripcion(inscripcion.id, $event)" 
                   class="text-primary-600 hover:text-primary-900 mr-3"
                   title="Renovar inscripción">
@@ -157,7 +159,7 @@
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                   </svg>
                 </button>
-              </td>
+              </td>-->
             </tr>
           </tbody>
         </table>
