@@ -120,8 +120,16 @@ export class PagoListComponent implements OnInit {
     this.router.navigate(['/pagos', id]);
   }
 
-  formatFecha(fecha: string | Date): string {
-    return new Date(fecha).toLocaleDateString();
+  formatFecha(fecha: string | Date | undefined): string {
+    if (!fecha) return 'N/A';
+  
+    if (typeof fecha === 'string') {
+      const [fechaParte] = fecha.split('T'); // "2025-04-19"
+      const [year, month, day] = fechaParte.split('-');
+      return `${day}/${month}/${year}`;
+    }
+  
+    return fecha.toLocaleDateString('es-AR');
   }
 
   // Método para obtener el primer día del mes actual en formato ISO (YYYY-MM-DD)

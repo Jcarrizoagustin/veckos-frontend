@@ -87,8 +87,15 @@ export class PagoDetalleComponent implements OnInit {
     }
   }
 
-  formatFecha(fecha?: string | Date): string {
+  formatFecha(fecha: string | Date | undefined): string {
     if (!fecha) return 'N/A';
-    return new Date(fecha).toLocaleDateString();
+  
+    if (typeof fecha === 'string') {
+      const [fechaParte] = fecha.split('T'); // "2025-04-19"
+      const [year, month, day] = fechaParte.split('-');
+      return `${day}/${month}/${year}`;
+    }
+  
+    return fecha.toLocaleDateString('es-AR');
   }
 }

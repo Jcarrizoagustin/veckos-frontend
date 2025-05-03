@@ -60,9 +60,16 @@ export class ClaseListComponent implements OnInit {
     this.cargarClasesPorFecha(this.fechaSeleccionada);
   }
 
-  formatFecha(fecha: string | Date): string {
-    const date = new Date(fecha);
-    return date.toLocaleDateString();
+  formatFecha(fecha: string | Date | undefined): string {
+    if (!fecha) return 'N/A';
+  
+    if (typeof fecha === 'string') {
+      const [fechaParte] = fecha.split('T'); // "2025-04-19"
+    const [year, month, day] = fechaParte.split('-');
+      return `${day}/${month}/${year}`;
+    }
+  
+    return fecha.toLocaleDateString('es-AR');
   }
   
   formatHora(hora: string): string {

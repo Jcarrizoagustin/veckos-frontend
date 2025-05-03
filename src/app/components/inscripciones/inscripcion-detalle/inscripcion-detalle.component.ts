@@ -142,9 +142,16 @@ export class InscripcionDetalleComponent implements OnInit {
     return Math.ceil(diferencia / (1000 * 3600 * 24));
   }
   
-  getFechaFormateada(fecha?: string | Date): string {
+  getFechaFormateada(fecha: string | Date | undefined): string {
     if (!fecha) return 'N/A';
-    return new Date(fecha).toLocaleDateString();
+  
+    if (typeof fecha === 'string') {
+      const [fechaParte] = fecha.split('T'); // "2025-04-19"
+      const [year, month, day] = fechaParte.split('-');
+      return `${day}/${month}/${year}`;
+    }
+  
+    return fecha.toLocaleDateString('es-AR');
   }
   
   getTotalPagado(): number {

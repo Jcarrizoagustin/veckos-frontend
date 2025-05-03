@@ -180,7 +180,15 @@ export class InscripcionListComponent implements OnInit {
     return Math.ceil(diferencia / (1000 * 3600 * 24));
   }
   
-  getFechaFormateada(fecha: string | Date): string {
-    return new Date(fecha).toLocaleDateString();
+  getFechaFormateada(fecha: string | Date | undefined): string {
+    if (!fecha) return 'N/A';
+  
+    if (typeof fecha === 'string') {
+      const [fechaParte] = fecha.split('T'); // "2025-04-19"
+    const [year, month, day] = fechaParte.split('-');
+      return `${day}/${month}/${year}`;
+    }
+  
+    return fecha.toLocaleDateString('es-AR');
   }
 }

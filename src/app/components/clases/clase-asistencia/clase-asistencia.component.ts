@@ -197,9 +197,16 @@ export class ClaseAsistenciaComponent implements OnInit {
     return Math.round((this.getCantidadPresentes() / total) * 100);
   }
 
-  formatFecha(fecha?: string | Date): string {
-    if (!fecha) return '';
-    return new Date(fecha).toLocaleDateString();
+  formatFecha(fecha: string | Date | undefined): string {
+    if (!fecha) return 'N/A';
+  
+    if (typeof fecha === 'string') {
+      const [fechaParte] = fecha.split('T'); // "2025-04-19"
+    const [year, month, day] = fechaParte.split('-');
+      return `${day}/${month}/${year}`;
+    }
+  
+    return fecha.toLocaleDateString('es-AR');
   }
   
   formatHora(hora?: string): string {
