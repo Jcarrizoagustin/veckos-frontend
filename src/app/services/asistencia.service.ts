@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { AsistenciaInfoDto, AsistenciaRegistrarDto } from '../models';
+import { AsistenciaInfoDto, AsistenciaPorClaseRegistrarDto, AsistenciaRegistrarDto } from '../models';
 import { environment } from '../../environments/entironments';
 import { MockDataService } from './mock-data.service';
 
@@ -95,11 +95,11 @@ export class AsistenciaService {
     return this.http.post<AsistenciaInfoDto>(this.apiUrl, asistencia);
   }
 
-  registrarPorClase(claseId: number, usuariosPresentes: number[]): Observable<AsistenciaInfoDto[]> {
+  registrarPorClase(claseId: number, asistenciaDto: AsistenciaPorClaseRegistrarDto): Observable<AsistenciaInfoDto[]> {
     /*if (this.useMockData) {
       return of(this.mockDataService.registrarAsistenciasPorClaseMock(claseId, usuariosPresentes));
     }*/
-    return this.http.post<AsistenciaInfoDto[]>(`${this.apiUrl}/clase/${claseId}`, usuariosPresentes);
+    return this.http.post<AsistenciaInfoDto[]>(`${this.apiUrl}/clase/${claseId}`, asistenciaDto);
   }
 
   delete(id: number): Observable<void> {

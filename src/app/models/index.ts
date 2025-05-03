@@ -174,6 +174,11 @@ export interface LoginDto {
     presente: boolean;
     fechaRegistro: Date | string;
   }
+
+  export interface AsistenciaPorClaseRegistrarDto {
+    presentes: number[],
+    ausentes: number[]
+  }
   
   // Pago
   export enum MetodoPago {
@@ -247,4 +252,12 @@ export interface LoginDto {
     agruparPorDia?: boolean;
     agruparPorUsuario?: boolean;
     incluirSoloPresentes?: boolean;
+  }
+
+  export interface EventoAuditoria {
+    id: number,
+    accion: string,
+    usuario: string,
+    fecha: Date,
+    nuevoValor:string
   }

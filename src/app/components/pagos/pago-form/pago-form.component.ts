@@ -80,7 +80,7 @@ export class PagoFormComponent implements OnInit {
     this.pagoForm = this.formBuilder.group({
       inscripcionId: ['', [Validators.required]],
       monto: ['', [Validators.required, Validators.min(1)]],
-      fechaPago: [new Date().toISOString().split('T')[0], [Validators.required]],
+      fechaPago: [new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0], [Validators.required]],
       metodoPago: [MetodoPago.EFECTIVO, [Validators.required]],
       cuentaId: ['', [Validators.required]],
       descripcion: ['']

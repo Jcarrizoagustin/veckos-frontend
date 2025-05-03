@@ -35,7 +35,7 @@ import { NotificacionService } from '../../../services/notification.service';
 export class ClaseListComponent implements OnInit {
   clases: ClaseInfoDto[] = [];
   filteredClases: ClaseInfoDto[] = [];
-  fechaSeleccionada: Date = new Date(); // Por defecto, fecha actual
+  fechaSeleccionada: Date = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)); // Por defecto, fecha actual
   loading = false;
   
   // Para traducir los enum a español
@@ -108,6 +108,7 @@ export class ClaseListComponent implements OnInit {
 
   onFechaChange(event: any): void {
     this.fechaSeleccionada = event.value;
+    console.log(event.value)
     this.cargarClasesPorFecha(this.fechaSeleccionada);
   }
 

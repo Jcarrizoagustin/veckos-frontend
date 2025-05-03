@@ -165,4 +165,8 @@ export class InscripcionService {
     }
     return this.http.put<void>(`${this.apiUrl}/actualizar-estados`, {});
   }
+
+  cancelarInscripcion(id: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${id}/completar`, {})
+  }
 }

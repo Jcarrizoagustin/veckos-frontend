@@ -2,7 +2,7 @@
   <div class="min-h-screen flex flex-col">
     <!-- Navbar -->
     <nav class="bg-primary-700 text-white shadow-md">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-fit mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="flex-shrink-0 flex items-center">
@@ -27,7 +27,7 @@
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Inscripciones
               </a>
-              <a routerLink="/turnos" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin()" routerLink="/turnos" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Turnos
               </a>
@@ -35,23 +35,27 @@
                   class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Clases
               </a>
-              <a routerLink="/planes" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin()" routerLink="/planes" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Planes
               </a>
-              <a routerLink="/pagos" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin()" routerLink="/pagos" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Pagos
               </a>
-              <a routerLink="/reportes" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin()" routerLink="/reportes" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Reportes
               </a>
-              <a routerLink="/cuentas" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin()" routerLink="/cuentas" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Cuentas
               </a>
-              <a routerLink="/ayuda" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin()" routerLink="/auditoria" routerLinkActive="active-link" 
+                 class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                Auditoria
+              </a>
+              <a *ngIf="authService.isAdmin()" routerLink="/ayuda" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Ayuda
               </a>

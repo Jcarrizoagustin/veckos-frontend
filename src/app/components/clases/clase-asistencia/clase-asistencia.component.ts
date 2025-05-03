@@ -16,7 +16,8 @@ import {
   AsistenciaRegistrarDto,
   UsuarioInfoDto,
   TurnoConUsuariosDto,
-  DayOfWeek
+  DayOfWeek,
+  AsistenciaPorClaseRegistrarDto
 } from '../../../models';
 import { NotificacionService } from '../../../services/notification.service';
 
@@ -43,6 +44,7 @@ export class ClaseAsistenciaComponent implements OnInit {
   
   // Control de estado para la interfaz
   usuariosPresentes: { [key: number]: boolean } = {}; // Mapa de ID de usuario a presente/ausente
+  usuariosAusentes: { [key: number]: boolean } = {};
   loading = false;
   loadingAsistencias = false;
   guardando = false;
@@ -98,6 +100,7 @@ export class ClaseAsistenciaComponent implements OnInit {
           
           // Inicializar el mapa de asistencias (por defecto, todos ausentes)
           this.usuariosEnTurno.forEach(usuario => {
+            this.usuariosAusentes[usuario.id] = true;
             this.usuariosPresentes[usuario.id] = false;
           });
         }
@@ -121,6 +124,7 @@ export class ClaseAsistenciaComponent implements OnInit {
           // Buscar el ID del usuario desde la asistencia
           const usuarioId = this.obtenerUsuarioIdDesdeAsistencia(asistencia);
           if (usuarioId) {
+            this.usuariosAusentes[usuarioId] = !asistencia.presente;
             this.usuariosPresentes[usuarioId] = asistencia.presente;
           }
         });
@@ -148,6 +152,7 @@ export class ClaseAsistenciaComponent implements OnInit {
   }
 
   toggleAsistencia(usuarioId: number): void {
+    this.usuariosAusentes[usuarioId] = this.usuariosPresentes[usuarioId];
     this.usuariosPresentes[usuarioId] = !this.usuariosPresentes[usuarioId];
   }
 
@@ -157,9 +162,13 @@ export class ClaseAsistenciaComponent implements OnInit {
     // Crear un array con los IDs de los usuarios presentes para enviar al backend
     const usuariosIds = Object.keys(this.usuariosPresentes).map(Number);
     const usuariosPresentes = usuariosIds.filter(id => this.usuariosPresentes[id]);
-    
+    const usuariosAusentes = usuariosIds.filter(id => !this.usuariosPresentes[id]);
     // Registrar asistencias por clase (endpoint que recibe la clase y los usuarios presentes)
-    this.asistenciaService.registrarPorClase(this.claseId, usuariosPresentes).subscribe({
+    const asistenciaDto: AsistenciaPorClaseRegistrarDto = {
+      presentes:usuariosPresentes,
+      ausentes:usuariosAusentes
+    }
+    this.asistenciaService.registrarPorClase(this.claseId, asistenciaDto).subscribe({
       next: (response) => {
         this.notificationService.exito('Asistencias registradas correctamente');
         this.guardando = false;

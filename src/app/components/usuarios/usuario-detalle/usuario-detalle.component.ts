@@ -209,4 +209,21 @@ export class UsuarioDetalleComponent implements OnInit {
   avisoPagoEfectuado():void {
     this.notificationService.info("La susbscripcion se encuentra paga");
   }
+
+  cancelarInscripcion(id: number){
+    if(confirm('Seguro que desea cancelar la inscripcion ?')){
+      this.inscripcionService.cancelarInscripcion(id).subscribe({
+        next: () => {
+          this.notificationService.exito('Inscripcion cancelada con exito')
+          const currentUrl = this.router.url;
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate([currentUrl]);
+          });
+        },
+        error: () => {
+          this.notificationService.error('Ocurrio un error al cancelar la inscripcion')
+        }
+      })
+    }
+  }
 }

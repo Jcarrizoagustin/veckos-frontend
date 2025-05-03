@@ -27,6 +27,7 @@ import { PagoDetalleComponent } from './components/pagos/pago-detalle/pago-detal
 import { IngresoComponent } from './components/ingreso/ingreso.component';
 import { CuentaFormComponent } from './components/cuentas/cuenta-form/cuenta-form.component';
 import { CuentaListComponent } from './components/cuentas/cuenta-list/cuenta-list.component';
+import { AuditoriaListComponent } from './components/auditoria/auditoria-list/auditoria-list.component';
 
 export const routes: Routes = [
   { 
@@ -53,25 +54,25 @@ export const routes: Routes = [
     path: 'usuarios/nuevo',
     component: UsuarioFormComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'usuarios/:id/editar',
     component: UsuarioFormComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'usuarios/:id',
     component: UsuarioDetalleComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'planes',
     component: PlanListComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'planes/nuevo',
@@ -89,13 +90,13 @@ export const routes: Routes = [
     path: 'inscripciones',
     component: InscripcionListComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'inscripciones/nuevo',
     component: InscripcionFormComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'inscripciones/:id/renovar',
@@ -107,13 +108,13 @@ export const routes: Routes = [
     path: 'inscripciones/:id',
     component: InscripcionDetalleComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'turnos',
     component: TurnoListComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'turnos/nuevo',
@@ -131,19 +132,19 @@ export const routes: Routes = [
     path: 'turnos/:id',
     component: TurnoDetalleComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'reportes',
     component: ReporteListComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'reportes/asistencia',
     component: ReporteAsistenciaComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'reportes/financiero',
@@ -155,67 +156,73 @@ export const routes: Routes = [
     path: 'reportes/inscripciones',
     component: ReporteInscripcionesComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'clases',
     component: ClaseListComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'clases/:id/asistencias',
     component: ClaseAsistenciaComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN','ROLE_OPERADOR'] }
   },
   {
     path: 'pagos',
     component: PagoListComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'pagos/nuevo',
     component: PagoFormComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'pagos/:id',
     component: PagoDetalleComponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'ayuda',
     component: GuiaUsuarioComponent,
-    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+    canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN'] } // Permitir acceso a todos los roles
   },
   {
     path: 'ingreso',
     component: IngresoComponent,
-    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
   },
   {
     path: 'cuentas/edit/:id',
     component: CuentaFormComponent,
-    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+    canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN'] } // Permitir acceso a todos los roles
   },
   {
     path: 'cuentas',
     component: CuentaListComponent,
-    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+    canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN'] } // Permitir acceso a todos los roles
   },
   {
     path: 'cuentas/new',
     component: CuentaFormComponent,
-    canActivate: [authGuard], // Asegurar que solo usuarios autenticados pueden acceder
-    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+    canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN'] } // Permitir acceso a todos los roles
+  },
+  {
+    path: 'auditoria',
+    component: AuditoriaListComponent,
+    canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN'] } // Permitir acceso a todos los roles
   },
   // Otras rutas aquí
   { 

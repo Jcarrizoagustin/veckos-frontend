@@ -32,7 +32,9 @@ export class AppComponent {
   ) {}
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    if(confirm("Seguro que deseas cerrar sesion ?")){
+      this.authService.logout();
+      this.router.navigate(['/login']);
+    }
   }
 }
