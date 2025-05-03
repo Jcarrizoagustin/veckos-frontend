@@ -332,12 +332,6 @@ export class InscripcionFormComponent implements OnInit {
 
   // Avanzar al siguiente paso
   nextStep(stepper: any): void {
-    console.log('Current seleccionesTurnos:', this.seleccionesTurnos.value);
-    console.log('Form Data:', {
-      usuario: this.usuarioForm.value,
-      plan: this.planForm.value,
-      turnos: this.turnosForm.value
-    });
     
     // Depurar estado del formulario antes de avanzar
     if (stepper.selectedIndex === 2) { // Estamos en el paso de turnos
@@ -351,10 +345,7 @@ export class InscripcionFormComponent implements OnInit {
     // Si estamos avanzando al paso 4 (confirmación), cargar datos para el resumen
     if (stepper.selectedIndex === 2 && !this.turnosForm.invalid) {
       // Forzar actualización de datos antes de mostrar el resumen
-      console.log('Preparando datos para resumen...');
-      console.log('Usuarios:', this.usuarios);
-      console.log('Planes:', this.planes);
-      console.log('Turnos:', this.turnos);
+      
     }
     
     stepper.next();
@@ -374,7 +365,6 @@ export class InscripcionFormComponent implements OnInit {
     const usuarioIdNum = Number(usuarioId);
     const usuario = this.usuarios.find(u => u.id === usuarioIdNum);
     
-    console.log('Usuario ID:', usuarioIdNum, 'Usuario encontrado:', usuario);
     return usuario ? `${usuario.nombre} ${usuario.apellido}` : 'No seleccionado';
   }
   
@@ -386,7 +376,6 @@ export class InscripcionFormComponent implements OnInit {
     const planIdNum = Number(planId);
     const plan = this.planes.find(p => p.id === planIdNum);
     
-    console.log('Plan ID:', planIdNum, 'Plan encontrado:', plan);
     return plan ? plan.nombre : 'No seleccionado';
   }
   
@@ -397,8 +386,6 @@ export class InscripcionFormComponent implements OnInit {
   
   getResumenTurnos(): string[] {
     const selecciones = this.seleccionesTurnos.value;
-    console.log('Selecciones de turnos:', selecciones);
-    console.log('Turnos disponibles:', this.turnos);
     
     return selecciones.map((seleccion: any) => {
       const dia = this.nombresDias[seleccion.diaSemana];
@@ -410,7 +397,6 @@ export class InscripcionFormComponent implements OnInit {
       const turnosDelDia = this.turnos[seleccion.diaSemana] || [];
       const turno = turnosDelDia.find(t => Number(t.id) === turnoId);
       
-      console.log('Día:', seleccion.diaSemana, 'Turno ID:', turnoId, 'Turno encontrado:', turno);
       const hora = turno ? turno.hora : 'No seleccionado';
       return `${dia} - ${this.formatHora(hora)}`;
     });
@@ -455,8 +441,6 @@ export class InscripcionFormComponent implements OnInit {
         diaSemana: seleccion.diaSemana
       }))
     };
-    
-    console.log('Datos a enviar:', inscripcion);
     
     // Enviar datos según sea creación o renovación
     if (this.isRenovacion && this.inscripcionId) {

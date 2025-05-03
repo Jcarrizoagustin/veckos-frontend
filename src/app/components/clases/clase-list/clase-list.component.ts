@@ -108,7 +108,6 @@ export class ClaseListComponent implements OnInit {
 
   onFechaChange(event: any): void {
     this.fechaSeleccionada = event.value;
-    console.log(event.value)
     this.cargarClasesPorFecha(this.fechaSeleccionada);
   }
 

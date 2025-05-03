@@ -36,7 +36,6 @@ export class AuditoriaListComponent implements OnInit{
         this.listado = data;
         this.auditoriasFiltradas = data;
         this.loading = false;
-        console.log(data)
       },
       error: (error) => {
         console.error('Error al cargar auditoria:', error);

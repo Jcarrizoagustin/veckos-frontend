@@ -100,7 +100,6 @@ export class ReporteAsistenciaComponent implements OnInit {
   }
 
   generarReporte(): void {
-    console.log("Gemeramdop reprortes")
     if (this.filtrosForm.invalid) {
       this.markFormGroupTouched(this.filtrosForm);
       return;
