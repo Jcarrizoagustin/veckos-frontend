@@ -35,7 +35,7 @@
             
             <div class="mt-2 flex items-center">
               <span [ngClass]="estadoInscripcionClasses[inscripcion.estadoInscripcion]" class="px-3 py-1 rounded-full text-xs font-semibold">
-                {{ inscripcion.estadoInscripcion }}
+                {{ inscripcion.estadoInscripcion.replace("_"," ") }}
               </span>
               <span *ngIf="getDiasRestantes() <= 7 && getDiasRestantes() > 0" class="ml-2 text-sm text-yellow-600">
                 Vence en {{ getDiasRestantes() }} días

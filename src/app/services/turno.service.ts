@@ -48,6 +48,13 @@ export class TurnoService {
     return this.http.get<TurnoConUsuariosDto[]>(`${this.apiUrl}/con-usuarios/${diaSemana}`);
   }
 
+  getConUsuariosByDiaSemanaAndTurnoId(diaSemana: DayOfWeek, turnoId: number, claseId: number): Observable<TurnoConUsuariosDto> {
+    /*if (this.useMockData) {
+      return of(this.mockDataService.getMockTurnosConUsuariosByDiaSemana(diaSemana));
+    }*/
+    return this.http.get<TurnoConUsuariosDto>(`${this.apiUrl}/con-usuarios/${diaSemana}/${turnoId}/${claseId}`);
+  }
+
   getByOcupacion(): Observable<TurnoDto[]> {
     /*if (this.useMockData) {
       // Simulamos ordenar por ocupación (aleatorio para los mocks)

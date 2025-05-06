@@ -116,7 +116,7 @@
               <div>
                 <p class="text-sm text-secondary-500">Estado</p>
                 <span [ngClass]="estadoInscripcionClasses[usuario.inscripcionActiva.estadoInscripcion]" class="px-2 py-1 rounded-full text-xs font-semibold">
-                  {{ usuario.inscripcionActiva.estadoInscripcion }}
+                  {{ usuario.inscripcionActiva.estadoInscripcion.replace("_"," ") }}
                 </span>
               </div>
               <div>

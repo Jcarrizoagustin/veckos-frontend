@@ -144,18 +144,18 @@
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-lg font-semibold text-primary-800">Resultados</h2>
       <div class="flex space-x-2">
-        <button (click)="exportarPDF()" class="btn-secondary flex items-center">
+        <button (click)="exportarPdfIndividualPorPeriodo()" class="btn-secondary flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
           </svg>
           PDF
         </button>
-        <button (click)="exportarExcel()" class="btn-secondary flex items-center">
+        <!--<button (click)="exportarExcel()" class="btn-secondary flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           Excel
-        </button>
+        </button>-->
       </div>
     </div>
 
@@ -171,7 +171,7 @@
         <p class="font-medium">{{ tipoReporte === 'usuario' ? reporte.totalClasesProgramadas : reporte.totalClasesProgramadas }}</p>
       </div>
       
-      <div class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
+      <!--<div class="bg-secondary-50 p-4 rounded-lg border border-secondary-200">
         <p class="text-sm text-secondary-500">Porcentaje de Asistencia</p>
         <p class="font-medium" [ngClass]="{
           'text-green-600': getPorcentajeAsistencia() >= 70,
@@ -180,7 +180,7 @@
         }">
           {{ getPorcentajeAsistencia() | number:'1.1-1' }}%
         </p>
-      </div>
+      </div>-->
     </div>
 
     <!-- Contenido específico según el tipo de reporte -->

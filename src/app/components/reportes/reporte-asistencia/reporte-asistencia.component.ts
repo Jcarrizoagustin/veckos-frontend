@@ -15,6 +15,7 @@ import { ReporteService } from '../../../services/reporte.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { UsuarioListItemDto, ReporteAsistenciaRequestDto } from '../../../models';
 import { NotificacionService } from '../../../services/notification.service';
+import { ExportarReporteService } from '../../../services/exportar-reporte.service';
 
 @Component({
   selector: 'app-reporte-asistencia',
@@ -49,7 +50,8 @@ export class ReporteAsistenciaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private reporteService: ReporteService,
     private usuarioService: UsuarioService,
-    private notificationService: NotificacionService
+    private notificationService: NotificacionService,
+    private exportarReporteService: ExportarReporteService
   ) { }
 
   ngOnInit(): void {
@@ -194,5 +196,40 @@ export class ReporteAsistenciaComponent implements OnInit {
     } else {
       return this.reporte.porcentajeAsistenciaPromedio || 0;
     }
+  }
+
+  exportarPdfIndividualPorPeriodo(): void {
+    const formValues = this.filtrosForm.value;
+     // Preparar la solicitud de reporte
+     const request: ReporteAsistenciaRequestDto = {
+      fechaInicio: this.formatDate(formValues.fechaInicio),
+      fechaFin: this.formatDate(formValues.fechaFin),
+      agruparPorDia: formValues.agruparPorDia
+    };
+    
+    // Añadir parámetros específicos según el tipo de reporte
+    if (formValues.tipoReporte === 'usuario') {
+      request.usuarioId = formValues.usuarioId;
+      request.incluirSoloPresentes = formValues.incluirSoloPresentes;
+    }
+    this.exportarReporteService.exportarReporteAsistenciaIndividualPdf(request).subscribe({
+      next: (blob) => {
+        this.descargarArchivo(blob, `reporteAsistencia.pdf`);
+      },
+      error: (err) => {
+        console.error('Error al generar el PDF:', err);
+        this.notificationService.error('Ocurrió un error al exportar el reporte.');
+      }
+    });
+  }
+  
+  private descargarArchivo(data: Blob, nombreArchivo: string): void {
+    const blob = new Blob([data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = nombreArchivo;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 }

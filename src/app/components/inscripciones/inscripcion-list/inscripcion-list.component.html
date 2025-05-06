@@ -128,7 +128,7 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <span [ngClass]="estadoInscripcionClasses[inscripcion.estadoInscripcion]" class="px-2 py-1 text-xs rounded-full">
-                  {{ inscripcion.estadoInscripcion }}
+                  {{ inscripcion.estadoInscripcion.replace("_"," ") }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">

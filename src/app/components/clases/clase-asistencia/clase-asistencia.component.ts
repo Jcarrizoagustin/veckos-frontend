@@ -90,10 +90,10 @@ export class ClaseAsistenciaComponent implements OnInit {
   }
 
   cargarUsuariosDelTurno(turnoId: number, diaSemana: DayOfWeek): void {
-    this.turnoService.getConUsuariosByDiaSemana(diaSemana).subscribe({
-      next: (turnos: TurnoConUsuariosDto[]) => {
+    this.turnoService.getConUsuariosByDiaSemanaAndTurnoId(diaSemana,turnoId, this.claseId).subscribe({
+      next: (turnos: TurnoConUsuariosDto) => {
         // Buscar el turno específico
-        const turnoConUsuarios = turnos.find(t => t.id === turnoId);
+        const turnoConUsuarios = turnos;
         
         if (turnoConUsuarios && turnoConUsuarios.usuarios) {
           this.usuariosEnTurno = turnoConUsuarios.usuarios;

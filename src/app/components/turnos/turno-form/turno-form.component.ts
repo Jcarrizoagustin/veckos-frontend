@@ -31,9 +31,7 @@ export class TurnoFormComponent implements OnInit {
     { value: DayOfWeek.TUESDAY, viewValue: 'Martes' },
     { value: DayOfWeek.WEDNESDAY, viewValue: 'Miércoles' },
     { value: DayOfWeek.THURSDAY, viewValue: 'Jueves' },
-    { value: DayOfWeek.FRIDAY, viewValue: 'Viernes' },
-    { value: DayOfWeek.SATURDAY, viewValue: 'Sábado' },
-    { value: DayOfWeek.SUNDAY, viewValue: 'Domingo' }
+    { value: DayOfWeek.FRIDAY, viewValue: 'Viernes' }
   ];
 
   constructor(
