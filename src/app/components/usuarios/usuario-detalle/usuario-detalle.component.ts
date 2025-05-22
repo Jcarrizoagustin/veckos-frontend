@@ -109,8 +109,10 @@ export class UsuarioDetalleComponent implements OnInit {
 
   loadAsistenciasRecientes(): void {
     // Obtener último mes
-    const fechaFin = new Date();
-    const fechaInicio = new Date();
+    const ahora = new Date();
+    const fechaFin = new Date(ahora.getTime() - 3 * 60 * 60 * 1000); // -3 horas
+    const fechaInicio = new Date(fechaFin); // copia
+  
     fechaInicio.setMonth(fechaInicio.getMonth() - 1);
     
     this.asistenciaService.getByUsuarioIdAndFecha(
@@ -146,6 +148,11 @@ export class UsuarioDetalleComponent implements OnInit {
     this.router.navigate(['/inscripciones/nuevo'], { 
       queryParams: { usuarioId: this.usuarioId } 
     });
+  }
+
+  formatHora(hora?: string): string {
+    if (!hora) return '';
+    return hora.substring(0, 5); // Format from "00:00:00" to "00:00"
   }
 
   renovarInscripcion(inscripcionId: number): void {
@@ -214,7 +221,7 @@ export class UsuarioDetalleComponent implements OnInit {
   }
 
   avisoPagoEfectuado():void {
-    this.notificationService.info("La susbscripcion se encuentra paga");
+    this.notificationService.info("La inscripcion se encuentra paga");
   }
 
   cancelarInscripcion(id: number){

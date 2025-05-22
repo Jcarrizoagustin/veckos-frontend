@@ -82,13 +82,25 @@ export class PagoFormComponent implements OnInit {
       monto: ['', [Validators.required, Validators.min(1)]],
       fechaPago: [new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0], [Validators.required]],
       metodoPago: [MetodoPago.EFECTIVO, [Validators.required]],
-      cuentaId: ['', [Validators.required]],
+      cuentaId: [''],
       descripcion: ['']
     });
 
+    // Configurar la validación inicial del campo cuentaId según el método de pago
+    const metodoPagoInicial = this.pagoForm.get('metodoPago')?.value;
+    const cuentaBancariaControl = this.pagoForm.get('cuentaId');
+    
+    if (metodoPagoInicial === 'TRANSFERENCIA') {
+      cuentaBancariaControl?.setValidators(Validators.required);
+    } else {
+      cuentaBancariaControl?.clearValidators();
+      cuentaBancariaControl?.setValue('');
+      cuentaBancariaControl?.disable();
+    }
+    cuentaBancariaControl?.updateValueAndValidity();
+
+    // Suscripción a cambios futuros
     this.pagoForm.get('metodoPago')?.valueChanges.subscribe(value => {
-      const cuentaBancariaControl = this.pagoForm.get('cuentaId');
-      
       if (value === 'TRANSFERENCIA') {
         cuentaBancariaControl?.enable();
         cuentaBancariaControl?.setValidators(Validators.required);

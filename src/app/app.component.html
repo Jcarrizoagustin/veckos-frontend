@@ -1,7 +1,7 @@
 <ng-container *ngIf="authService.isAuthenticated$ | async; else loginTemplate"> <!-- *ngIf="authService.isAuthenticated$ | async; else loginTemplate" -->
-  <div class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col ">
     <!-- Navbar -->
-    <nav class="bg-primary-700 text-white shadow-md">
+    <nav class="bg-primary-700 text-white shadow-md fixed z-50 w-full">
       <div class="max-w-fit mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex">
@@ -71,7 +71,7 @@
     </nav>
 
     <!-- Content -->
-    <main class="flex-1 bg-gray-50 p-4 sm:p-6">
+    <main class="flex-1 bg-gray-50 p-4 sm:p-6 mt-[70px]">
       <div class="max-w-7xl mx-auto">
         <router-outlet></router-outlet>
       </div>

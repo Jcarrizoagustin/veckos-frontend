@@ -90,4 +90,8 @@ export class UsuarioService {
     }
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  ingreso(dni: number): Observable<UsuarioDetalleDto> {
+    return this.http.get<UsuarioDetalleDto>(`${this.apiUrl}/ingreso?dni=${dni}`)
+  }
 }

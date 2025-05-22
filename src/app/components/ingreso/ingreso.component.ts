@@ -11,10 +11,23 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UsuarioService } from '../../services/usuario.service';
 import { UsuarioDetalleDto, EstadoUsuario } from '../../models';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-ingreso',
   templateUrl: './ingreso.component.html',
+  animations: [
+    trigger('fadeInOut', [
+      state('in', style({ opacity: 1 })),
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ opacity: 0 }))
+      ])
+    ])
+  ],
   styleUrls: ['./ingreso.component.css'],
   standalone: true,
   imports: [
@@ -56,37 +69,24 @@ export class IngresoComponent {
     this.usuario = null;
 
     const dni = this.ingresoForm.get('dni')!.value;
-
-    // Buscar usuario por DNI
-    this.usuarioService.buscar(dni).subscribe({
-      next: (usuarios) => {
-        setTimeout(() => {
-          this.loading = false;
-          this.searchComplete = true;
-        },1000)
-
-        if (usuarios && usuarios.length > 0) {
-          // Obtener los detalles del primer usuario encontrado
-          this.usuarioService.getUsuarioDtoById(usuarios[0].id).subscribe({
-            next: (usuario) => {
+    
+    this.usuarioService.ingreso(dni).subscribe({
+     next: (usuario) => {
               this.usuario = usuario;
+              this.loading = false;
+              this.searchComplete = true;
+              this.borrarUsuario();
             },
             error: (error) => {
-              console.error('Error al obtener detalles del usuario:', error);
-              this.errorMessage = 'Error al obtener detalles del usuario.';
+              if(error.message == "Usuario no encontrado"){
+                this.errorMessage = 'No se encontró ningún usuario con ese DNI.';
+              }else{
+                this.errorMessage = 'Error al buscar usuario. Por favor, intente nuevamente.';
+              }
+              this.loading = false;
+              this.searchComplete = true;
             }
-          });
-        } else {
-          this.errorMessage = 'No se encontró ningún usuario con ese DNI.';
-        }
-      },
-      error: (error) => {
-        console.error('Error en la búsqueda:', error);
-        this.loading = false;
-        this.searchComplete = true;
-        this.errorMessage = 'Error al buscar usuario. Por favor, intente nuevamente.';
-      }
-    });
+    })
   }
 
   clearSearch() {
@@ -105,6 +105,12 @@ export class IngresoComponent {
     } else {
       return 'bg-red-100 border-red-500 text-red-800';
     }
+  }
+
+  borrarUsuario(){
+    setTimeout(()=> {
+        this.clearSearch();
+              }, 3000)
   }
 
   getEstadoTexto(): string {

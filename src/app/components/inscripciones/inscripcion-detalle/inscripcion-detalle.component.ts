@@ -163,6 +163,6 @@ export class InscripcionDetalleComponent implements OnInit {
   }
 
   avisoPagoEfectuado():void {
-    this.notificationService.info("La susbscripcion se encuentra paga");
+    this.notificationService.info("La inscripcion se encuentra paga");
   }
 }

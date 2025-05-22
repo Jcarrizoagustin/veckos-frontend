@@ -113,6 +113,8 @@ export class ClaseAsistenciaComponent implements OnInit {
   }
 
   cargarAsistencias(): void {
+    console.log(this.usuariosPresentes)
+    console.log("Cargar asistencias: Usuarios Ausentes:" + JSON.stringify(this.usuariosAusentes))
     this.loadingAsistencias = true;
     
     this.asistenciaService.getByClaseId(this.claseId).subscribe({
@@ -152,8 +154,8 @@ export class ClaseAsistenciaComponent implements OnInit {
   }
 
   toggleAsistencia(usuarioId: number): void {
-    this.usuariosAusentes[usuarioId] = this.usuariosPresentes[usuarioId];
     this.usuariosPresentes[usuarioId] = !this.usuariosPresentes[usuarioId];
+    this.usuariosAusentes[usuarioId] = !this.usuariosAusentes[usuarioId];
   }
 
   guardarAsistencias(): void {
