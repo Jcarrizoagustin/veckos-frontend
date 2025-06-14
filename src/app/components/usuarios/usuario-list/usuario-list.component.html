@@ -8,6 +8,37 @@
         Nuevo Usuario
       </button>
     </div>
+
+    <!-- Filtros -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+      <h2 class="text-sm font-medium text-secondary-500 mb-3">Filtrar por día</h2>
+      <div class="flex flex-wrap gap-2">
+        <button 
+          (click)="filtrarPorEstado('TODOS')" 
+          [ngClass]="estadoFilter === 'TODOS' ? 'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-secondary-700 border-secondary-300'"
+          class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-primary-50">
+          Todos
+        </button>
+        <button 
+          (click)="filtrarPorEstado('ACTIVO')" 
+          [ngClass]="estadoFilter === 'ACTIVO' ? 'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-secondary-700 border-secondary-300'"
+          class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-primary-50">
+          Activos
+        </button>
+        <button 
+          (click)="filtrarPorEstado('INACTIVO')" 
+          [ngClass]="estadoFilter === 'INACTIVO' ? 'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-secondary-700 border-secondary-300'"
+          class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-primary-50">
+          Inactivos
+        </button>
+        <button 
+          (click)="filtrarPorEstado('PENDIENTE')" 
+          [ngClass]="estadoFilter === 'PENDIENTE' ? 'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-secondary-700 border-secondary-300'"
+          class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium hover:bg-primary-50">
+          Pendientes
+        </button>
+      </div>
+    </div>
   
     <!-- Search Bar -->
     <div class="bg-white shadow-md rounded-lg p-4 mb-6">
@@ -72,7 +103,7 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-secondary-200">
-            <tr *ngFor="let usuario of filteredUsuarios" (click)="viewUsuario(usuario.id!)" class="hover:bg-secondary-50 cursor-pointer">
+            <tr *ngFor="let usuario of filteredUsuarios | usuarioSort" (click)="viewUsuario(usuario.id!)" class="hover:bg-secondary-50 cursor-pointer">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="font-medium text-secondary-900">{{ usuario.nombre }} {{ usuario.apellido }}</div>
               </td>

@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { UsuarioService } from '../../../services/usuario.service';
 import { EstadoUsuario, UsuarioDto, UsuarioListItemDto } from '../../../models';
 import { NotificacionService } from '../../../services/notification.service';
+import { UsuarioSortPipe } from '../../../pipes/usuario-sort.pipe';
 
 @Component({
   selector: 'app-usuario-list',
@@ -14,12 +15,14 @@ import { NotificacionService } from '../../../services/notification.service';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    UsuarioSortPipe
   ]
 })
 export class UsuarioListComponent implements OnInit {
   usuarios: UsuarioListItemDto[] = [];
   filteredUsuarios: UsuarioListItemDto[] = [];
+  estadoFilter: String = 'TODOS';
   searchTerm: string = '';
   loading: boolean = false;
   
@@ -100,5 +103,21 @@ export class UsuarioListComponent implements OnInit {
 
   createUsuario(): void {
     this.router.navigate(['/usuarios/nuevo']);
+  }
+
+  aplicarFiltros(): void {
+    if (this.estadoFilter === 'TODOS') {
+      this.filteredUsuarios = [...this.usuarios];
+      return;
+    }
+
+    this.filteredUsuarios = this.usuarios.filter(
+      usuario => usuario.estado === this.estadoFilter
+    );
+  }
+
+  filtrarPorEstado(estado:String):void {
+    this.estadoFilter = estado;
+    this.aplicarFiltros();
   }
 }

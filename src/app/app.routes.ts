@@ -42,7 +42,8 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard,roleGuard],
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] }
   },
   {
     path: 'usuarios',
@@ -196,6 +197,12 @@ export const routes: Routes = [
   },
   {
     path: 'ingreso',
+    component: IngresoComponent,
+    canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
+    data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles
+  },
+  {
+    path: 'ingreso2',
     component: IngresoComponent,
     canActivate: [authGuard, roleGuard], // Asegurar que solo usuarios autenticados pueden acceder
     data: { roles: ['ROLE_ADMIN', 'ROLE_OPERADOR'] } // Permitir acceso a todos los roles

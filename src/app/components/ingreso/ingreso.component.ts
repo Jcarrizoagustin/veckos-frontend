@@ -12,6 +12,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { UsuarioDetalleDto, EstadoUsuario } from '../../models';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { RutaService } from '../../services/ruta.service';
 
 @Component({
   selector: 'app-ingreso',
@@ -44,6 +45,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   ]
 })
 export class IngresoComponent {
+  readonly RUTA_INGRESO = "ingreso2";
   ingresoForm: FormGroup;
   usuario: UsuarioDetalleDto | null = null;
   loading = false;
@@ -51,7 +53,8 @@ export class IngresoComponent {
   errorMessage = '';
   constructor(
     private formBuilder: FormBuilder,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private rutaService: RutaService
   ) {
     this.ingresoForm = this.formBuilder.group({
       dni: ['', [Validators.required, Validators.pattern(/^[0-9]{7,8}$/)]]
@@ -156,5 +159,9 @@ export class IngresoComponent {
     }
   
     return fecha.toLocaleDateString('es-AR');
+  }
+
+  esRutaIngreso():boolean {
+    return this.rutaService.hasPath(this.RUTA_INGRESO,true);
   }
 }

@@ -10,7 +10,7 @@
                 <img src="../assets/images/logo.png" width="80" height="80" alt="Veckos">
               </span>
             </div>
-            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <div *ngIf="(authService.isAdmin() || authService.isOperador()) && !esRutaIngreso()" class="hidden sm:ml-6 sm:flex sm:space-x-8">
               <a routerLink="/dashboard" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Dashboard
@@ -19,49 +19,49 @@
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Ingreso
               </a>
-              <a routerLink="/usuarios" routerLinkActive="active-link" 
+              <a *ngIf="(authService.isAdmin() || authService.isOperador()) && !esRutaIngreso()" routerLink="/usuarios" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Usuarios
               </a>
-              <a routerLink="/inscripciones" routerLinkActive="active-link" 
+              <a *ngIf="!esRutaIngreso()" routerLink="/inscripciones" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Inscripciones
               </a>
-              <a *ngIf="authService.isAdmin()" routerLink="/turnos" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin() && !esRutaIngreso()" routerLink="/turnos" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Turnos
               </a>
-              <a routerLink="/clases" routerLinkActive="active-link" 
+              <a *ngIf="(authService.isAdmin() || authService.isOperador()) && !esRutaIngreso()" routerLink="/clases" routerLinkActive="active-link" 
                   class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Clases
               </a>
-              <a *ngIf="authService.isAdmin()" routerLink="/planes" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin() && !esRutaIngreso()" routerLink="/planes" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Planes
               </a>
-              <a *ngIf="authService.isAdmin()" routerLink="/pagos" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin() && !esRutaIngreso()" routerLink="/pagos" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Pagos
               </a>
-              <a *ngIf="authService.isAdmin()" routerLink="/reportes" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin() && !esRutaIngreso()" routerLink="/reportes" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Reportes
               </a>
-              <a *ngIf="authService.isAdmin()" routerLink="/cuentas" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin() && !esRutaIngreso()" routerLink="/cuentas" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Cuentas
               </a>
-              <a *ngIf="authService.isAdmin()" routerLink="/auditoria" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin() && !esRutaIngreso()" routerLink="/auditoria" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Auditoria
               </a>
-              <a *ngIf="authService.isAdmin()" routerLink="/ayuda" routerLinkActive="active-link" 
+              <a *ngIf="authService.isAdmin() && !esRutaIngreso()" routerLink="/ayuda" routerLinkActive="active-link" 
                  class="border-transparent text-white hover:text-primary-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Ayuda
               </a>
             </div>
           </div>
-          <div class="flex items-center">
+          <div *ngIf="!esRutaIngreso()"  class="flex items-center">
             <button (click)="logout()" class="text-white hover:text-primary-200 px-3 py-2 rounded-md text-sm font-medium">
               Cerrar sesión
             </button>

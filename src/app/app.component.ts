@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { NotificationComponent } from "./components/notification/notification.component";
+import { RutaService } from './services/ruta.service';
 
 @Component({
   selector: 'app-root',
@@ -24,11 +25,13 @@ import { NotificationComponent } from "./components/notification/notification.co
 ]
 })
 export class AppComponent {
+  readonly RUTA_INGRESO = "ingreso2";
   title = 'Veckos Centro de Entrenamiento';
   
   constructor(
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private rutaService: RutaService
   ) {}
 
   logout(): void {
@@ -36,5 +39,9 @@ export class AppComponent {
       this.authService.logout();
       this.router.navigate(['/login']);
     }
+  }
+
+  esRutaIngreso():boolean {
+    return this.rutaService.hasPath(this.RUTA_INGRESO,true);
   }
 }
