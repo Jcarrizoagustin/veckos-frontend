@@ -76,40 +76,8 @@ export class ReporteService {
     return this.http.post<any>(`${this.apiUrl}/asistencia`, request);
   }
 
-  generarReporteFinanciero(fechaInicio: string, fechaFin: string, agruparPorMes: boolean = false, agruparPorMetodoPago: boolean = false): Observable<any> {
-    /*if (this.useMockData) {
-      // Generar un reporte financiero simulado
-      const reporte: any = {
-        fechaInicio,
-        fechaFin,
-        ingresoTotal: 125000,
-        cantidadPagos: 45,
-        montoPromedio: 2777.78
-      };
-      
-      // Pagos simulados
-      reporte.pagos = this.mockDataService.getMockPagos();
-      
-      // Agrupar por mes si se solicita
-      if (agruparPorMes) {
-        reporte.ingresosPorMes = [
-          ['2023-01', 45000],
-          ['2023-02', 80000]
-        ];
-      }
-      
-      // Agrupar por método de pago si se solicita
-      if (agruparPorMetodoPago) {
-        reporte.ingresosPorMetodoPago = [
-          ['EFECTIVO', 35000],
-          ['TRANSFERENCIA', 42000]
-        ];
-      }
-      
-      return of(reporte);
-    }*/
-    
-    return this.http.get<any>(`${this.apiUrl}/financiero?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&agruparPorMes=${agruparPorMes}&agruparPorMetodoPago=${agruparPorMetodoPago}`);
+  generarReporteFinanciero(fechaInicio: string, fechaFin: string, agruparPorMes: boolean = false, agruparPorMetodoPago: boolean = false,cuentaId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/financiero?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&agruparPorMes=${agruparPorMes}&agruparPorMetodoPago=${agruparPorMetodoPago}&cuentaId=${cuentaId}`);
   }
 
   generarReporteInscripciones(fechaInicio: string, fechaFin: string): Observable<any> {

@@ -18,8 +18,8 @@ export class ExportarReporteService {
     });
   }
 
-  exportarReportePorPeriodoExcel(fechaInicio: string, fechaFin: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/financiero/excel/periodo?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, {
+  exportarReportePorPeriodoExcel(fechaInicio: string, fechaFin: string, cuentaId:string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/financiero/excel/periodo?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&cuentaId=${cuentaId}`, {
       responseType: 'blob'
     });
   }

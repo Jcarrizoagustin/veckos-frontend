@@ -14,6 +14,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ReporteService } from '../../../services/reporte.service';
 import { ExportarReporteService } from '../../../services/exportar-reporte.service';
 import { NotificacionService } from '../../../services/notification.service';
+import { CuentaDto } from '../../../models';
+import { CuentaService } from '../../../services/cuenta.service';
 
 @Component({
   selector: 'app-reporte-financiero',
@@ -41,16 +43,20 @@ export class ReporteFinancieroComponent implements OnInit {
   reporte: any = null;
   loading = false;
   maxDate = new Date();
+  cuentas: CuentaDto[] = [];
+  loadingCuentas: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private reporteService: ReporteService,
     private notificationService: NotificacionService,
-    private exportarReporteService: ExportarReporteService
+    private exportarReporteService: ExportarReporteService,
+    private cuentasService: CuentaService
   ) { }
 
   ngOnInit(): void {
     this.initForm();
+    this.cargarCuentas();
   }
 
   initForm(): void {
@@ -58,7 +64,23 @@ export class ReporteFinancieroComponent implements OnInit {
       fechaInicio: [this.getPrimerDiaMes(), Validators.required],
       fechaFin: [new Date(), Validators.required],
       agruparPorMes: [true],
-      agruparPorMetodoPago: [true]
+      agruparPorMetodoPago: [true],
+      cuentaId:[''],
+    });
+  }
+
+  cargarCuentas(): void {
+    this.loadingCuentas = true;
+    this.cuentasService.getAll().subscribe({
+      next: (cuentas) => {
+        this.cuentas = cuentas;
+        this.loadingCuentas = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar Cuentas:', error);
+        this.notificationService.error('Error al cargar las cuentas');
+        this.loadingCuentas = false;
+      }
     });
   }
 
@@ -75,7 +97,8 @@ export class ReporteFinancieroComponent implements OnInit {
       this.formatDate(formValues.fechaInicio),
       this.formatDate(formValues.fechaFin),
       formValues.agruparPorMes,
-      formValues.agruparPorMetodoPago
+      formValues.agruparPorMetodoPago,
+      formValues.cuentaId
     ).subscribe({
       next: (data) => {
         this.reporte = data;
@@ -157,7 +180,8 @@ export class ReporteFinancieroComponent implements OnInit {
     const formValues = this.filtrosForm.value;
     let fechaInicio = this.formatDate(formValues.fechaInicio);
     let fechaFin = this.formatDate(formValues.fechaFin);
-    this.exportarReporteService.exportarReportePorPeriodoExcel(fechaInicio, fechaFin).subscribe(blob => {
+    let cuentaId = this.formatDate(formValues.cuentaId);
+    this.exportarReporteService.exportarReportePorPeriodoExcel(fechaInicio, fechaFin,cuentaId).subscribe(blob => {
       this.descargarArchivo(blob, `reporteFinanciero_${fechaInicio}_a_${fechaFin}.xlsx`);
     });
   }
