@@ -63,6 +63,7 @@ export interface LoginDto {
     estadoUsuario: EstadoUsuario,
     edad: number;
     tieneInscripcionActiva: boolean;
+    eliminado:boolean;
   }
   
   // Plan

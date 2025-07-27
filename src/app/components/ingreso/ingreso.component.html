@@ -53,6 +53,15 @@
       {{ errorMessage }}
     </div>
     
+
+    <div *ngIf="usuario && searchComplete && usuario.tieneInscripcionActiva && usuario.inscripcionActiva?.estadoPago == 'PENDIENTE'" class="mb-8 animate-pulse-in" [@fadeInOut]>
+      <div [ngClass]="getEstadoClasses()" class="border-l-8 p-2 rounded-lg shadow-md overflow-hidden">
+        <h3 [ngClass]="'font-bold'">INSCRIPCION VENCIDA</h3>
+        <p>
+               Debe regularizar su situacion para seguir asistiendo.
+              </p>
+      </div>
+    </div>
     <!-- Result -->
     <div *ngIf="usuario && searchComplete" class="mb-8 animate-pulse-in" [@fadeInOut]>
       <div [ngClass]="getEstadoClasses()" class="border-l-8 rounded-lg shadow-md overflow-hidden">

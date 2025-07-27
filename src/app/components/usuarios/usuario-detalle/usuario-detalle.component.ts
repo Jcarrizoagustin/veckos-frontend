@@ -89,11 +89,9 @@ export class UsuarioDetalleComponent implements OnInit {
     this.loading = true;
     this.usuarioService.getById(this.usuarioId).subscribe({
       next: (usuario: any) => {
-        // Algunos backends devuelven un formato específico para la vista detalle
-        // Si necesitas adaptar el formato del backend, hazlo aquí
         this.usuario = usuario as UsuarioDetalleDto;
         this.loading = false;
-        
+        this.validarUsuario(this.usuario);
         // Cargar datos adicionales
         this.loadAsistenciasRecientes();
         this.loadPagosRecientes();
@@ -238,6 +236,27 @@ export class UsuarioDetalleComponent implements OnInit {
           this.notificationService.error('Ocurrio un error al cancelar la inscripcion')
         }
       })
+    }
+  }
+
+  eliminarUsuario(id: number){
+    if(confirm("Seguro que desea eliminar al usuario ?")){
+      this.usuarioService.delete(id).subscribe({
+        next: () => {
+          this.notificationService.exito("Usuario eliminado correctamente");
+          this.router.navigate(['/usuarios']);
+        },
+        error: () => {
+          this.notificationService.error('Ocurrio un error al eliminar el usuario')
+        }
+      })
+    }
+  }
+
+  validarUsuario(usuario: UsuarioDetalleDto){
+    if(usuario.eliminado){
+      this.router.navigate(['/usuarios']);
+      this.notificationService.advertencia("ADVERTENCIA: El usuario " + usuario.nombre + " " + usuario.apellido + " ha sido eliminado del sistema");
     }
   }
 }
