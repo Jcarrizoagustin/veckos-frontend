@@ -113,7 +113,7 @@ export class IngresoComponent {
   borrarUsuario(){
     setTimeout(()=> {
         this.clearSearch();
-              }, 3000)
+              }, 5000)
   }
 
   getEstadoTexto(): string {
