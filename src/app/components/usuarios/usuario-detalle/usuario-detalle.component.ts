@@ -130,7 +130,9 @@ export class UsuarioDetalleComponent implements OnInit {
   loadPagosRecientes(): void {
     this.pagoService.getByUsuarioId(this.usuarioId).subscribe({
       next: (pagos) => {
-        this.pagosRecientes = pagos.slice(0, 5); // Solo los 5 más recientes
+        this.pagosRecientes = pagos
+        .sort((a, b) => new Date(b.fechaPago).getTime() - new Date(a.fechaPago).getTime())
+        .slice(0, 5); // Solo los 5 más recientes
       },
       error: (error) => {
         console.error('Error al cargar pagos:', error);
